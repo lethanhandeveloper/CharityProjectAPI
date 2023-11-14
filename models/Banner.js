@@ -1,0 +1,19 @@
+import mongoose, { Schema } from "mongoose";
+
+export default mongoose.model(
+  "Banner",
+  new Schema({
+    id: { type: ObjectId },
+    url: {
+      type: String,
+      require: true,
+    },
+    title: {
+      type: String,
+      require: true,
+    },
+    description: {
+      type: String,
+    },
+  })
+);

@@ -8,7 +8,7 @@ const getAllCommune = async (req, res) => {
         const Communes = await Commune.find().populate('districtId').exec()
         res.status(HttpStatusCode.OK).json({
             message: "Get all Communes successfully",
-            data: Communes
+            result: Communes
         })
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -82,7 +82,7 @@ const getAllProvince = async (req, res) => {
         const provinces = await Province.find().exec()
         res.status(HttpStatusCode.OK).json({
             message: "Get all province successfully",
-            data: provinces
+            result: provinces
         })
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -129,7 +129,7 @@ const getAllDistrict = async (req, res) => {
         const districts = await District.find().populate('provinceId').exec()
         res.status(HttpStatusCode.OK).json({
             message: "Get all district successfully",
-            data: districts
+            result: districts
         })
     } catch (error) {
        

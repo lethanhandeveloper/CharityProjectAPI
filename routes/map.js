@@ -1,5 +1,5 @@
 import express from "express";
-import { MapController } from "../controllers";
+import { MapController } from "../controllers/index.js";
 const router = express.Router();
 
 router.get("/list", MapController.getMapList);

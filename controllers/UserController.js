@@ -4,6 +4,16 @@ import { Commune, District, Province, User } from "../models/index.js"
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
 
+const isUserExists = async({email, phoneNumber}) => {
+    const existingUser = await User.exists({ $or : [
+        {email : email},
+        {phoneNumber: phoneNumber}
+    ]})
+
+
+    return existingUser 
+}
+
 const register = async (req, res) => {
     try {
         const {
@@ -18,15 +28,13 @@ const register = async (req, res) => {
     
         } = req.body
 
-        const existingUser = await User.findOne({ $or : [
-            {email : email},
-            {phoneNumber, phoneNumber}
-        ]}).exec()
 
-        if(existingUser) {
-            res.json(HttpStatusCode.CONFLICT).json({
-                message: "Email or phonenumber is exists already"
+        if(await isUserExists({email, phoneNumber})) {
+            res.status(HttpStatusCode.CONFLICT).json({
+                message: "Email or phone number is exists already"
             })
+
+            return
         }
 
         const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS))
@@ -45,11 +53,13 @@ const register = async (req, res) => {
 
         res.status(HttpStatusCode.OK).json({
             message: "Register successfully",
-            data: {
+            result: {
                 ...newUser._doc,
                 password: "not show"
             }
         })
+
+        return
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(Exception.SERVER_ERROR)
     }
@@ -88,7 +98,7 @@ const login = async (req, res) => {
 
             res.status(200).json({
                 message: 'Login user successfully',
-                data: {
+                result: {
                     ...existingUser.toObject(),
                     password: "not show",
                     token: token 
@@ -106,7 +116,7 @@ const login = async (req, res) => {
         console.log(error)
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
             message: "Server is error",
-            data: error
+            result: error
         })
     }
     
@@ -116,7 +126,6 @@ const getMyUserInfo = async (req, res) => {
     try {
         const token = req.headers?.authorization?.split(" ")[1]
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-            console.log(typeof(decoded.data._doc._id))
             const user = await User.findById(decoded.data._doc._id).exec();
             const commune = await Commune.findById(user.communeId).exec()
             const district =  await District.findById(commune.districtId).exec()
@@ -124,14 +133,14 @@ const getMyUserInfo = async (req, res) => {
 
             res.status(HttpStatusCode.OK).json({
                 message: 'Get my user info successfully',
-                data: {
+                result: {
                     ...user._doc,
                     commune: commune.name,
                     district: district.name,
                     province: province.name
                 }
             })
-        });
+        }); 
     } catch (error) {
        res.status(HttpStatusCode.SERVER_ERROR).json({
         message: Exception.SERVER_ERROR
@@ -140,8 +149,63 @@ const getMyUserInfo = async (req, res) => {
    
 }
 
+const updateMyUserInfo = async (req, res) => {
+    try {
+        const token = req.headers?.authorization?.split(" ")[1]
+        const {
+            name,
+            email,
+            phoneNumber,
+            gender,
+            age,
+            commune
+        } = req.body
+
+        if(await isUserExists({email, phoneNumber})){
+
+            res.status(HttpStatusCode.CONFLICT).json({
+                message: "Email or phone number existed in the system"
+            })
+
+            return
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+            const userId = decoded.data._doc._id;
+
+            try {
+                await User.findByIdAndUpdate(userId, {
+                    name,
+                    email,
+                    phoneNumber,
+                    gender,
+                    age,
+                    commune
+                }, {new : true})
+    
+                res.status(HttpStatusCode.OK).json({
+                    message: "Update user info successfully"
+                })
+            } catch (error) {
+                res.status(HttpStatusCode.BAD_REQUEST).json({
+                    message: "User info is not valid"
+                })
+
+                
+            }
+
+            return
+        }); 
+    } catch (error) {
+        res.status(HttpStatusCode.SERVER_ERROR).json({
+            message: Exception.SERVER_ERROR
+        })
+    }
+}
+
 export default {
     register,
     login,
-    getMyUserInfo
+    getMyUserInfo,
+    updateMyUserInfo
 }

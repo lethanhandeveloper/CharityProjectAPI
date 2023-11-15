@@ -34,6 +34,11 @@ export default mongoose.model('User',
             enum: ['male', 'female', 'other'],
             message: 'Gioi tinh khong hop le'
         },
+        role: {
+            type: Number,
+            required: true,
+            message: 'Role is not valid'
+        },
         age: {
             type: Number,
             required: true,

@@ -8,6 +8,7 @@ import {
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
 import checkToken from "./middlewares/auth.js";
+import HttpStatusCode from "./utils/HttpStatusCode.js";
 
 dotenv.config();
 
@@ -19,6 +20,10 @@ app.use("/user", userRouter);
 app.use("/area", areaRouter);
 app.use("/map", mapRouter);
 app.use("/banner", bannerRouter);
+
+app.use((req, res) => {
+  res.status(HttpStatusCode.BAD_REQUEST).json({ message: "Route not found" });
+});
 
 const port = process.env.SERVER_PORT ?? 3000;
 

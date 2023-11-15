@@ -1,5 +1,5 @@
-import HttpStatusCode from "../utils/HttpStatusCode";
-import Message from "../utils/Message";
+import HttpStatusCode from "../utils/HttpStatusCode.js";
+import Message from "../utils/Message.js";
 
 const getAllList = async (req, res) => {
   try {

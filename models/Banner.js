@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 export default mongoose.model(
   "Banner",
   new Schema({
-    id: { type: ObjectId },
+    id: { type: Schema.ObjectId },
     url: {
       type: String,
       require: true,

@@ -1,4 +1,4 @@
-import HttpStatusCode from "../utils/HttpStatusCode";
+import HttpStatusCode from "../utils/HttpStatusCode.js";
 
 const getMapList = async (req, res) => {
   try {

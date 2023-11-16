@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import {
   userRouter,
   areaRouter,
@@ -15,7 +16,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(checkToken);
-
+app.use(cors());
 app.use("/user", userRouter);
 app.use("/area", areaRouter);
 app.use("/map", mapRouter);

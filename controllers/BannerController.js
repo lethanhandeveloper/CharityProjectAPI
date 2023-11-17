@@ -6,7 +6,13 @@ const getAllList = async (req, res) => {
     const data = [
       {
         id: "",
-        url: "",
+        url: "https://thiennguyen.app/_next/static/media/hero.770ae228.png",
+        title: "",
+        description: "",
+      },
+      {
+        id: "",
+        url: "https://thiennguyen.app/_next/static/media/banner-vrace.c4d6d0b6.png",
         title: "",
         description: "",
       },

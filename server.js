@@ -8,14 +8,14 @@ import {
 } from "./routes/index.js";
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
-import checkToken from "./middlewares/auth.js";
+
 import HttpStatusCode from "./utils/HttpStatusCode.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(checkToken);
+
 app.use(cors());
 app.use("/user", userRouter);
 app.use("/area", areaRouter);

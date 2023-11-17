@@ -2,34 +2,17 @@ import Exception from "../utils/Exception.js";
 import HttpStatusCode from "../utils/HttpStatusCode.js";
 import jwt from "jsonwebtoken";
 
-const unauthorizedRoutes = [
-  "/user/login/",
-  "/user/login",
-  "/user/register",
-  "/user/register/",
-];
-
-
 export default function checkToken(req, res, next) {
   try {
-    const isUnauthorizedRoute = unauthorizedRoutes.includes(
-      req.url.toLowerCase().trim()
-    );
-
-    if (isUnauthorizedRoute) {
-      next();
-      return;
-    }
-
     const token = req.headers?.authorization?.split(" ")[1];
     let isExpired = "";
-    let role
-    let jwtObject
+    let role;
+    let jwtObject;
 
     if (token) {
-      jwtObject = jwt.verify(token, process.env.JWT_SECRET)
-      console.log(jwtObject)
-      const isExpired = Date.now() >= jwtObject.exp * 1000
+      jwtObject = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(jwtObject);
+      const isExpired = Date.now() >= jwtObject.exp * 1000;
     } else {
       res.status(HttpStatusCode.BAD_REQUEST).json({
         message: "Token must be provided",
@@ -45,12 +28,15 @@ export default function checkToken(req, res, next) {
 
       return;
     } else {
-      if(req.url.toLowerCase().trim().split("/")[1] === 'admin' && jwtObject.data._doc.role !== 4){
+      if (
+        req.url.toLowerCase().trim().split("/")[1] === "admin" &&
+        jwtObject.data._doc.role !== 4
+      ) {
         res.status(HttpStatusCode.FORBIDDEN).json({
-          message: "Your request is not valid"
-        })
+          message: "Your request is not valid",
+        });
 
-        return
+        return;
       }
 
       next();

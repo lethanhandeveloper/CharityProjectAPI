@@ -24,7 +24,8 @@ const register = async (req, res) => {
             gender,
             age,
             communeId,
-            specificAddress
+            specificAddress,
+            image_url
     
         } = req.body
 
@@ -48,7 +49,8 @@ const register = async (req, res) => {
             gender,
             age,
             communeId,
-            specificAddress
+            specificAddress,
+            image_url
         })
 
         res.status(HttpStatusCode.OK).json({

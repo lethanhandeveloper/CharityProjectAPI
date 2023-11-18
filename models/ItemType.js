@@ -3,10 +3,6 @@ import mongoose, { Schema, ObjectId } from "mongoose";
 export default mongoose.model('ItemType',
     new Schema({
         id: { type: ObjectId },
-        type: {
-            type: Schema.ObjectId,
-            required: true
-        },
         name: {
             type: String,
             required: true,
@@ -18,7 +14,6 @@ export default mongoose.model('ItemType',
         unit: {
             type: String,
             required: true,
-            
         }
     })
 )

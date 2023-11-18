@@ -44,6 +44,9 @@ export default mongoose.model('User',
             required: true,
             min: [18, 'Age must be greater than 18'],
         },
+        image_url: {
+            type: String,
+        },
         communeId: {
             type: Schema.ObjectId,
             required: true,

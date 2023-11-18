@@ -1,24 +1,28 @@
 import express from "express";
+import cors from "cors"
 import {
   userRouter,
   areaRouter,
   mapRouter,
   bannerRouter,
+  campaignRouter
 } from "./routes/index.js";
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
 import checkToken from "./middlewares/auth.js";
+import checkAdminRole from "./middlewares/admin.js";
 import HttpStatusCode from "./utils/HttpStatusCode.js";
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
-app.use(checkToken);
 
 app.use("/user", userRouter);
 app.use("/area", areaRouter);
 app.use("/map", mapRouter);
+app.use("/campaign", campaignRouter);
 app.use("/banner", bannerRouter);
 
 app.use((req, res) => {

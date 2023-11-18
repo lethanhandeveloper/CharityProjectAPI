@@ -2,7 +2,9 @@ import mongoose, { Schema, ObjectId } from "mongoose";
 
 export default mongoose.model('Campaign',
     new Schema({
-        id: { type: ObjectId },
+        id: { 
+            type: ObjectId 
+        },
         creatorId: {
             type: ObjectId,
             required: true,
@@ -26,11 +28,6 @@ export default mongoose.model('Campaign',
         title: {
             type: String,
             required: true
-        },
-        currentValue: {
-            type: Number,
-            required: true,
-            default: 0
         },
         targetValue: {
             type: Number,

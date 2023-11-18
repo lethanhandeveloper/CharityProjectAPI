@@ -44,6 +44,30 @@ const addNewCommune = async (req, res) => {
     
 }
 
+const getCommuneByDistrictId = async (req, res) => {
+    try {
+        const districtId = req.params.districtId;
+
+        const communes = await Commune.find({ districtId: districtId }).exec()
+        res.status(HttpStatusCode.OK).json({
+            message: "Get all communes successfully",
+            result: communes
+        })
+    } catch (error) {
+        if(error.name === Exception.CAST_ERROR){
+            res.status(HttpStatusCode.BAD_REQUEST).json({
+                message: "District id is not valid"
+            })
+
+            return
+        }
+
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+            message: Exception.SERVER_ERROR
+        })
+    }
+}
+
 const deleteAllCommune = async (req, res) => {
     try {
         await Commune.deleteMany();
@@ -139,7 +163,29 @@ const getAllDistrict = async (req, res) => {
     }
 }
 
+const getDistrictByProvinceId = async (req, res) => {
+    try {
+        const provinceId = req.params.provinceId;
 
+        const districts = await District.find({ provinceId: provinceId }).exec()
+        res.status(HttpStatusCode.OK).json({
+            message: "Get all district successfully",
+            result: districts
+        })
+    } catch (error) {
+        if(error.name === Exception.CAST_ERROR){
+            res.status(HttpStatusCode.BAD_REQUEST).json({
+                message: "Province id is not valid"
+            })
+
+            return
+        }
+
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+            message: Exception.SERVER_ERROR
+        })
+    }
+}
 
 
 export default {
@@ -149,5 +195,7 @@ export default {
     addNewProvince,
     getAllProvince,
     addNewDistrict,
-    getAllDistrict
+    getAllDistrict,
+    getDistrictByProvinceId,
+    getCommuneByDistrictId
 }

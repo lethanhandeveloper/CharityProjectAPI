@@ -83,30 +83,30 @@ const login = async (req, res) => {
       console.log("password" + password);
       console.log("epss" + existingUser);
       let isMatch = await bcrypt.compare(password, existingUser.password);
-      let token = "";
-      if (isMatch) {
-        token = jwt.sign(
-          {
-            data: {
-              ...existingUser,
-              password: "not show",
-            },
-          },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: "30 days",
-          }
-        );
-      }
 
-      res.status(200).json({
-        message: "Login user successfully",
-        result: {
-          ...existingUser.toObject(),
-          password: "not show",
-          token: token,
-        },
-      });
+      if (isMatch) {
+        const payLoad = {
+          data: {
+            ...existingUser,
+            password: "not show",
+          },
+        };
+        let accessToken = jwt.sign(payLoad, process.env.JWT_SECRET, {
+          expiresIn: "50m",
+        });
+        let refreshToken = jwt.sign(payLoad, process.env.JWT_REFRESH, {
+          expiresIn: "30d",
+        });
+
+        res.status(200).json({
+          message: "Login user successfully",
+          result: {
+            ...existingUser.toObject(),
+            password: "not show",
+            token: accessToken,
+          },
+        });
+      }
     } else {
       res.status(HttpStatusCode.UNAUTHORIZED).json({
         message: "User is not exists",

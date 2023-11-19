@@ -9,8 +9,6 @@ import {
 } from "./routes/index.js";
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
-import checkToken from "./middlewares/auth.js";
-import checkAdminRole from "./middlewares/admin.js";
 import HttpStatusCode from "./utils/HttpStatusCode.js";
 
 dotenv.config();

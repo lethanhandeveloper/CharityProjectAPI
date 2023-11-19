@@ -1,6 +1,6 @@
 import express from "express"
 import { UserController } from '../controllers/index.js'
-import checkToken from "../middlewares/auth.js"
+import checkToken from "../middlewares/user.js"
 
 const router = express.Router();
 

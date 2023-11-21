@@ -10,6 +10,7 @@ import PersonalGeneralInfo from "./PersonalGeneralInfo.js";
 import OrganizationGeneralInfo from "./OrganizationGeneralInfo.js";
 import CommitInfoVerification from "./CommitInfoVerification.js";
 import SurveyInfoVerification from "./SurveyInfoVerification.js"
+import VerificationRequest from "./VerificationRequest.js"
 
 export {
     User,
@@ -23,5 +24,6 @@ export {
     PersonalGeneralInfo,
     OrganizationGeneralInfo,
     CommitInfoVerification,
-    SurveyInfoVerification
+    SurveyInfoVerification,
+    VerificationRequest
 };

@@ -11,17 +11,17 @@ export default mongoose.model('Campaign',
             ref: "User"
         },
         categoryId: {
-            type: { ObjectId },
+            type: ObjectId,
             required: true,
             ref: "CampaignCategory"
         },
         itemTypeId: {
-            type: { ObjectId },
+            type: ObjectId,
             required: true,
             ref: "ItemType"
         },
         provinceId: {
-            type: { ObjectId },
+            type: ObjectId,
             required: true,
             ref: "Province"
         },

@@ -1,13 +1,15 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
 import Exception from "../utils/Exception.js";
-import { Campaign, User } from "../models/index.js";
+import mongoose from "mongoose";
+import { Campaign, User, VerificationRequest } from "../models/index.js";
 import { PersonalGeneralInfo, OrganizationGeneralInfo, CommitInfoVerification, SurveyInfoVerification } from "../models/index.js";
 
 const addNewVerificationRequest = async (req, res) => {
-  try {
-    const type = req.params.type
+  const session = await mongoose.startSession();
 
-    if(isNaN(type) || (type !== 1 || type !== 2)){
+  try {
+    const type = parseInt(req.params.type)
+    if(isNaN(type) || (type != 1 && type != 2)){
       throw new Exception("NotANumber");
       return 
     }
@@ -69,26 +71,26 @@ const addNewVerificationRequest = async (req, res) => {
       }
     } = req.body
 
-    const createdPGI = null
-    const createdOGI = null
+    let createdPGI = null
+    let createdOGI = null
+
+    session.startTransaction()
 
     if(type === 1) {
       createdPGI = await PersonalGeneralInfo.create({
-        type,
-        personalName,
+        name: personalName,
         dateOfBirth,
         phoneNumber,
         email,
         socialNetworkLink,
-        personalAddress,
+        address: personalAddress,
         roleOnClub,
         clubName,
         logo,
         underOrg,
         actionDescSociaLink,
-        personalAchivementDoc,
-        personalUserName,
-        organizationGeneralInfo
+        achivementDoc: personalAchivementDoc,
+        userName: personalUserName,
       })
 
     }else if(type === 2){
@@ -120,8 +122,32 @@ const addNewVerificationRequest = async (req, res) => {
       endDate
     })
 
+    const createdSIV = await SurveyInfoVerification.create({
+      optionSurveyOne,
+      optionSurveyTwo,
+      optionSurveyThree,
+      optionSurveyFour,
+      optionSurveyFive,
+      lawOneOption,
+      lawTwoOption,
+      lawThreeOption,
+      lawFourOption,
+      lawFiveOption,
+      chanel
+    })
     
+
+    await VerificationRequest.create({
+      type,
+      personalGeneralInfoId: createdPGI?._id,
+      organizationGeneralInfoId: createdOGI?._id,
+      commitInfoVerificationId: createdCIV._id,
+      surveyInfoVerification: createdSIV._id
+    })
+
+    await session.commitTransaction()
   } catch (error) {
+    await session.abortTransaction();
     if(error.message === 'NotANumber'){
       res.status(HttpStatusCode.BAD_REQUEST).json({
         message: "Your data is not valid"
@@ -136,6 +162,10 @@ const addNewVerificationRequest = async (req, res) => {
         message: Exception.SERVER_ERROR
       });
   }
+  finally {
+    session.endSession();
+  }
+  
 };
 
 

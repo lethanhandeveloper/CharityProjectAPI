@@ -9,19 +9,19 @@ export default mongoose.model('VerificationRequest',
             required: true
         },
         personalGeneralInfoId: {
-            type: {ObjectId},
+            type: ObjectId,
             ref: 'PersonalGeneralInfo'
         },
         organizationGeneralInfoId: {
-            type: {ObjectId},
+            type: ObjectId,
             ref: 'OrganizationGeneralInfo'
         },
         commitInfoVerificationId: {
-            type: { ObjectId },
+            type: ObjectId,
             ref: "CommitInfoVerification"
         },
         surveyInfoVerification: {
-            type: { ObjectId },
+            type: ObjectId,
             ref: "SurveyInfoVerification"
         }
     })

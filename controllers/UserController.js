@@ -13,26 +13,23 @@ const isUserExists = async ({ email, phoneNumber }) => {
 };
 
 const register = async (req, res) => {
-    try {
-        const {
-            name,
-            email,
-            password,
-            phoneNumber,
-            gender,
-            age,
-            communeId,
-            specificAddress,
-            image_url
-    
-        } = req.body
+  try {
+    const {
+      name,
+      email,
+      password,
+      phoneNumber,
+      gender,
+      age,
+      communeId,
+      specificAddress,
+      image_url,
+    } = req.body;
 
-
-        if(await isUserExists({email, phoneNumber})) {
-            res.status(HttpStatusCode.CONFLICT).json({
-                message: "Email or phone number is exists already"
-            })
-
+    if (await isUserExists({ email, phoneNumber })) {
+      res.status(HttpStatusCode.CONFLICT).json({
+        message: "Email or phone number is exists already",
+      });
       return;
     }
 
@@ -41,18 +38,18 @@ const register = async (req, res) => {
       parseInt(process.env.SALT_ROUNDS)
     );
 
-        const newUser = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            role: 1,
-            phoneNumber,
-            gender,
-            age,
-            communeId,
-            specificAddress,
-            image_url
-        })
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: 1,
+      phoneNumber,
+      gender,
+      age,
+      communeId,
+      specificAddress,
+      image_url,
+    });
 
     res.status(HttpStatusCode.OK).json({
       message: "Register successfully",
@@ -150,7 +147,15 @@ const getMyUserInfo = async (req, res) => {
 const updateMyUserInfo = async (req, res) => {
   try {
     const token = req.headers?.authorization?.split(" ")[1];
-    const { name, email, phoneNumber, gender, age, commune } = req.body;
+    const {
+      name,
+      email,
+      phoneNumber,
+      gender,
+      age,
+      communeId,
+      specificAddress,
+    } = req.body;
 
     if (await isUserExists({ email, phoneNumber })) {
       res.status(HttpStatusCode.CONFLICT).json({
@@ -172,7 +177,42 @@ const updateMyUserInfo = async (req, res) => {
             phoneNumber,
             gender,
             age,
-            commune,
+            communeId,
+            specificAddress,
+          },
+          { new: true }
+        );
+
+        res.status(HttpStatusCode.OK).json({
+          message: "Update user info successfully",
+        });
+      } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({
+          message: "User info is not valid",
+        });
+      }
+
+      return;
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+const updateAvatar = async (req, res) => {
+  try {
+    const token = req.headers?.authorization?.split(" ")[1];
+    const { image_url } = req.body;
+
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      const userId = decoded.data._doc._id;
+
+      try {
+        await User.findByIdAndUpdate(
+          userId,
+          {
+            image_url,
           },
           { new: true }
         );
@@ -200,4 +240,5 @@ export default {
   login,
   getMyUserInfo,
   updateMyUserInfo,
+  updateAvatar,
 };

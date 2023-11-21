@@ -6,6 +6,10 @@ import Map from "./Map.js";
 import Banner from "./Banner.js";
 import CampaignCategory from "./CampaignCategory.js";
 import Campaign from "./Campaign.js";
+import PersonalGeneralInfo from "./PersonalGeneralInfo.js";
+import OrganizationGeneralInfo from "./OrganizationGeneralInfo.js";
+import CommitInfoVerification from "./CommitInfoVerification.js";
+import SurveyInfoVerification from "./SurveyInfoVerification.js"
 
 export {
     User,
@@ -15,5 +19,9 @@ export {
     Map,
     Banner,
     CampaignCategory,
-    Campaign
+    Campaign,
+    PersonalGeneralInfo,
+    OrganizationGeneralInfo,
+    CommitInfoVerification,
+    SurveyInfoVerification
 };

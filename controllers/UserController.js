@@ -13,26 +13,23 @@ const isUserExists = async ({ email, phoneNumber }) => {
 };
 
 const register = async (req, res) => {
-    try {
-        const {
-            name,
-            email,
-            password,
-            phoneNumber,
-            gender,
-            age,
-            communeId,
-            specificAddress,
-            image_url
-    
-        } = req.body
+  try {
+    const {
+      name,
+      email,
+      password,
+      phoneNumber,
+      gender,
+      age,
+      communeId,
+      specificAddress,
+      image_url,
+    } = req.body;
 
-
-        if(await isUserExists({email, phoneNumber})) {
-            res.status(HttpStatusCode.CONFLICT).json({
-                message: "Email or phone number is exists already"
-            })
-
+    if (await isUserExists({ email, phoneNumber })) {
+      res.status(HttpStatusCode.CONFLICT).json({
+        message: "Email or phone number is exists already",
+      });
       return;
     }
 
@@ -41,18 +38,18 @@ const register = async (req, res) => {
       parseInt(process.env.SALT_ROUNDS)
     );
 
-        const newUser = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            role: 1,
-            phoneNumber,
-            gender,
-            age,
-            communeId,
-            specificAddress,
-            image_url
-        })
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: 1,
+      phoneNumber,
+      gender,
+      age,
+      communeId,
+      specificAddress,
+      image_url,
+    });
 
     res.status(HttpStatusCode.OK).json({
       message: "Register successfully",
@@ -83,30 +80,30 @@ const login = async (req, res) => {
       console.log("password" + password);
       console.log("epss" + existingUser);
       let isMatch = await bcrypt.compare(password, existingUser.password);
-      let token = "";
-      if (isMatch) {
-        token = jwt.sign(
-          {
-            data: {
-              ...existingUser,
-              password: "not show",
-            },
-          },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: "30 days",
-          }
-        );
-      }
 
-      res.status(200).json({
-        message: "Login user successfully",
-        result: {
-          ...existingUser.toObject(),
-          password: "not show",
-          token: token,
-        },
-      });
+      if (isMatch) {
+        const payLoad = {
+          data: {
+            ...existingUser,
+            password: "not show",
+          },
+        };
+        let accessToken = jwt.sign(payLoad, process.env.JWT_SECRET, {
+          expiresIn: "50m",
+        });
+        let refreshToken = jwt.sign(payLoad, process.env.JWT_REFRESH, {
+          expiresIn: "30d",
+        });
+
+        res.status(200).json({
+          message: "Login user successfully",
+          result: {
+            ...existingUser.toObject(),
+            password: "not show",
+            token: accessToken,
+          },
+        });
+      }
     } else {
       res.status(HttpStatusCode.UNAUTHORIZED).json({
         message: "User is not exists",
@@ -150,7 +147,15 @@ const getMyUserInfo = async (req, res) => {
 const updateMyUserInfo = async (req, res) => {
   try {
     const token = req.headers?.authorization?.split(" ")[1];
-    const { name, email, phoneNumber, gender, age, commune } = req.body;
+    const {
+      name,
+      email,
+      phoneNumber,
+      gender,
+      age,
+      communeId,
+      specificAddress,
+    } = req.body;
 
     if (await isUserExists({ email, phoneNumber })) {
       res.status(HttpStatusCode.CONFLICT).json({
@@ -172,7 +177,42 @@ const updateMyUserInfo = async (req, res) => {
             phoneNumber,
             gender,
             age,
-            commune,
+            communeId,
+            specificAddress,
+          },
+          { new: true }
+        );
+
+        res.status(HttpStatusCode.OK).json({
+          message: "Update user info successfully",
+        });
+      } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({
+          message: "User info is not valid",
+        });
+      }
+
+      return;
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+const updateAvatar = async (req, res) => {
+  try {
+    const token = req.headers?.authorization?.split(" ")[1];
+    const { image_url } = req.body;
+
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      const userId = decoded.data._doc._id;
+
+      try {
+        await User.findByIdAndUpdate(
+          userId,
+          {
+            image_url,
           },
           { new: true }
         );
@@ -200,4 +240,5 @@ export default {
   login,
   getMyUserInfo,
   updateMyUserInfo,
+  updateAvatar,
 };

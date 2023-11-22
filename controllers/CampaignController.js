@@ -97,6 +97,7 @@ const addNewCampaign = async (req, res) => {
     const token = req.headers?.authorization?.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       const userId = decoded.data._doc._id;
+
       await Campaign.create({
         creatorId: userId,
         categoryId: new mongoose.Types.ObjectId(categoryId),
@@ -138,6 +139,39 @@ const getAllCampaign = async (req, res) => {
     res.status(HttpStatusCode.OK).json({
       message: "Get All Campaigns successfully",
       result: campaigns,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+const getCampaignByCurrentUser = async (req, res) => {
+  try {
+    const token = req.headers?.authorization?.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      const userId = decoded.data._doc._id;
+      console.log(userId);
+      const campaigns = await Campaign.find({ creatorId: userId }).exec();
+      res.status(HttpStatusCode.OK).json({
+        message: "Get All Campaigns successfully",
+        result: campaigns,
+      });
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+const getCampaignDetail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const campaign = await Campaign.findById(id).exec();
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Get All Campaign successfully",
+      result: campaign,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -213,4 +247,6 @@ export default {
   getAllItemType,
   addNewCampaign,
   getAllCampaign,
+  getCampaignDetail,
+  getCampaignByCurrentUser,
 };

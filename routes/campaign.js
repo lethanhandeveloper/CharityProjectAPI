@@ -19,5 +19,7 @@ router.post("/itemtype", checkAdminRole, CampaignController.addNewItemType);
 router.post("/", checkAdminRole, CampaignController.addNewCampaign);
 router.get("/", CampaignController.getAllCampaign);
 router.post("/filter", CampaignController.getCampaignByFilter);
+router.get("/:id", CampaignController.getCampaignDetail);
+router.get("/user", CampaignController.getCampaignByCurrentUser);
 
 export default router;

@@ -4,9 +4,9 @@ import { Commune, District, Province, User } from "../models/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const isUserExists = async ({ email, phoneNumber }) => {
+const isUserExists = async ({ email, phoneNumber, userName }) => {
   const existingUser = await User.exists({
-    $or: [{ email: email }, { phoneNumber: phoneNumber }],
+    $or: [{ email }, { phoneNumber }, { userName }],
   });
 
   return existingUser;
@@ -16,6 +16,7 @@ const register = async (req, res) => {
   try {
     const {
       name,
+      userName,
       email,
       password,
       phoneNumber,
@@ -26,7 +27,7 @@ const register = async (req, res) => {
       image_url,
     } = req.body;
 
-    if (await isUserExists({ email, phoneNumber })) {
+    if (await isUserExists({ email, phoneNumber, userName })) {
       res.status(HttpStatusCode.CONFLICT).json({
         message: "Email or phone number is exists already",
       });
@@ -40,6 +41,7 @@ const register = async (req, res) => {
 
     const newUser = await User.create({
       name,
+      userName,
       email,
       password: hashedPassword,
       role: 1,
@@ -89,7 +91,7 @@ const login = async (req, res) => {
           },
         };
         let accessToken = jwt.sign(payLoad, process.env.JWT_SECRET, {
-          expiresIn: "50m",
+          expiresIn: "5d",
         });
         let refreshToken = jwt.sign(payLoad, process.env.JWT_REFRESH, {
           expiresIn: "30d",
@@ -110,7 +112,6 @@ const login = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: "Server is error",
       result: error,

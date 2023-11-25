@@ -12,6 +12,10 @@ export default mongoose.model('User',
                 message: "Name must be at least 3 characters"
             }
         }, 
+        userName: {
+            type: String,
+            required: true
+        },
         email: {
             type: String,
             required: true,

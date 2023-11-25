@@ -20,9 +20,14 @@ export default mongoose.model('VerificationRequest',
             type: ObjectId,
             ref: "CommitInfoVerification"
         },
-        surveyInfoVerification: {
+        surveyInfoVerificationId: {
             type: ObjectId,
             ref: "SurveyInfoVerification"
+        },
+        status:{
+            type: Number,
+            default: 1,
+            enum: [1, 2, 3] //dang cho phe duyet, da phe duyet, tu choi
         }
     })
 )

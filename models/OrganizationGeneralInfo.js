@@ -23,8 +23,9 @@ export default mongoose.model('OrganizationGeneralInfo',
             type: String,
             required: true,
         },
-        userName: {
-            type: String,
+        userId: {
+            type: ObjectId,
+            ref: "User",
             required: true,
         },
         actionDescSocialLink: {

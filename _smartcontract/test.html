@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Contract Interaction</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.6/dist/web3.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Smart Contract Interaction</h1>
+
+    <p>Stored Data: <span id="storedData"></span></p>
+    <input type="number" id="newValue" placeholder="New Value">
+
+    <button onclick="setValue()">Set Value</button>
+    <button onclick="getValue()">Get Value</button>
+
+    <script>
+        // Replace with your smart contract address
+        const contractAddress = '0xC576A874cc93f25806A52C97a56c5C099aFA5C9C';
+
+        // Replace with your smart contract ABI
+        const contractABI = [
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "creatorUserName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "currentValue",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "targetValue",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "endDate",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "addNewCampaign",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "campaignInfoArray",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "creatorUserName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "currentValue",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "targetValue",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "endDate",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "id",
+                        "type": "string"
+                    }
+                ],
+                "name": "getCampaignById",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "string",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "creatorUserName",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "title",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "currentValue",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "targetValue",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "endDate",
+                                "type": "uint256"
+                            }
+                        ],
+                        "internalType": "struct Campaign.CampaignInfo",
+                        "name": "",
+                        "type": "tuple"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+        var contract = null;
+
+        window.addEventListener('load', async () => {
+            const rpcUrl = 'http://localhost:8545';
+            // Modern dapp browsers
+            if (window.ethereum) { 
+                window.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+                try {
+                    // Request account access
+                    await ethereum.enable();
+                } catch (error) {
+                    // User denied account access
+                    console.error("User denied account access");
+                }
+            }
+            // Legacy dapp browsers
+            else if (window.web3) {
+                window.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+            }
+            // Non-dapp browsers
+            else {
+                console.log("Non-Ethereum browser detected. You should consider trying MetaMask!");
+            }
+
+            // Set the contract address and ABI
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+
+            // Display initial value
+            getValue();
+        });
+
+        async function getValue() {
+            const value = await contract.methods.getCampaignById('280280802402802').call();
+            console.log(value);
+        }
+    </script>
+
+</body>
+
+</html>

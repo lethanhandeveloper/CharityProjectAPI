@@ -11,11 +11,13 @@ router.post(
   CampaignController.addNewCampaignCategory
 );
 
-router.get("/category", CampaignController.getAllCampaignCategory);
-// router.get('/category', AreaController.addNewCommune)
+router.get("/category", CampaignController.getAllCampaignCategory)
+router.post('/category', auth([Role.admin]), CampaignController.addNewCampaignCategory)
+router.delete("/category/:id", auth([Role.admin]), CampaignController.deleteCampaignCategoryById)
 
-router.get("/itemtype", CampaignController.getAllItemType);
-router.post("/itemtype", auth([Role.admin]), CampaignController.addNewItemType);
+router.get("/itemtype", CampaignController.getAllItemType)
+router.post("/itemtype", auth([Role.admin]), CampaignController.addNewItemType)
+router.delete("/itemtype/:id", auth([Role.admin]), CampaignController.deleteItemTypeById)
 
 router.post("/", auth([Role.personal, Role.organization, Role.admin]), CampaignController.addNewCampaign);
 router.get("/", CampaignController.getAllCampaign);

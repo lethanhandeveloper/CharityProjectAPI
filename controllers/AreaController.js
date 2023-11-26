@@ -78,6 +78,44 @@ const deleteAllCommune = async (req, res) => {
   }
 };
 
+const deleteCommuneById = async (req, res) => {
+  try {
+    const communeId = req.params.id
+    await Commune.findByIdAndDelete(communeId)
+
+    res.status(HttpStatusCode.NO_CONTENT).json({
+      message: "Delete district successfully"
+    })
+  } catch (error) {
+    res.status(HttpStatusCode.OK).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+}
+
+const updateCommuneById = async (req, res) => {
+  try {
+    const id  = req.params.id
+    const { name, districtId } = req.body
+
+    await Commune.findByIdAndUpdate(id, { name, districtId })
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Update commune successfully"
+    })
+  } catch (error) {
+    if(error.name === 'CastError'){
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        message: "Your data is not valid",
+      });
+    }
+
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 // provinces
 const addNewProvince = async (req, res) => {
   const { name } = req.body;
@@ -104,6 +142,46 @@ const getAllProvince = async (req, res) => {
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
+    });
+  }
+};
+
+const deleteProvinceById = async (req, res) => {
+  try {
+    const provinceId = req.params.id
+    const districts = await District.find({ provinceId })
+    Promise.all(
+      districts.forEach(async district => {
+        await Commune.findOneAndDelete({ districtId: district._id})
+        await District.findByIdAndDelete(district._id)
+      })
+    )
+    
+    await Province.findByIdAndDelete(districtId)
+
+    res.status(HttpStatusCode.NO_CONTENT).json({
+      message: "Delete province successfully"
+    })
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+}
+
+const updateProvinceById = async (req, res) => {
+  try {
+    const id = req.params.id
+    const { name } = req.body
+
+    await Province.findByIdAndUpdate(id, { name })
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Update province successfully"
+    })
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
     });
   }
 };
@@ -175,14 +253,60 @@ const getDistrictByProvinceId = async (req, res) => {
   }
 };
 
+const deleteDistrictbyId = async (req, res) => {
+  try {
+    const districtId = req.params.id
+
+    await Commune.findOneAndDelete({ districtId })
+    await District.findByIdAndDelete(districtId)
+
+    res.status(HttpStatusCode.NO_CONTENT).json({
+      message: "Delete district successfully"
+    })
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+}
+
+const updateDistrictById = async (req, res) => {
+  try {
+    const id  = req.params.id
+    const { name, provinceId } = req.body
+
+    await District.findByIdAndUpdate(id, { name, provinceId })
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Update district successfully"
+    })
+  } catch (error) {
+    if(error.name === 'CastError'){
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        message: "Your data is not valid",
+      });
+    }
+
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   addNewCommune,
   getAllCommune,
+  getCommuneByDistrictId,
   deleteAllCommune,
+  deleteCommuneById,
+  updateCommuneById,
   addNewProvince,
   getAllProvince,
+  deleteProvinceById,
+  updateProvinceById,
   addNewDistrict,
   getAllDistrict,
   getDistrictByProvinceId,
-  getCommuneByDistrictId,
+  deleteDistrictbyId,
+  updateDistrictById
 };

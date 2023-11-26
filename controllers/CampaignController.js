@@ -42,6 +42,20 @@ const getAllCampaignCategory = async (req, res) => {
   }
 };
 
+const deleteCampaignCategoryById = async (req, res) => {
+  try {
+    const id = req.params.id
+    await CampaignCategory.findByIdAndDelete(id)
+    
+    res.status(HttpStatusCode.NO_CONTENT).json({
+      message: " Delete Campaign Category successfully"
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
 //Item Type
 const addNewItemType = async (req, res) => {
   try {
@@ -72,6 +86,21 @@ const getAllItemType = async (req, res) => {
     res.status(HttpStatusCode.CREATED).json({
       message: "Get All Item Type successfully",
       result: itemtypes,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
+const deleteItemTypeById = async (req, res) => {
+  try {
+    const id = req.params.id
+    await ItemType.findByIdAndDelete(id)
+
+    res.status(HttpStatusCode.NO_CONTENT).json({
+      message: "Delete Item Type successfully"
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -242,9 +271,11 @@ const getCampaignByFilter = async (req, res) => {
 export default {
   addNewCampaignCategory,
   getAllCampaignCategory,
+  deleteCampaignCategoryById,
   getCampaignByFilter,
   addNewItemType,
   getAllItemType,
+  deleteItemTypeById,
   addNewCampaign,
   getAllCampaign,
   getCampaignDetail,

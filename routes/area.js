@@ -66,7 +66,7 @@ router.delete(
 router.put(
   "/commune/:id",
   auth([Role.admin]),
-  AreaController.updateCommuneById
+  AreaController.CommuneController.updateCommuneById
 );
 
 export default router;

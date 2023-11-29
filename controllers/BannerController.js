@@ -1,25 +1,15 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
 import Message from "../utils/Message.js";
-
+import Banner from "../models/Banner.js";
 const getAllList = async (req, res) => {
   try {
-    const data = [
-      {
-        id: "",
-        url: "https://thiennguyen.app/_next/static/media/hero.770ae228.png",
-        title: "",
-        description: "",
-      },
-      {
-        id: "",
-        url: "https://thiennguyen.app/_next/static/media/banner-vrace.c4d6d0b6.png",
-        title: "",
-        description: "",
-      },
-    ];
+    const data = await Banner.find().exec();
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
       data: data,
+    });
+    res.status(HttpStatusCode.OK).json({
+      result: data,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -27,9 +17,22 @@ const getAllList = async (req, res) => {
     });
   }
 };
+const getListActive = async (req, res) => {
+  try {
+    const data = await Banner.find({ isActive: true }).exec();
+    res.status(HttpStatusCode.OK).json({
+      result: data,
+      message: Message.success,
+    });
+  } catch (error) {}
+};
 const addNewBanner = async (req, res) => {
   try {
-    //create banner
+    const { url, title, description } = req.body;
+    await Banner.create({ url, title, description, isActive: true });
+    res.status(HttpStatusCode.OK).json({
+      message: Message.success,
+    });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Message.error,
@@ -38,7 +41,16 @@ const addNewBanner = async (req, res) => {
 };
 const updateBaner = async (req, res) => {
   try {
-    //update banner
+    const { id, url, title, description, isActive } = req.body;
+    await Banner.findByIdAndUpdate(id, {
+      title,
+      url,
+      description,
+      isActive,
+    });
+    res.status(HttpStatusCode.OK).json({
+      message: Message.success,
+    });
   } catch (error) {
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -47,6 +59,11 @@ const updateBaner = async (req, res) => {
 };
 const deleteBanner = async (req, res) => {
   try {
+    const { id, isActive } = req.body;
+    await Banner.findByIdAndUpdate(id, { isActive });
+    res.status(HttpStatusCode.OK).json({
+      message: Message.success,
+    });
   } catch (error) {
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
@@ -58,4 +75,5 @@ export default {
   addNewBanner,
   updateBaner,
   deleteBanner,
+  getListActive,
 };

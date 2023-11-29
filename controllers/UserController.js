@@ -201,6 +201,7 @@ const updateMyUserInfo = async (req, res) => {
     });
   }
 };
+
 const updateAvatar = async (req, res) => {
   try {
     const token = req.headers?.authorization?.split(" ")[1];
@@ -236,10 +237,23 @@ const updateAvatar = async (req, res) => {
   }
 };
 
+const getUserListByPage = async (req, res) => {
+  try {
+    const UserList = await User.find().exec();
+    res.status(HttpStatusCode.OK).json({
+      result: UserList,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
 export default {
   register,
   login,
   getMyUserInfo,
   updateMyUserInfo,
   updateAvatar,
+  getUserListByPage,
 };

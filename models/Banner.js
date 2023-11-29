@@ -15,5 +15,8 @@ export default mongoose.model(
     description: {
       type: String,
     },
+    isActive: {
+      type: Boolean,
+    },
   })
 );

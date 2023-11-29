@@ -1,28 +1,57 @@
 import express from "express";
 import { CampaignController } from "../controllers/index.js";
-import auth from '../middlewares/auth.js'
-import Role from '../utils/Role.js'
+import auth from "../middlewares/auth.js";
+import Role from "../utils/Role.js";
 
 const router = express.Router();
 
 router.post(
   "/category",
   auth([Role.admin]),
-  CampaignController.addNewCampaignCategory
+  CampaignController.CategoryController.addNewCampaignCategory
 );
 
-router.get("/category", CampaignController.getAllCampaignCategory)
-router.post('/category', auth([Role.admin]), CampaignController.addNewCampaignCategory)
-router.delete("/category/:id", auth([Role.admin]), CampaignController.deleteCampaignCategoryById)
+router.get(
+  "/category",
+  CampaignController.CategoryController.getAllCampaignCategory
+);
+router.post(
+  "/category",
+  auth([Role.admin]),
+  CampaignController.CategoryController.addNewCampaignCategory
+);
+router.delete(
+  "/category/:id",
+  auth([Role.admin]),
+  CampaignController.CategoryController.deleteCampaignCategoryById
+);
 
-router.get("/itemtype", CampaignController.getAllItemType)
-router.post("/itemtype", auth([Role.admin]), CampaignController.addNewItemType)
-router.delete("/itemtype/:id", auth([Role.admin]), CampaignController.deleteItemTypeById)
+router.get("/itemtype", CampaignController.ItemTypeController.getAllItemType);
+router.post(
+  "/itemtype",
+  auth([Role.admin]),
+  CampaignController.ItemTypeController.addNewItemType
+);
+router.delete(
+  "/itemtype/:id",
+  auth([Role.admin]),
+  CampaignController.ItemTypeController.deleteItemTypeById
+);
 
-router.post("/", auth([Role.personal, Role.organization, Role.admin]), CampaignController.addNewCampaign);
-router.get("/", CampaignController.getAllCampaign);
-router.post("/filter", CampaignController.getCampaignByFilter);
-router.get("/:id", CampaignController.getCampaignDetail);
-router.get("/user", CampaignController.getCampaignByCurrentUser);
+router.post(
+  "/",
+  auth([Role.personal, Role.organization, Role.admin]),
+  CampaignController.CampaignController.addNewCampaign
+);
+router.get("/", CampaignController.CampaignController.getAllCampaign);
+router.post(
+  "/filter",
+  CampaignController.CampaignController.getCampaignByFilter
+);
+router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
+router.get(
+  "/user",
+  CampaignController.CampaignController.getCampaignByCurrentUser
+);
 
 export default router;

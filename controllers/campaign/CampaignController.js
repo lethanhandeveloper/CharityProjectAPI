@@ -1,115 +1,9 @@
-import ItemType from "../models/ItemType.js";
-import { Campaign, CampaignCategory } from "../models/index.js";
-import Exception from "../utils/Exception.js";
-import HttpStatusCode from "../utils/HttpStatusCode.js";
+import { Campaign } from "../../models/index.js";
+import Exception from "../../utils/Exception.js";
+import HttpStatusCode from "../../utils/HttpStatusCode.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-//Campaign Category
-const addNewCampaignCategory = async (req, res) => {
-  try {
-    const { name } = req.body;
-    await CampaignCategory.create({ name });
-    res.status(HttpStatusCode.CREATED).json({
-      message: "Create Campaign Category successfully",
-    });
-  } catch (error) {
-    if (error.name === Exception.VALIDATION_ERROR) {
-      res.status(HttpStatusCode.BAD_REQUEST).json({
-        message: "Your data is not valid",
-      });
 
-      return;
-    }
-
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
-    });
-  }
-};
-
-const getAllCampaignCategory = async (req, res) => {
-  try {
-    const campaigncategories = await CampaignCategory.find().exec();
-
-    res.status(HttpStatusCode.OK).json({
-      message: "Get All Campaign Category successfully",
-      result: campaigncategories,
-    });
-  } catch (error) {
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
-    });
-  }
-};
-
-const deleteCampaignCategoryById = async (req, res) => {
-  try {
-    const id = req.params.id
-    await CampaignCategory.findByIdAndDelete(id)
-    
-    res.status(HttpStatusCode.NO_CONTENT).json({
-      message: " Delete Campaign Category successfully"
-    });
-  } catch (error) {
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
-    });
-  }
-};
-//Item Type
-const addNewItemType = async (req, res) => {
-  try {
-    const { name, unit } = req.body;
-    await ItemType.create({ name, unit });
-    res.status(HttpStatusCode.CREATED).json({
-      message: "Create Item Type successfully",
-    });
-  } catch (error) {
-    if (error.name === Exception.VALIDATION_ERROR) {
-      res.status(HttpStatusCode.BAD_REQUEST).json({
-        message: "Your data is not valid",
-      });
-
-      return;
-    }
-
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
-    });
-  }
-};
-
-const getAllItemType = async (req, res) => {
-  try {
-    const itemtypes = await ItemType.find().exec();
-
-    res.status(HttpStatusCode.CREATED).json({
-      message: "Get All Item Type successfully",
-      result: itemtypes,
-    });
-  } catch (error) {
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
-    });
-  }
-};
-
-const deleteItemTypeById = async (req, res) => {
-  try {
-    const id = req.params.id
-    await ItemType.findByIdAndDelete(id)
-
-    res.status(HttpStatusCode.NO_CONTENT).json({
-      message: "Delete Item Type successfully"
-    });
-  } catch (error) {
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
-    });
-  }
-};
-
-// campaign
 const addNewCampaign = async (req, res) => {
   try {
     const {
@@ -269,13 +163,7 @@ const getCampaignByFilter = async (req, res) => {
 };
 
 export default {
-  addNewCampaignCategory,
-  getAllCampaignCategory,
-  deleteCampaignCategoryById,
   getCampaignByFilter,
-  addNewItemType,
-  getAllItemType,
-  deleteItemTypeById,
   addNewCampaign,
   getAllCampaign,
   getCampaignDetail,

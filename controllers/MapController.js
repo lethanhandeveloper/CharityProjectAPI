@@ -1,26 +1,33 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
-
+import Map from "../models/Map.js";
+import Message from "../utils/Message.js";
+import Banner from "../models/Banner.js";
 const getMapList = async (req, res) => {
   try {
-    const data = [
-      { lat: "21.02776440", long: "105.83415980", idRecord: "" },
-      { lat: "16.047079", long: "108.206230", idRecord: "" },
-      { lat: "10.762622", long: "106.660172", idRecord: "" },
-    ];
+    const data = await Map.find().exec();
     res.status(HttpStatusCode.OK).json({
       data: data,
-      message: "Success",
+      message: Message.success,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
+      message: Message.error,
     });
   }
 };
+
 const addNewMap = async (req, res) => {
   try {
-    //create Map
-    //req {lat,long,idRecord}
+    const { lat, long, idRecord, type } = req.body;
+    await Map.create({
+      lat,
+      long,
+      type,
+      idRecord,
+    });
+    res.status(HttpStatusCode.OK).json({
+      message: Message.success,
+    });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: "Server is error",
@@ -29,8 +36,13 @@ const addNewMap = async (req, res) => {
 };
 const updateMap = async (req, res) => {
   try {
-    //update Map
-    //req {lat,long,idRecord}
+    const { lat, long, idRecord, id, type } = req.body;
+    await Banner.findByIdAndUpdate(id, {
+      lat,
+      long,
+      type,
+      idRecord,
+    });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: "Server is error",

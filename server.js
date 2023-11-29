@@ -1,11 +1,11 @@
 import express from "express";
-import cors from "cors"
+import cors from "cors";
 import {
   userRouter,
   areaRouter,
   mapRouter,
   bannerRouter,
-  campaignRouter
+  campaignRouter,
 } from "./routes/index.js";
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";

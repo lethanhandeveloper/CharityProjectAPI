@@ -1,21 +1,26 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
 import Exception from "../utils/Exception.js";
 import mongoose from "mongoose";
-import { Campaign, User, VerificationRequest } from "../models/index.js";
-import { PersonalGeneralInfo, OrganizationGeneralInfo, CommitInfoVerification, SurveyInfoVerification } from "../models/index.js";
+import { User, VerificationRequest } from "../models/index.js";
+import {
+  PersonalGeneralInfo,
+  OrganizationGeneralInfo,
+  CommitInfoVerification,
+  SurveyInfoVerification,
+} from "../models/index.js";
 
 const addNewVerificationRequest = async (req, res) => {
   const session = await mongoose.startSession();
-  session.startTransaction()
+  session.startTransaction();
 
   try {
-    const type = parseInt(req.params.type)
+    const type = parseInt(req.params.type);
     if (isNaN(type) || (type != 1 && type != 2)) {
       throw new Exception("NotANumber");
     }
 
-    let createdPGI = null
-    let createdOGI = null
+    let createdPGI = null;
+    let createdOGI = null;
     const {
       optionCommitOne,
       optionCommitTwo,
@@ -26,9 +31,9 @@ const addNewVerificationRequest = async (req, res) => {
       goalName,
       targetAmount,
       startDate,
-      endDate
-    } = req.body.commitInfoVerification
-    
+      endDate,
+    } = req.body.commitInfoVerification;
+
     const {
       optionSurveyOne,
       optionSurveyTwo,
@@ -40,8 +45,8 @@ const addNewVerificationRequest = async (req, res) => {
       lawThreeOption,
       lawFourOption,
       lawFiveOption,
-      chanel
-    } = req.body.surveyInfoVerification
+      chanel,
+    } = req.body.surveyInfoVerification;
 
     if (type === 1) {
       const {
@@ -59,14 +64,15 @@ const addNewVerificationRequest = async (req, res) => {
           actionDescSociaLink,
           personalAchivementDoc,
           personalUserName,
-        }
-      } = req.body
+        },
+      } = req.body;
 
+      const user = await User.findOne({
+        userName: personalUserName.toString(),
+      });
 
-      const user = await User.findOne({ userName: personalUserName.toString() })
-    
       if (!user) {
-        throw new Exception('UserNotExists')
+        throw new Exception("UserNotExists");
       }
 
       createdPGI = await PersonalGeneralInfo.create({
@@ -83,26 +89,30 @@ const addNewVerificationRequest = async (req, res) => {
         actionDescSociaLink,
         achivementDoc: personalAchivementDoc,
         userId: user._id,
-      })
+      });
     } else if (type === 2) {
-      const { organizationGeneralInfo: {
-        organizationName,
-        establishedDate,
-        website,
-        operationField,
-        address,
-        organizationUserName,
-        actionDescSocialLink,
-        achivementDoc,
-        representativeName,
-        representativePhoneNumber,
-        representativeEmail,
-      } } = req.body
+      const {
+        organizationGeneralInfo: {
+          organizationName,
+          establishedDate,
+          website,
+          operationField,
+          address,
+          organizationUserName,
+          actionDescSocialLink,
+          achivementDoc,
+          representativeName,
+          representativePhoneNumber,
+          representativeEmail,
+        },
+      } = req.body;
 
-      const user = await User.findOne({ userName: organizationUserName.toString() })
-      
+      const user = await User.findOne({
+        userName: organizationUserName.toString(),
+      });
+
       if (!user) {
-        throw new Exception('UserNotExists')
+        throw new Exception("UserNotExists");
       }
 
       createdOGI = await OrganizationGeneralInfo.create({
@@ -117,7 +127,7 @@ const addNewVerificationRequest = async (req, res) => {
         representativeName,
         representativePhoneNumber,
         representativeEmail,
-      })
+      });
     }
 
     const createdCIV = await CommitInfoVerification.create({
@@ -130,8 +140,8 @@ const addNewVerificationRequest = async (req, res) => {
       goalName,
       targetAmount,
       startDate,
-      endDate
-    })
+      endDate,
+    });
 
     const createdSIV = await SurveyInfoVerification.create({
       optionSurveyOne,
@@ -144,135 +154,143 @@ const addNewVerificationRequest = async (req, res) => {
       lawThreeOption,
       lawFourOption,
       lawFiveOption,
-      chanel
-    })
+      chanel,
+    });
 
     await VerificationRequest.create({
       type,
       personalGeneralInfoId: createdPGI?._id,
       organizationGeneralInfoId: createdOGI?._id,
       commitInfoVerificationId: createdCIV._id,
-      surveyInfoVerificationId: createdSIV._id
-    })
+      surveyInfoVerificationId: createdSIV._id,
+    });
 
-    await session.commitTransaction()
+    await session.commitTransaction();
 
     res.status(HttpStatusCode.CREATED).json({
-      message: "Create Verification Request Successfully"
-    })
+      message: "Create Verification Request Successfully",
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     await session.abortTransaction();
 
-    if (error.message === 'UserNotExists') {
+    if (error.message === "UserNotExists") {
       res.status(HttpStatusCode.BAD_REQUEST).json({
-        message: "User name is not exists"
-      })
-
-      return
-    }
-
-    if (error.message === 'NotANumber') {
-      res.status(HttpStatusCode.BAD_REQUEST).json({
-        message: "Your data is not valid"
-      })
-
-      return
-    }
-
-    res
-      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      .json({
-        message: Exception.SERVER_ERROR
+        message: "User name is not exists",
       });
-  }
-  finally {
+
+      return;
+    }
+
+    if (error.message === "NotANumber") {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        message: "Your data is not valid",
+      });
+
+      return;
+    }
+
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  } finally {
     session.endSession();
   }
-
 };
 
 const getAllVerificationRequest = async (req, res) => {
   try {
-    const requests = await VerificationRequest.find()
-    let personalGeneralInfo
-    let organizationGeneralInfo
-    let returnRequestArr = []
-    const returnRequest = await Promise.all(requests.map(async request => {
-      let commitInfoVerification = await CommitInfoVerification.findById(request.commitInfoVerificationId)
-      let surveyInfoVerification = await SurveyInfoVerification.findById(request.surveyInfoVerificationId)
-      console.log(request)
-      let generalInfo;
+    const requests = await VerificationRequest.find();
+    let personalGeneralInfo;
+    let organizationGeneralInfo;
+    let returnRequestArr = [];
+    const returnRequest = await Promise.all(
+      requests.map(async (request) => {
+        let commitInfoVerification = await CommitInfoVerification.findById(
+          request.commitInfoVerificationId
+        );
+        let surveyInfoVerification = await SurveyInfoVerification.findById(
+          request.surveyInfoVerificationId
+        );
+        console.log(request);
+        let generalInfo;
 
-      if (request.type === 1) {
-        personalGeneralInfo = await PersonalGeneralInfo.findById(request.personalGeneralInfoId).populate('userId')
+        if (request.type === 1) {
+          personalGeneralInfo = await PersonalGeneralInfo.findById(
+            request.personalGeneralInfoId
+          ).populate("userId");
 
-        return {
-          id: request._id,
-          type: request.type,
-          status: request.status,
-          personalGeneralInfo,
-          commitInfoVerification,
-          surveyInfoVerification
+          return {
+            id: request._id,
+            type: request.type,
+            status: request.status,
+            personalGeneralInfo,
+            commitInfoVerification,
+            surveyInfoVerification,
+          };
+        } else {
+          organizationGeneralInfo = await OrganizationGeneralInfo.findById(
+            request.organizationGeneralInfoId
+          ).populate("userId");
+
+          return {
+            id: request._id,
+            type: request.type,
+            status: request.status,
+            organizationGeneralInfo,
+            commitInfoVerification,
+            surveyInfoVerification,
+          };
         }
-      } else {
-        organizationGeneralInfo = await OrganizationGeneralInfo.findById(request.organizationGeneralInfoId).populate('userId')
-
-        return {
-          id: request._id,
-          type: request.type,
-          status: request.status,
-          organizationGeneralInfo,
-          commitInfoVerification,
-          surveyInfoVerification
-        }
-      }
-    }))
+      })
+    );
 
     res.status(HttpStatusCode.OK).json({
       message: "Get all verification request successfully",
-      result: returnRequest
-    })
+      result: returnRequest,
+    });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR
-    })
+      message: Exception.SERVER_ERROR,
+    });
   }
-}
+};
 
 const updateRequestStatus = async (req, res) => {
   try {
-    const { status } = req.body
-    const reqId = req.params.id
-    let verificationRequest = await VerificationRequest.findById(reqId)
-    verificationRequest.status = status
-    verificationRequest.save()
-    let user
+    const { status } = req.body;
+    const reqId = req.params.id;
+    let verificationRequest = await VerificationRequest.findById(reqId);
+    verificationRequest.status = status;
+    verificationRequest.save();
+    let user;
 
-    if(status === 2){
-      if(verificationRequest.type === 1){
-        user = await PersonalGeneralInfo.findById(verificationRequest.personalGeneralInfoId);
-        await User.findByIdAndUpdate(user.userId, { role: 2 })
-      }else if(verificationRequest.type === 2){
-        user = await OrganizationGeneralInfo.findById(verificationRequest.personalGeneralInfoId);
-        await User.findByIdAndUpdate(user.userId, { role: 3 })
+    if (status === 2) {
+      if (verificationRequest.type === 1) {
+        user = await PersonalGeneralInfo.findById(
+          verificationRequest.personalGeneralInfoId
+        );
+        await User.findByIdAndUpdate(user.userId, { role: 2 });
+      } else if (verificationRequest.type === 2) {
+        user = await OrganizationGeneralInfo.findById(
+          verificationRequest.personalGeneralInfoId
+        );
+        await User.findByIdAndUpdate(user.userId, { role: 3 });
       }
     }
 
     res.status(HttpStatusCode.NO_CONTENT).json({
-      message: "Update request status successfully"
-    })
+      message: "Update request status successfully",
+    });
   } catch (error) {
-
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR
-    })
+      message: Exception.SERVER_ERROR,
+    });
   }
-
 };
 
 export default {
   addNewVerificationRequest,
   getAllVerificationRequest,
-  updateRequestStatus
+  updateRequestStatus,
 };

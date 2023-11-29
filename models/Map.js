@@ -16,5 +16,9 @@ export default mongoose.model(
       type: String,
       require: true,
     },
+    type: {
+      type: String,
+      require: true,
+    },
   })
 );

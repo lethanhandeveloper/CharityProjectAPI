@@ -40,4 +40,6 @@ router.get(
   UserController.getMyUserInfo
 );
 
+router.get("/list", auth([Role.admin]), UserController.getUserListByPage);
+
 export default router;

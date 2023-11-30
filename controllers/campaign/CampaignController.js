@@ -162,10 +162,60 @@ const getCampaignByFilter = async (req, res) => {
   }
 };
 
+const getCampaignByStatus = async (req, res) => {
+  try {
+    const {
+      page,
+      no_item_per_page,
+      search_text,
+      provinceId,
+      categoryId,
+      status,
+    } = req.body;
+
+    const query = [];
+    if (provinceId) {
+      query.push({ provinceId: provinceId });
+    }
+    if (categoryId) {
+      query.push({ categoryId: categoryId });
+    }
+    if (status) {
+      query.push({ status: status });
+    }
+    if (search_text) {
+      query.push({ title: { $regex: new RegExp(search_text, "i") } });
+    }
+
+    let queryMongo = {};
+    if (query.length > 0) {
+      queryMongo = {
+        $and: [...query],
+      };
+    }
+    const skip = (page - 1) * no_item_per_page;
+
+    const campaigns = await Campaign.find(queryMongo)
+      .skip(skip)
+      .limit(no_item_per_page)
+      .exec();
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Get All Campaigns successfully",
+      result: campaigns,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   getCampaignByFilter,
   addNewCampaign,
   getAllCampaign,
   getCampaignDetail,
   getCampaignByCurrentUser,
+  getCampaignByStatus,
 };

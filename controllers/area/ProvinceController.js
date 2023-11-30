@@ -1,5 +1,6 @@
 import Exception from "../../utils/Exception.js";
 import HttpStatusCode from "../../utils/HttpStatusCode.js";
+import Province from "../../models/Province.js";
 
 const addNewProvince = async (req, res) => {
   const { name } = req.body;
@@ -18,6 +19,7 @@ const addNewProvince = async (req, res) => {
 
 const getAllProvince = async (req, res) => {
   try {
+    console.log("check");
     const provinces = await Province.find().exec();
     res.status(HttpStatusCode.OK).json({
       message: "Get all province successfully",

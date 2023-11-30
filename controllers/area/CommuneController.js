@@ -1,7 +1,7 @@
 // Communes
 import Exception from "../../utils/Exception.js";
 import HttpStatusCode from "../../utils/HttpStatusCode.js";
-
+import Commune from "../../models/Commune.js";
 const getAllCommune = async (req, res) => {
   try {
     const Communes = await Commune.find().populate("districtId").exec();

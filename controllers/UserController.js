@@ -158,17 +158,17 @@ const updateMyUserInfo = async (req, res) => {
       specificAddress,
     } = req.body;
 
-    if (await isUserExists({ email, phoneNumber })) {
-      res.status(HttpStatusCode.CONFLICT).json({
-        message: "Email or phone number existed in the system",
-      });
-
-      return;
-    }
-
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       const userId = decoded.data._doc._id;
+      const user = await User.findById(userId);
+      if (email !== user.email || phoneNumber !== user.phoneNumber)
+        if (await isUserExists({ email, phoneNumber })) {
+          res.status(HttpStatusCode.CONFLICT).json({
+            message: "Email or phone number existed in the system",
+          });
 
+          return;
+        }
       try {
         await User.findByIdAndUpdate(
           userId,

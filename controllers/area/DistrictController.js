@@ -1,5 +1,6 @@
 import Exception from "../../utils/Exception.js";
 import HttpStatusCode from "../../utils/HttpStatusCode.js";
+import District from "../../models/District.js";
 
 const addNewDistrict = async (req, res) => {
   try {

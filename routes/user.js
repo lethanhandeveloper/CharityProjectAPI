@@ -40,6 +40,11 @@ router.get(
   UserController.getMyUserInfo
 );
 
-router.get("/list", auth([Role.admin]), UserController.getUserListByPage);
+router.post("/list", UserController.getUserListByPage);
+router.post(
+  "/listinactive",
+
+  UserController.getUserInActiveListByPage
+);
 
 export default router;

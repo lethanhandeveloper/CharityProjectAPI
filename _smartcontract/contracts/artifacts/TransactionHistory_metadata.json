@@ -1,0 +1,182 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "campaignId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "donatorId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"name": "addNewTransactionHistory",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "adminAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "campaignAddress",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllTransaction",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "donatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "time",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TransactionHistory.TransactionInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_campaignAddress",
+						"type": "address"
+					}
+				],
+				"name": "setCampaignAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "transactionInfoArray",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "campaignId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "donatorId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/TransactionHistory.sol": "TransactionHistory"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/TransactionHistory.sol": {
+			"keccak256": "0x463447cb0a9bd273f3f8aed1053e21e8b63df0ce18bf1b714c45fc2a6b229121",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://78704584f7227848763d545fe4b3e2aab081e2c213850bb56950746faf834d09",
+				"dweb:/ipfs/QmWMc5NEWzb1iXmXeqVZnoxabYRfHEtnJnG2jSugSgMEZE"
+			]
+		}
+	},
+	"version": 1
+}

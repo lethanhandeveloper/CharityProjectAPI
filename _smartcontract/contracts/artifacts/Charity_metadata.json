@@ -1,0 +1,126 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "id",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "creatorUserName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "currentValue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "targetValue",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endDate",
+						"type": "uint256"
+					}
+				],
+				"name": "addNewCampaign",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_campaignAddress",
+						"type": "address"
+					}
+				],
+				"name": "setCampaignAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_transactionHistoryAddress",
+						"type": "address"
+					}
+				],
+				"name": "setTransactionHistoryAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Charity.sol": "Charity"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Campaign.sol": {
+			"keccak256": "0xe3e5ff919b3753d55d6c5becf79b3b174f849ec33789eb34fba2feae2038043d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://efbdbe46e753e13f18d0e7e0071cc3e4b535422c08ce2c2f05cf0d2809a13f41",
+				"dweb:/ipfs/Qmd9b5Ci8iV7qctGYZDY3YWoCqEoACeSaH1hw4cF9sDtUh"
+			]
+		},
+		"contracts/Charity.sol": {
+			"keccak256": "0x18390db8138dd8dc4e92312b1753f7772d9ec89b6cde2218e3a3c18bcd53bc65",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://28ed0a33002f3e9387c52e5356ccaed117e3c08ccdc24b4e5837a8584e5f318a",
+				"dweb:/ipfs/QmT22DHJPi8ECa4DdsKzVLzNsocMs26r4jhc3LCoEy49gg"
+			]
+		},
+		"contracts/TransactionHistory.sol": {
+			"keccak256": "0x1fdb56e436ba0cba53e44638d5b568fa7e7b849b2a29b08d9f83ac8e6bcfed64",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7a89978d4d156ce242ddecd1b9f767b2cb39fbcadeb4ec55ac6eab1bfa3f4360",
+				"dweb:/ipfs/QmPxx81QrTH8fftRDgu55kpBrVPbRuezDgcU6VsUu2kcm1"
+			]
+		}
+	},
+	"version": 1
+}

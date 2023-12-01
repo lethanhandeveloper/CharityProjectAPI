@@ -91,6 +91,69 @@
 				"inputs": [
 					{
 						"internalType": "string",
+						"name": "campaignId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "donatorId",
+						"type": "string"
+					}
+				],
+				"name": "donate",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllCampaign",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "id",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "creatorUserName",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "currentValue",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "targetValue",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "endDate",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Campaign.CampaignInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
 						"name": "id",
 						"type": "string"
 					}
@@ -167,11 +230,19 @@
 	},
 	"sources": {
 		"contracts/Campaign.sol": {
-			"keccak256": "0x47ddbaf8398eb03fc09b5885a6cc5bee2a8954080f781decadd2b19fe1a21d41",
+			"keccak256": "0x0510f04c41d8959b15d9e654f67032246fdd95790db52feb9cbd7b127008e018",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bc656210170c9f903c00beb266cf7dac186ce12e7de8588c4c8cd0c435bff28a",
-				"dweb:/ipfs/QmSgDxdv6ho4BDREwCfuh8DjNyk8v1nTnKGcdimwhDzdtw"
+				"bzz-raw://fde670519dca0c15e525d2c8fb1d038d0a38db92692bdf2fb6964c282bfdc84b",
+				"dweb:/ipfs/QmecFWnDdPNTbztshGeQo9NcKeyH83ZdHbdwgq1FCfcaPk"
+			]
+		},
+		"contracts/TransactionHistory.sol": {
+			"keccak256": "0x463447cb0a9bd273f3f8aed1053e21e8b63df0ce18bf1b714c45fc2a6b229121",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://78704584f7227848763d545fe4b3e2aab081e2c213850bb56950746faf834d09",
+				"dweb:/ipfs/QmWMc5NEWzb1iXmXeqVZnoxabYRfHEtnJnG2jSugSgMEZE"
 			]
 		}
 	},

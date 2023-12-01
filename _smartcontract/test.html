@@ -20,7 +20,7 @@
 
     <script>
         // Replace with your smart contract address
-        const contractAddress = '0xC576A874cc93f25806A52C97a56c5C099aFA5C9C';
+        const contractAddress = '0x5D777a12c55B956c162A3083406722Ae77dA8A9F';
 
         // Replace with your smart contract ABI
         const contractABI = [
@@ -107,6 +107,51 @@
                 "type": "function"
             },
             {
+                "inputs": [],
+                "name": "getAllCampaign",
+                "outputs": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "string",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "creatorUserName",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "title",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "currentValue",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "targetValue",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "endDate",
+                                "type": "uint256"
+                            }
+                        ],
+                        "internalType": "struct Campaign.CampaignInfo[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "inputs": [
                     {
                         "internalType": "string",
@@ -163,7 +208,7 @@
         window.addEventListener('load', async () => {
             const rpcUrl = 'http://localhost:8545';
             // Modern dapp browsers
-            if (window.ethereum) { 
+            if (window.ethereum) {
                 window.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
                 try {
                     // Request account access
@@ -181,7 +226,7 @@
             else {
                 console.log("Non-Ethereum browser detected. You should consider trying MetaMask!");
             }
-
+            web3.eth.handleRevert = true
             // Set the contract address and ABI
             contract = new web3.eth.Contract(contractABI, contractAddress);
 
@@ -190,8 +235,12 @@
         });
 
         async function getValue() {
-            const value = await contract.methods.getCampaignById('280280802402802').call();
-            console.log(value);
+            try {
+                const value = await contract.methods.getCampaignById('12222').call();
+            // console.log(value);
+            } catch (error) {
+                console.log(error.message)
+            }
         }
     </script>
 

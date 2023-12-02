@@ -8,6 +8,7 @@ contract TransactionHistory
     struct TransactionInfo {
         string campaignId;
         string donatorId;
+        address donatorAddress;
         uint value;
         uint256 time;
     }
@@ -24,10 +25,11 @@ contract TransactionHistory
         _; 
     }
 
-    function addNewTransactionHistory(string memory campaignId, string memory donatorId, uint value, uint256 time) external onlyCampaignContract{
+    function addNewTransactionHistory(string memory campaignId, string memory donatorId, address donatorAddress, uint value, uint256 time) external onlyCampaignContract{
         TransactionInfo memory newTransaction;
         newTransaction.campaignId = campaignId;
         newTransaction.donatorId = donatorId;
+        newTransaction.donatorAddress = donatorAddress;
         newTransaction.value = value;
         newTransaction.time = time;
 
@@ -40,5 +42,33 @@ contract TransactionHistory
 
     function setCampaignAddress(address _campaignAddress) public onlyAdminAddress{
         campaignAddress = _campaignAddress;
+    }
+
+    function getDonateByUser(string memory _donatorId) public view returns(TransactionInfo memory)  {
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(transactionInfoArray[i].donatorId)) ==
+                keccak256(abi.encodePacked(_donatorId))
+            ) {
+                return transactionInfoArray[i];
+            }
+        }
+
+        revert("Not found");
+    }
+
+    function isDonatedtoCampaign(address _donatorAddress, string memory _campaignId) public view returns(bool) {
+         for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(transactionInfoArray[i].donatorAddress)) ==
+                keccak256(abi.encodePacked(_donatorAddress)) &&
+                keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) ==
+                keccak256(abi.encodePacked(_campaignId))
+            ){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

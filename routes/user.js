@@ -14,6 +14,11 @@ router.post(
   requestLimit,
   UserController.sendRegistionCode
 );
+router.get(
+  "/refreshtoken",
+  UserController.getAccessToken
+);
+
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 router.patch("/", UserController.updateMyUserInfo);

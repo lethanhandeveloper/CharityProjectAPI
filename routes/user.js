@@ -1,11 +1,11 @@
-import express from "express"
+import express from "express";
 import {
   UserController,
   VerificationController,
-} from "../controllers/index.js"
-import auth from "../middlewares/auth.js"
-import requestLimit from "../middlewares/requestlimit.js"
-import Role from "../utils/Role.js"
+} from "../controllers/index.js";
+import auth from "../middlewares/auth.js";
+import requestLimit from "../middlewares/requestlimit.js";
+import Role from "../utils/Role.js";
 
 const router = express.Router();
 
@@ -51,11 +51,17 @@ router.get(
   UserController.getMyUserInfo
 );
 
-router.post("/list", UserController.getUserListByPage);
+router.post(
+  "/list",
+  auth([Role.user, Role.admin]),
+  UserController.getUserListByPage
+);
 router.post(
   "/listinactive",
-
+  auth([Role.user, Role.admin]),
   UserController.getUserInActiveListByPage
 );
+
+router.get("/home", UserController.getUserOrgina);
 
 export default router;

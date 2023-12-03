@@ -5,29 +5,31 @@ import Role from "../utils/Role.js";
 
 const router = express.Router();
 
-router.post(
-  "/province",
-  auth([Role.admin]),
-  AreaController.ProvinceController.addNewProvince
-);
-router.get("/province", AreaController.ProvinceController.getAllProvince);
+router.get("/province/list", AreaController.ProvinceController.getAllProvince);
+router.post("/province/list", AreaController.ProvinceController.getAllProvince);
+
 router.delete(
   "/province/:id",
   auth([Role.admin]),
   AreaController.ProvinceController.deleteProvinceById
 );
-router.put(
-  "/province/:id",
+router.post(
+  "/province/create",
+  AreaController.ProvinceController.addNewProvince
+);
+router.patch(
+  "/province/update",
   auth([Role.admin]),
   AreaController.ProvinceController.updateProvinceById
 );
 
 router.post(
-  "/district",
-  auth([Role.admin]),
+  "/district/create",
+
   AreaController.DistrictController.addNewDistrict
 );
-router.get("/district", AreaController.DistrictController.getAllDistrict);
+router.get("/district/list", AreaController.DistrictController.getAllDistrict);
+router.post("/district/list", AreaController.DistrictController.getAllDistrict);
 router.delete(
   "/district/:id",
   auth([Role.admin]),
@@ -37,34 +39,40 @@ router.get(
   "/district/:provinceId/province",
   AreaController.DistrictController.getDistrictByProvinceId
 );
-router.put(
-  "/district/:id",
+router.patch(
+  "/district/update",
   auth([Role.admin]),
   AreaController.DistrictController.updateDistrictById
 );
 
 router.post(
-  "/commune",
-  auth([Role.admin]),
+  "/commune/create",
+
   AreaController.CommuneController.addNewCommune
 );
-router.get("/commune", AreaController.CommuneController.getAllCommune);
+
+router.get("/commune/list", AreaController.CommuneController.getAllCommune);
+router.post("/commune/list", AreaController.CommuneController.getAllCommune);
+
 router.get(
   "/commune/:districtId/district",
   AreaController.CommuneController.getCommuneByDistrictId
 );
+
 router.delete(
   "/commune/:id",
   auth([Role.admin]),
   AreaController.CommuneController.deleteCommuneById
 );
+
 router.delete(
   "/commune",
   auth([Role.admin]),
   AreaController.CommuneController.deleteAllCommune
 );
-router.put(
-  "/commune/:id",
+
+router.patch(
+  "/commune/update",
   auth([Role.admin]),
   AreaController.CommuneController.updateCommuneById
 );

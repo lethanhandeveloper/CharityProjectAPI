@@ -91,7 +91,7 @@ contract Campaign {
                 }
 
 
-                TransactionHistory(0x3328358128832A260C76A4141e19E2A943CD4B6D)
+                TransactionHistory(transactionHistoryAddress)
                     .addNewTransactionHistory(
                         campaignId,
                         donatorId,

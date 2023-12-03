@@ -4,11 +4,9 @@ import Banner from "../models/Banner.js";
 const getAllList = async (req, res) => {
   try {
     const data = await Banner.find().exec();
+
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
-      data: data,
-    });
-    res.status(HttpStatusCode.OK).json({
       result: data,
     });
   } catch (error) {

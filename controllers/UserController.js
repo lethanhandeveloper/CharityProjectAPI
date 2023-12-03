@@ -1,6 +1,8 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
 import Exception from "../utils/Exception.js";
-import { Commune, District, Province, User } from "../models/index.js";
+import { Commune, District, Province, User, EmailRegistrationCode, RequestLimit } from "../models/index.js";
+import { sendRegistionCodeEmail } from "../services/Email.js";
+import requestIp from 'request-ip';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -11,6 +13,10 @@ const isUserExists = async ({ email, phoneNumber, userName }) => {
 
   return existingUser;
 };
+
+const isValidRgCode = async (email, rgCode) => {
+  return await EmailRegistrationCode.exists({ email, rgCode, expiredAt : { $gte : Date.now() } })
+}
 
 const register = async (req, res) => {
   try {
@@ -25,19 +31,27 @@ const register = async (req, res) => {
       communeId,
       specificAddress,
       image_url,
+      rgCode
     } = req.body;
 
+    if(!await isValidRgCode(email, rgCode)){
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        message: "Registration code is not valid or expired. Please try again",
+      })
+      return
+    }
+    
     if (await isUserExists({ email, phoneNumber, userName })) {
       res.status(HttpStatusCode.CONFLICT).json({
         message: "Email or phone number is exists already",
-      });
-      return;
+      })
+      return
     }
 
     const hashedPassword = await bcrypt.hash(
       password,
       parseInt(process.env.SALT_ROUNDS)
-    );
+    )
 
     const newUser = await User.create({
       name,
@@ -263,6 +277,44 @@ const getUserInActiveListByPage = async (req, res) => {
   }
 };
 
+const sendRegistionCode = async (req, res) => {
+  try {
+    const { toEmail } = req.body
+    const rgcode = await sendRegistionCodeEmail(toEmail);
+    const expiredAt = Date.now() + process.env.REGISTRATION_EXPIRED_AFTER_MINUTES * 60 * 1000;
+
+    let ergcode = await EmailRegistrationCode.findOne({ email: toEmail })
+    if(ergcode){
+      ergcode.rgCode = rgcode
+      ergcode.expiredAt = expiredAt
+
+      ergcode.save()
+    }else{
+      EmailRegistrationCode.create({ 
+        email: toEmail,
+        rgCode: rgcode,
+        expiredAt: expiredAt
+      })
+    }
+
+    const clientIp = requestIp.getClientIp(req); 
+    let rqLimit = await RequestLimit.findOne({ route: "/user/register/getcode", clientIp })
+    if(rqLimit){
+      rqLimit.nextRequestAt = expiredAt
+      await rqLimit.save()
+    }else{
+      await RequestLimit.create({ route: "/user/register/getcode", clientIp, nextRequestAt : expiredAt })
+    }
+
+    res.status(200).json({
+      "message": "Send registration code mail successfully"
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server is error" })
+  }
+}
+
 export default {
   register,
   login,
@@ -271,4 +323,5 @@ export default {
   updateAvatar,
   getUserListByPage,
   getUserInActiveListByPage,
+  sendRegistionCode
 };

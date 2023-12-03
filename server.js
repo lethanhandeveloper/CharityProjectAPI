@@ -10,12 +10,21 @@ import {
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
 import HttpStatusCode from "./utils/HttpStatusCode.js";
+import requestIp from 'request-ip';
+import path from 'path';
+
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(cors());
 app.use("/user", userRouter);

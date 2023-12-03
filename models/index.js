@@ -11,6 +11,8 @@ import OrganizationGeneralInfo from "./OrganizationGeneralInfo.js";
 import CommitInfoVerification from "./CommitInfoVerification.js";
 import SurveyInfoVerification from "./SurveyInfoVerification.js"
 import VerificationRequest from "./VerificationRequest.js"
+import EmailRegistrationCode from "./EmailRegistrationCode.js"
+import RequestLimit from './RequestLimit.js'
 
 export {
     User,
@@ -25,5 +27,7 @@ export {
     OrganizationGeneralInfo,
     CommitInfoVerification,
     SurveyInfoVerification,
-    VerificationRequest
+    VerificationRequest,
+    EmailRegistrationCode,
+    RequestLimit
 };

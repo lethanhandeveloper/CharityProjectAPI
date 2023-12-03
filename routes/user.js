@@ -1,13 +1,19 @@
-import express from "express";
+import express from "express"
 import {
   UserController,
   VerificationController,
-} from "../controllers/index.js";
-import auth from "../middlewares/auth.js";
-import Role from "../utils/Role.js";
+} from "../controllers/index.js"
+import auth from "../middlewares/auth.js"
+import requestLimit from "../middlewares/requestlimit.js"
+import Role from "../utils/Role.js"
 
 const router = express.Router();
 
+router.post(
+  "/register/getcode",
+  requestLimit,
+  UserController.sendRegistionCode
+);
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 router.patch("/", UserController.updateMyUserInfo);

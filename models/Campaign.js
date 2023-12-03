@@ -7,22 +7,22 @@ export default mongoose.model(
       type: ObjectId,
     },
     creatorId: {
-      type: ObjectId,
+      type: Schema.ObjectId,
       required: true,
       ref: "User",
     },
     categoryId: {
-      type: ObjectId,
+      type: Schema.ObjectId,
       required: true,
       ref: "CampaignCategory",
     },
     itemTypeId: {
-      type: ObjectId,
+      type: Schema.ObjectId,
       required: true,
       ref: "ItemType",
     },
     provinceId: {
-      type: ObjectId,
+      type: Schema.ObjectId,
       required: true,
       ref: "Province",
     },

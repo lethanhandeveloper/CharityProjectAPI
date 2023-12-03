@@ -48,6 +48,8 @@ router.post(
   "/filter",
   CampaignController.CampaignController.getCampaignByFilter
 );
+router.post("/list", CampaignController.CampaignController.getCampaignByFilter);
+
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
 router.get(
   "/user",

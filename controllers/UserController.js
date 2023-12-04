@@ -124,14 +124,16 @@ const login = async (req, res) => {
           expiresIn: "30d",
         });
 
-        console.log(payLoad);
+
         res.status(200).json({
           message: "Login user successfully",
           result: {
             ...existingUser.toObject(),
             password: "not show",
             token: accessToken,
+
             refreshToken,
+
           },
         });
       }
@@ -419,6 +421,59 @@ const countUser = async (req, res) => {
   }
 };
 
+const getAccessToken = async (req, res) => {
+  try {
+    const refreshToken = req.headers?.authorization?.split(" ")[1];
+    let isExpired
+    let jwtObject
+
+    if (refreshToken) {
+      jwtObject = await jwt.verify(refreshToken, process.env.JWT_REFRESH)
+      console.log(jwtObject)
+      isExpired = Date.now() >= jwtObject.exp * 1000
+    } else {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        message: "Refresh token must be provided",
+      });
+
+      return;
+    }
+
+    if (isExpired) {
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
+        message: "Refresh token is expired",
+      });
+    } 
+
+    const payLoad = {
+      data: {
+        ...jwtObject.data,
+        password: "not show",
+      },
+    };
+
+    let accessToken = jwt.sign(payLoad, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    return res.status(HttpStatusCode.OK).json({
+      token: accessToken
+    })
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError') {
+      res.status(HttpStatusCode.UNAUTHORIZED).json({
+        message: "Refresh token is not valid"
+      });
+
+      return
+    }
+    console.log(error)
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+}
+
 export default {
   register,
   login,
@@ -431,4 +486,6 @@ export default {
   getAccessToken,
   getUserOrgina,
   countUser,
+
+
 };

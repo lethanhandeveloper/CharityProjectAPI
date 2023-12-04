@@ -40,7 +40,7 @@ router.delete(
 
 router.post(
   "/",
-  auth([Role.personal, Role.organization, Role.admin]),
+  auth([Role.admin]),
   CampaignController.CampaignController.addNewCampaign
 );
 router.get("/", CampaignController.CampaignController.getAllCampaign);
@@ -55,5 +55,6 @@ router.get(
   "/user",
   CampaignController.CampaignController.getCampaignByCurrentUser
 );
+router.get("/home", CampaignController.CampaignController.getCampaignHome);
 
 export default router;

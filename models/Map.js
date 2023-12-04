@@ -12,9 +12,10 @@ export default mongoose.model(
       type: String,
       require: true,
     },
-    idRecord: {
-      type: String,
-      require: true,
+    campaign: {
+      type: Schema.ObjectId,
+      required: true,
+      ref: "Campaign",
     },
     type: {
       type: String,

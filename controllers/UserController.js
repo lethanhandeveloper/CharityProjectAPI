@@ -1,8 +1,15 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
 import Exception from "../utils/Exception.js";
-import { Commune, District, Province, User, EmailRegistrationCode, RequestLimit } from "../models/index.js";
+import {
+  Commune,
+  District,
+  Province,
+  User,
+  EmailRegistrationCode,
+  RequestLimit,
+} from "../models/index.js";
 import { sendRegistionCodeEmail } from "../services/Email.js";
-import requestIp from 'request-ip';
+import requestIp from "request-ip";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -15,8 +22,12 @@ const isUserExists = async ({ email, phoneNumber, userName }) => {
 };
 
 const isValidRgCode = async (email, rgCode) => {
-  return await EmailRegistrationCode.exists({ email, rgCode, expiredAt : { $gte : Date.now() } })
-}
+  return await EmailRegistrationCode.exists({
+    email,
+    rgCode,
+    expiredAt: { $gte: Date.now() },
+  });
+};
 
 const register = async (req, res) => {
   try {
@@ -31,27 +42,27 @@ const register = async (req, res) => {
       communeId,
       specificAddress,
       image_url,
-      rgCode
+      rgCode,
     } = req.body;
 
-    if(!await isValidRgCode(email, rgCode)){
+    if (!(await isValidRgCode(email, rgCode))) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
         message: "Registration code is not valid or expired. Please try again",
-      })
-      return
+      });
+      return;
     }
-    
+
     if (await isUserExists({ email, phoneNumber, userName })) {
       res.status(HttpStatusCode.CONFLICT).json({
         message: "Email or phone number is exists already",
-      })
-      return
+      });
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(
       password,
       parseInt(process.env.SALT_ROUNDS)
-    )
+    );
 
     const newUser = await User.create({
       name,
@@ -113,14 +124,16 @@ const login = async (req, res) => {
           expiresIn: "30d",
         });
 
-        console.log(payLoad)
+
         res.status(200).json({
           message: "Login user successfully",
           result: {
             ...existingUser.toObject(),
             password: "not show",
             token: accessToken,
-            refreshToken
+
+            refreshToken,
+
           },
         });
       }
@@ -283,41 +296,130 @@ const getUserInActiveListByPage = async (req, res) => {
 
 const sendRegistionCode = async (req, res) => {
   try {
-    const { toEmail } = req.body
+    const { toEmail } = req.body;
     const rgcode = await sendRegistionCodeEmail(toEmail);
-    const expiredAt = Date.now() + process.env.REGISTRATION_EXPIRED_AFTER_MINUTES * 60 * 1000;
+    const expiredAt =
+      Date.now() + process.env.REGISTRATION_EXPIRED_AFTER_MINUTES * 60 * 1000;
 
-    let ergcode = await EmailRegistrationCode.findOne({ email: toEmail })
-    if(ergcode){
-      ergcode.rgCode = rgcode
-      ergcode.expiredAt = expiredAt
+    let ergcode = await EmailRegistrationCode.findOne({ email: toEmail });
+    if (ergcode) {
+      ergcode.rgCode = rgcode;
+      ergcode.expiredAt = expiredAt;
 
-      ergcode.save()
-    }else{
-      EmailRegistrationCode.create({ 
+      ergcode.save();
+    } else {
+      EmailRegistrationCode.create({
         email: toEmail,
         rgCode: rgcode,
-        expiredAt: expiredAt
-      })
+        expiredAt: expiredAt,
+      });
     }
 
-    const clientIp = requestIp.getClientIp(req); 
-    let rqLimit = await RequestLimit.findOne({ route: "/user/register/getcode", clientIp })
-    if(rqLimit){
-      rqLimit.nextRequestAt = expiredAt
-      await rqLimit.save()
-    }else{
-      await RequestLimit.create({ route: "/user/register/getcode", clientIp, nextRequestAt : expiredAt })
+    const clientIp = requestIp.getClientIp(req);
+    let rqLimit = await RequestLimit.findOne({
+      route: "/user/register/getcode",
+      clientIp,
+    });
+    if (rqLimit) {
+      rqLimit.nextRequestAt = expiredAt;
+      await rqLimit.save();
+    } else {
+      await RequestLimit.create({
+        route: "/user/register/getcode",
+        clientIp,
+        nextRequestAt: expiredAt,
+      });
     }
 
     res.status(200).json({
-      "message": "Send registration code mail successfully"
-    })
+      message: "Send registration code mail successfully",
+    });
   } catch (error) {
-    console.log(error)
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: "Server is error" })
+    console.log(error);
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server is error" });
   }
-}
+};
+
+const getAccessToken = async (req, res) => {
+  try {
+    const refreshToken = req.headers?.authorization?.split(" ")[1];
+    let isExpired;
+    let jwtObject;
+
+    if (refreshToken) {
+      jwtObject = await jwt.verify(refreshToken, process.env.JWT_REFRESH);
+      console.log(jwtObject);
+      isExpired = Date.now() >= jwtObject.exp * 1000;
+    } else {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        message: "Refresh token must be provided",
+      });
+
+      return;
+    }
+
+    if (isExpired) {
+      return res.status(HttpStatusCode.UNAUTHORIZED).json({
+        message: "Refresh token is expired",
+      });
+    }
+
+    const payLoad = {
+      data: {
+        ...jwtObject.data,
+        password: "not show",
+      },
+    };
+
+    let accessToken = jwt.sign(payLoad, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    return res.status(HttpStatusCode.OK).json({
+      token: accessToken,
+    });
+  } catch (error) {
+    if (error.name === "JsonWebTokenError") {
+      res.status(HttpStatusCode.UNAUTHORIZED).json({
+        message: "Refresh token is not valid",
+      });
+
+      return;
+    }
+    console.log(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+
+const getUserOrgina = async (req, res) => {
+  try {
+    const UserList = await User.find().exec();
+    res.status(HttpStatusCode.OK).json({
+      result: UserList,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+
+const countUser = async (req, res) => {
+  try {
+    const UserList = await User.count();
+    res.status(HttpStatusCode.OK).json({
+      result: UserList,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
 
 const getAccessToken = async (req, res) => {
   try {
@@ -381,5 +483,9 @@ export default {
   getUserListByPage,
   getUserInActiveListByPage,
   sendRegistionCode,
-  getAccessToken
+  getAccessToken,
+  getUserOrgina,
+  countUser,
+
+
 };

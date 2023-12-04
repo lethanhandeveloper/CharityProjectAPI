@@ -1,6 +1,7 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
 import Message from "../utils/Message.js";
 import Banner from "../models/Banner.js";
+
 const getAllList = async (req, res) => {
   try {
     const data = await Banner.find().exec();
@@ -15,6 +16,7 @@ const getAllList = async (req, res) => {
     });
   }
 };
+
 const getListActive = async (req, res) => {
   try {
     const data = await Banner.find({ isActive: true }).exec();
@@ -22,8 +24,13 @@ const getListActive = async (req, res) => {
       result: data,
       message: Message.success,
     });
-  } catch (error) {}
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Message.error,
+    });
+  }
 };
+
 const addNewBanner = async (req, res) => {
   try {
     const { url, title, description } = req.body;
@@ -37,6 +44,7 @@ const addNewBanner = async (req, res) => {
     });
   }
 };
+
 const updateBaner = async (req, res) => {
   try {
     const { id, url, title, description, isActive } = req.body;
@@ -55,6 +63,7 @@ const updateBaner = async (req, res) => {
       .json({ message: Message.error });
   }
 };
+
 const deleteBanner = async (req, res) => {
   try {
     const { id, isActive } = req.body;
@@ -68,6 +77,7 @@ const deleteBanner = async (req, res) => {
       .json({ message: Message.error });
   }
 };
+
 export default {
   getAllList,
   addNewBanner,

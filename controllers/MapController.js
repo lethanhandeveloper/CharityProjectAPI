@@ -18,12 +18,12 @@ const getMapList = async (req, res) => {
 
 const addNewMap = async (req, res) => {
   try {
-    const { lat, long, idRecord, type } = req.body;
+    const { lat, long, campaign, type } = req.body;
     await Map.create({
       lat,
       long,
       type,
-      idRecord,
+      campaign,
     });
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
@@ -36,12 +36,12 @@ const addNewMap = async (req, res) => {
 };
 const updateMap = async (req, res) => {
   try {
-    const { lat, long, idRecord, id, type } = req.body;
+    const { lat, long, campaign, id, type } = req.body;
     await Banner.findByIdAndUpdate(id, {
       lat,
       long,
       type,
-      idRecord,
+      campaign,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({

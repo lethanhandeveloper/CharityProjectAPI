@@ -211,6 +211,21 @@ const getCampaignByStatus = async (req, res) => {
   }
 };
 
+const getCampaignHome = async (req, res) => {
+  try {
+    const campaigns = await Campaign.find().exec();
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Get All Campaigns successfully",
+      result: campaigns,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   getCampaignByFilter,
   addNewCampaign,
@@ -218,4 +233,5 @@ export default {
   getCampaignDetail,
   getCampaignByCurrentUser,
   getCampaignByStatus,
+  getCampaignHome,
 };

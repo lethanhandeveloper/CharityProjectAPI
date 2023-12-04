@@ -405,6 +405,20 @@ const getUserOrgina = async (req, res) => {
     });
   }
 };
+
+const countUser = async (req, res) => {
+  try {
+    const UserList = await User.count();
+    res.status(HttpStatusCode.OK).json({
+      result: UserList,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+
 export default {
   register,
   login,
@@ -416,4 +430,5 @@ export default {
   sendRegistionCode,
   getAccessToken,
   getUserOrgina,
+  countUser,
 };

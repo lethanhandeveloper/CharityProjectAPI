@@ -71,4 +71,17 @@ contract TransactionHistory
 
         return false;
     }
+
+    function getTransactionHistoryByCampaignId(string memory _campaignId) public returns(TransactionInfo[] memory) {
+        TransactionInfo[] memory transactionHistoryArr;
+
+         for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) ==
+                keccak256(abi.encodePacked(_campaignId))
+            ){
+                transactionHistoryArr.push(transactionInfoArray[i]);
+            }
+        }
+    }
 }

@@ -71,9 +71,52 @@ const updateProvinceById = async (req, res) => {
     });
   }
 };
+
+const getProvinceByPagination = async (req, res) => {
+  try {
+    const {
+      page,
+      no_item_per_page,
+    } = req.body;
+
+    const skip = (page - 1) * no_item_per_page;
+
+    const provinces = await Province.find()
+      .skip(skip)
+      .limit(no_item_per_page)
+      .exec();
+
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get All Provinces successfully",
+      result: provinces,
+    });
+  } catch (error) {
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
+const getProvinceByName = async (req, res) => {
+  try {
+    const name = req.params.name
+    const provinces = await Province.find({name: new RegExp(name, 'i') })
+    res.status(HttpStatusCode.OK).json({
+      message: "Get all Provinces successfully",
+      result: provinces,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   addNewProvince,
   deleteProvinceById,
   getAllProvince,
   updateProvinceById,
+  getProvinceByPagination,
+  getProvinceByName
 };

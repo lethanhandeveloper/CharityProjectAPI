@@ -5,6 +5,7 @@ import Role from "../utils/Role.js";
 
 const router = express.Router();
 
+router.get("/province/getbyname/:name", AreaController.ProvinceController.getProvinceByName);
 router.get("/province/list", AreaController.ProvinceController.getAllProvince);
 router.post("/province/list", AreaController.ProvinceController.getAllProvince);
 
@@ -21,6 +22,11 @@ router.patch(
   "/province/update",
   auth([Role.admin]),
   AreaController.ProvinceController.updateProvinceById
+);
+
+router.post(
+  "/province/paginate",
+  AreaController.ProvinceController.getProvinceByPagination
 );
 
 router.post(
@@ -46,11 +52,19 @@ router.patch(
 );
 
 router.post(
+  "/district/paginate",
+  AreaController.DistrictController.getDistrictByPagination
+);
+
+router.get("/district/getbyname/:name", AreaController.DistrictController.getDistrictByName);
+
+router.post(
   "/commune/create",
 
   AreaController.CommuneController.addNewCommune
 );
 
+router.get("/commune/getbyname/:name", AreaController.CommuneController.getCommuneByName);
 router.get("/commune/list", AreaController.CommuneController.getAllCommune);
 router.post("/commune/list", AreaController.CommuneController.getAllCommune);
 
@@ -58,6 +72,8 @@ router.get(
   "/commune/:districtId/district",
   AreaController.CommuneController.getCommuneByDistrictId
 );
+
+
 
 router.delete(
   "/commune/:id",
@@ -75,6 +91,11 @@ router.patch(
   "/commune/update",
   auth([Role.admin]),
   AreaController.CommuneController.updateCommuneById
+);
+
+router.post(
+  "/commune/paginate",
+  AreaController.CommuneController.getCommuneByPagination
 );
 
 export default router;

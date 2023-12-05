@@ -421,58 +421,20 @@ const countUser = async (req, res) => {
   }
 };
 
-const getAccessToken = async (req, res) => {
+const getUserByName = async (req, res) => {
   try {
-    const refreshToken = req.headers?.authorization?.split(" ")[1];
-    let isExpired
-    let jwtObject
-
-    if (refreshToken) {
-      jwtObject = await jwt.verify(refreshToken, process.env.JWT_REFRESH)
-      console.log(jwtObject)
-      isExpired = Date.now() >= jwtObject.exp * 1000
-    } else {
-      res.status(HttpStatusCode.BAD_REQUEST).json({
-        message: "Refresh token must be provided",
-      });
-
-      return;
-    }
-
-    if (isExpired) {
-      return res.status(HttpStatusCode.UNAUTHORIZED).json({
-        message: "Refresh token is expired",
-      });
-    } 
-
-    const payLoad = {
-      data: {
-        ...jwtObject.data,
-        password: "not show",
-      },
-    };
-
-    let accessToken = jwt.sign(payLoad, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+    const name = req.params.name
+    const users = await User.find({name: new RegExp(name, 'i') })
+    res.status(HttpStatusCode.OK).json({
+      message: "Get all Users successfully",
+      result: users,
     });
-
-    return res.status(HttpStatusCode.OK).json({
-      token: accessToken
-    })
   } catch (error) {
-    if (error.name === 'JsonWebTokenError') {
-      res.status(HttpStatusCode.UNAUTHORIZED).json({
-        message: "Refresh token is not valid"
-      });
-
-      return
-    }
-    console.log(error)
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR,
+      message: "Server is error",
     });
   }
-}
+};
 
 export default {
   register,
@@ -486,6 +448,6 @@ export default {
   getAccessToken,
   getUserOrgina,
   countUser,
-
+  getUserByName
 
 };

@@ -21,7 +21,15 @@ router.get(
 
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
+router.get("/getbyname/:name", auth([Role.admin]) ,  UserController.getUserByName);
 router.patch("/", UserController.updateMyUserInfo);
+
+router.post(
+  "/verification/paginate",
+  // auth([Role.admin]),
+  VerificationController.getVerificationRequestByPagination
+);
+
 router.post(
   "/verification/:type",
   auth([Role.user]),

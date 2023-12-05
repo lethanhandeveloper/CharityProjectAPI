@@ -113,7 +113,50 @@ const updateCommuneById = async (req, res) => {
       message: "Server is error",
     });
   }
+
+  
 };
+
+const getCommuneByPagination = async (req, res) => {
+  try {
+    const {
+      page,
+      no_item_per_page,
+    } = req.body;
+
+    const skip = (page - 1) * no_item_per_page;
+
+    const communes = await Commune.find()
+      .skip(skip)
+      .limit(no_item_per_page)
+      .exec();
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Get All Communes successfully",
+      result: communes,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
+const getCommuneByName = async (req, res) => {
+  try {
+    const name = req.params.name
+    const Communes = await Commune.find({name: new RegExp(name, 'i') })
+    res.status(HttpStatusCode.OK).json({
+      message: "Get all Communes successfully",
+      result: Communes,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   addNewCommune,
   deleteAllCommune,
@@ -121,4 +164,6 @@ export default {
   getAllCommune,
   getCommuneByDistrictId,
   updateCommuneById,
+  getCommuneByPagination,
+  getCommuneByName
 };

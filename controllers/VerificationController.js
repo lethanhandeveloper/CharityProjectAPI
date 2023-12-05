@@ -289,8 +289,76 @@ const updateRequestStatus = async (req, res) => {
   }
 };
 
+const getVerificationRequestByPagination = async (req, res) => {
+  try {
+    const {
+      page,
+      no_item_per_page,
+    } = req.body;
+    const skip = (page - 1) * no_item_per_page;
+
+    const requests = await VerificationRequest.find().skip(skip)
+      .limit(no_item_per_page)
+      .exec();
+
+    let personalGeneralInfo;
+    let organizationGeneralInfo;
+    let returnRequestArr = [];
+    const returnRequest = await Promise.all(
+      requests.map(async (request) => {
+        let commitInfoVerification = await CommitInfoVerification.findById(
+          request.commitInfoVerificationId
+        );
+        let surveyInfoVerification = await SurveyInfoVerification.findById(
+          request.surveyInfoVerificationId
+        );
+        console.log(request);
+        let generalInfo;
+
+        if (request.type === 1) {
+          personalGeneralInfo = await PersonalGeneralInfo.findById(
+            request.personalGeneralInfoId
+          ).populate("userId");
+
+          return {
+            id: request._id,
+            type: request.type,
+            status: request.status,
+            personalGeneralInfo,
+            commitInfoVerification,
+            surveyInfoVerification,
+          };
+        } else {
+          organizationGeneralInfo = await OrganizationGeneralInfo.findById(
+            request.organizationGeneralInfoId
+          ).populate("userId");
+
+          return {
+            id: request._id,
+            type: request.type,
+            status: request.status,
+            organizationGeneralInfo,
+            commitInfoVerification,
+            surveyInfoVerification,
+          };
+        }
+      })
+    );
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Get all verification request successfully",
+      result: returnRequest,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+
 export default {
   addNewVerificationRequest,
   getAllVerificationRequest,
+  getVerificationRequestByPagination,
   updateRequestStatus,
 };

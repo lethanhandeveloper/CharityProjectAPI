@@ -107,10 +107,52 @@ const updateDistrictById = async (req, res) => {
   }
 };
 
+const getDistrictByPagination = async (req, res) => {
+  try {
+    const {
+      page,
+      no_item_per_page,
+    } = req.body;
+
+    const skip = (page - 1) * no_item_per_page;
+
+    const districts = await District.find()
+      .skip(skip)
+      .limit(no_item_per_page)
+      .exec();
+
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get All Districts successfully",
+      result: districts,
+    });
+  } catch (error) {
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
+const getDistrictByName = async (req, res) => {
+  try {
+    const name = req.params.name
+    const districts = await District.find({name: new RegExp(name, 'i') })
+    res.status(HttpStatusCode.OK).json({
+      message: "Get all Districts successfully",
+      result: districts,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   addNewDistrict,
   deleteDistrictbyId,
   getAllDistrict,
   getDistrictByProvinceId,
   updateDistrictById,
+  getDistrictByPagination,
+  getDistrictByName
 };

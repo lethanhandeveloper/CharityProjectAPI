@@ -213,8 +213,8 @@ const getCampaignByStatus = async (req, res) => {
 
 const getCampaignHome = async (req, res) => {
   try {
+    console.log("check campaign");
     const campaigns = await Campaign.find().exec();
-
     res.status(HttpStatusCode.OK).json({
       message: "Get All Campaigns successfully",
       result: campaigns,

@@ -5,7 +5,10 @@ import Role from "../utils/Role.js";
 
 const router = express.Router();
 
-router.get("/province/getbyname/:name", AreaController.ProvinceController.getProvinceByName);
+router.get(
+  "/province/getbyname/:name",
+  AreaController.ProvinceController.getProvinceByName
+);
 router.get("/province/list", AreaController.ProvinceController.getAllProvince);
 router.post("/province/list", AreaController.ProvinceController.getAllProvince);
 
@@ -56,7 +59,10 @@ router.post(
   AreaController.DistrictController.getDistrictByPagination
 );
 
-router.get("/district/getbyname/:name", AreaController.DistrictController.getDistrictByName);
+router.get(
+  "/district/getbyname/:name",
+  AreaController.DistrictController.getDistrictByName
+);
 
 router.post(
   "/commune/create",
@@ -64,7 +70,10 @@ router.post(
   AreaController.CommuneController.addNewCommune
 );
 
-router.get("/commune/getbyname/:name", AreaController.CommuneController.getCommuneByName);
+router.get(
+  "/commune/getbyname/:name",
+  AreaController.CommuneController.getCommuneByName
+);
 router.get("/commune/list", AreaController.CommuneController.getAllCommune);
 router.post("/commune/list", AreaController.CommuneController.getAllCommune);
 
@@ -72,8 +81,6 @@ router.get(
   "/commune/:districtId/district",
   AreaController.CommuneController.getCommuneByDistrictId
 );
-
-
 
 router.delete(
   "/commune/:id",

@@ -40,7 +40,6 @@ const addNewCampaign = async (req, res) => {
       });
     });
   } catch (error) {
-    console.log(error);
     if (error.name === Exception.VALIDATION_ERROR) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
         message: "Your data is not valid",
@@ -74,7 +73,7 @@ const getCampaignByCurrentUser = async (req, res) => {
     const token = req.headers?.authorization?.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       const userId = decoded.data._doc._id;
-      console.log(userId);
+
       const campaigns = await Campaign.find({ creatorId: userId }).exec();
       res.status(HttpStatusCode.OK).json({
         message: "Get All Campaigns successfully",
@@ -213,7 +212,6 @@ const getCampaignByStatus = async (req, res) => {
 
 const getCampaignHome = async (req, res) => {
   try {
-    console.log("check campaign");
     const campaigns = await Campaign.find().exec();
     res.status(HttpStatusCode.OK).json({
       message: "Get All Campaigns successfully",
@@ -225,10 +223,26 @@ const getCampaignHome = async (req, res) => {
     });
   }
 };
+const updateStatus = async (req, res) => {
+  try {
+    const { id, status } = req.params;
+    await Campaign.findByIdAndUpdate(id, {
+      status: status,
+    });
+    res.status(HttpStatusCode.OK).json({
+      message: "Cập nhật trạng thái thành công!",
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Đã xảy ra lỗi",
+    });
+  }
+};
 
 export default {
   getCampaignByFilter,
   addNewCampaign,
+  updateStatus,
   getAllCampaign,
   getCampaignDetail,
   getCampaignByCurrentUser,

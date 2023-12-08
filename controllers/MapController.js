@@ -6,7 +6,7 @@ const getMapList = async (req, res) => {
   try {
     const data = await Map.find().exec();
     res.status(HttpStatusCode.OK).json({
-      data: data,
+      result: data,
       message: Message.success,
     });
   } catch (error) {
@@ -18,19 +18,19 @@ const getMapList = async (req, res) => {
 
 const addNewMap = async (req, res) => {
   try {
-    const { lat, long, campaign, type } = req.body;
+    const { lat, long, campaignId, type } = req.body;
     await Map.create({
       lat,
       long,
       type,
-      campaign,
+      campaignId,
     });
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: "Server is error",
+      message: error,
     });
   }
 };

@@ -50,6 +50,10 @@ router.post(
 );
 router.post("/list", CampaignController.CampaignController.getCampaignByFilter);
 router.get("/home", CampaignController.CampaignController.getCampaignHome);
+router.patch(
+  "/updateStatus",
+  CampaignController.CampaignController.updateStatus
+);
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
 router.get(
   "/user",

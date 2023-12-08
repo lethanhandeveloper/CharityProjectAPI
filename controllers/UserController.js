@@ -98,14 +98,11 @@ const login = async (req, res) => {
   try {
     const { useraccount, password } = req.body;
 
-    console.log(req.body);
     let existingUser = await User.findOne({
       $or: [{ email: useraccount }, { phoneNumber: useraccount }],
     }).exec();
 
     if (existingUser) {
-      console.log("password" + password);
-      console.log("epss" + existingUser);
       let isMatch = await bcrypt.compare(password, existingUser.password);
 
       if (isMatch) {
@@ -124,7 +121,6 @@ const login = async (req, res) => {
           expiresIn: "30d",
         });
 
-
         res.status(200).json({
           message: "Login user successfully",
           result: {
@@ -133,7 +129,6 @@ const login = async (req, res) => {
             token: accessToken,
 
             refreshToken,
-
           },
         });
       }
@@ -335,7 +330,6 @@ const sendRegistionCode = async (req, res) => {
       message: "Send registration code mail successfully",
     });
   } catch (error) {
-    console.log(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "Server is error" });
@@ -350,7 +344,7 @@ const getAccessToken = async (req, res) => {
 
     if (refreshToken) {
       jwtObject = await jwt.verify(refreshToken, process.env.JWT_REFRESH);
-      console.log(jwtObject);
+
       isExpired = Date.now() >= jwtObject.exp * 1000;
     } else {
       res.status(HttpStatusCode.BAD_REQUEST).json({
@@ -388,7 +382,7 @@ const getAccessToken = async (req, res) => {
 
       return;
     }
-    console.log(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
     });
@@ -423,8 +417,8 @@ const countUser = async (req, res) => {
 
 const getUserByName = async (req, res) => {
   try {
-    const name = req.params.name
-    const users = await User.find({name: new RegExp(name, 'i') })
+    const name = req.params.name;
+    const users = await User.find({ name: new RegExp(name, "i") });
     res.status(HttpStatusCode.OK).json({
       message: "Get all Users successfully",
       result: users,
@@ -448,6 +442,5 @@ export default {
   getAccessToken,
   getUserOrgina,
   countUser,
-  getUserByName
-
+  getUserByName,
 };

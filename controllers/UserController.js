@@ -436,6 +436,7 @@ const getUserByName = async (req, res) => {
   }
 };
 
+
 export default {
   register,
   login,
@@ -449,5 +450,4 @@ export default {
   getUserOrgina,
   countUser,
   getUserByName
-
 };

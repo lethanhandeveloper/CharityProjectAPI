@@ -25,6 +25,18 @@ app.use("/map", mapRouter);
 app.use("/campaign", campaignRouter);
 app.use("/banner", bannerRouter);
 
+import twilio from "twilio";
+
+app.use("/authsdt", (req, res) => {
+  const accountSid = 'ACf89eec8fd034140f10c92584c196fa9b';
+  const authToken = '982dde939ab1c991ed6c6f698a45899f';
+  const client = twilio(accountSid, authToken);
+
+  client.messages
+    .create({ from: '+84337464921', body: 'Ahoy, world!', to: '+84337464921' })
+    .then(message => console.log(message.sid));
+});
+
 app.use((req, res) => {
   res.status(HttpStatusCode.BAD_REQUEST).json({ message: "Route not found" });
 });

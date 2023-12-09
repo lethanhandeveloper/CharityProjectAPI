@@ -34,6 +34,10 @@ export default mongoose.model(
     citizenIdentificationCard: {
       type: String,
     },
+    requestedUserId: {
+      type: ObjectId,
+      ref: "User"
+    },
     status: {
       type: Number,
       default: 1,

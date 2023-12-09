@@ -24,6 +24,10 @@ router.post("/login", UserController.login);
 router.get("/getbyname/:name", auth([Role.admin]) ,  UserController.getUserByName);
 router.patch("/", UserController.updateMyUserInfo);
 
+router.get("/verification/:id", auth([Role.admin, Role.organization, Role.personal]) , VerificationController.getRequestById);
+router.get("/verification/myrequest", auth([Role.personal, Role.organization, Role.user]) , VerificationController.getRequestByCurrentUser)
+router.post("/verification/myrequest/:id", auth([Role.personal, Role.organization, Role.user]) , VerificationController.updateMyRequestById)
+
 router.post(
   "/verification/paginate",
   // auth([Role.admin]),
@@ -45,6 +49,7 @@ router.patch(
   auth([Role.admin]),
   VerificationController.updateRequestStatus
 );
+
 
 // router.patch('/user/verification', checkToken, VerificationController.addNewVerificationRequest)
 router.patch(

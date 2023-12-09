@@ -12,7 +12,6 @@ export default function auth(roles) {
 
       if (token) {
         jwtObject = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(jwtObject)
         isExpired = Date.now() >= jwtObject.exp * 1000
       } else {
         res.status(HttpStatusCode.BAD_REQUEST).json({

@@ -147,6 +147,22 @@ const getDistrictByName = async (req, res) => {
   }
 };
 
+const countDistrictRecords = async (req, res) => {
+  try {
+    const search_text = req.query.search_text
+    const count = await District.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get district records number successfully",
+      result: count
+    })
+  } catch (error) {
+    console.log(error)
+    return res.json(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.INTERNAL_SERVER_ERROR
+    })
+  }
+}
+
 export default {
   addNewDistrict,
   deleteDistrictbyId,
@@ -154,5 +170,6 @@ export default {
   getDistrictByProvinceId,
   updateDistrictById,
   getDistrictByPagination,
-  getDistrictByName
+  getDistrictByName,
+  countDistrictRecords
 };

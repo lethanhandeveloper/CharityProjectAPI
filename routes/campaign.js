@@ -20,6 +20,13 @@ router.post(
   auth([Role.admin]),
   CampaignController.CategoryController.addNewCampaignCategory
 );
+
+router.get(
+  "/category/count",
+  auth([Role.admin]),
+  CampaignController.CategoryController.countCategoryRecords
+);
+
 router.delete(
   "/category/:id",
   auth([Role.admin]),
@@ -32,11 +39,20 @@ router.post(
   auth([Role.admin]),
   CampaignController.ItemTypeController.addNewItemType
 );
+
+router.get(
+  "/itemtype/count",
+  auth([Role.admin]),
+  CampaignController.ItemTypeController.countItemTypeRecords
+);
+
 router.delete(
   "/itemtype/:id",
   auth([Role.admin]),
   CampaignController.ItemTypeController.deleteItemTypeById
 );
+
+
 
 router.post(
   "/",
@@ -54,6 +70,13 @@ router.patch(
   "/updateStatus",
   CampaignController.CampaignController.updateStatus
 );
+
+router.get(
+  "/count",
+  auth([Role.admin]),
+  CampaignController.CampaignController.countCampaignRecords
+);
+
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
 router.get(
   "/user",

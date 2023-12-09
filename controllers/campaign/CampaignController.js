@@ -239,6 +239,22 @@ const updateStatus = async (req, res) => {
   }
 };
 
+const countCampaignRecords = async (req, res) => {
+  try {
+    const search_text = req.query.search_text
+    const count = await Campaign.countDocuments({ title : { $regex: new RegExp(search_text, 'i') } })
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get campaign records number successfully",
+      result: count
+    })
+  } catch (error) {
+    console.log(error)
+    return res.json(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.INTERNAL_SERVER_ERROR
+    })
+  }
+}
+
 export default {
   getCampaignByFilter,
   addNewCampaign,
@@ -248,4 +264,5 @@ export default {
   getCampaignByCurrentUser,
   getCampaignByStatus,
   getCampaignHome,
+  countCampaignRecords
 };

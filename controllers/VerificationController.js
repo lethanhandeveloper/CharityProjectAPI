@@ -629,6 +629,21 @@ const updateMyRequestById = async (req, res) => {
   }
 }
 
+const countVerificationRequestRecords = async (req, res) => {
+  try {
+    const count = await VerificationRequest.countDocuments()
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get verification request number successfully",
+      result: count
+    })
+  } catch (error) {
+    //console.log(error)
+    return res.json(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.INTERNAL_SERVER_ERROR
+    })
+  }
+}
+
 export default {
   addNewVerificationRequest,
   getAllVerificationRequest,
@@ -636,5 +651,6 @@ export default {
   updateRequestStatus,
   getRequestByCurrentUser,
   getRequestById,
-  updateMyRequestById
+  updateMyRequestById,
+  countVerificationRequestRecords
 };

@@ -53,8 +53,26 @@ const deleteCampaignCategoryById = async (req, res) => {
     });
   }
 };
+
+const countCategoryRecords = async (req, res) => {
+  try {
+    const search_text = req.query.search_text
+    const count = await CampaignCategory.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get campaign category records number successfully",
+      result: count
+    })
+  } catch (error) {
+    console.log(error)
+    return res.json(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.INTERNAL_SERVER_ERROR
+    })
+  }
+}
+
 export default {
   addNewCampaignCategory,
   getAllCampaignCategory,
   deleteCampaignCategoryById,
+  countCategoryRecords
 };

@@ -14,26 +14,21 @@ export default function auth(roles) {
         jwtObject = jwt.verify(token, process.env.JWT_SECRET)
         isExpired = Date.now() >= jwtObject.exp * 1000
       } else {
-        res.status(HttpStatusCode.BAD_REQUEST).json({
+        return res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "Token must be provided",
         });
-
-        return;
       }
 
       if (isExpired) {
-        res.status(HttpStatusCode.UNAUTHORIZED).json({
+        return res.status(HttpStatusCode.UNAUTHORIZED).json({
           message: "Token is expired",
         });
 
-        return;
       } else {
         if (!roles.includes(jwtObject.data._doc.role)) {
-          res.status(HttpStatusCode.FORBIDDEN).json({
+          return res.status(HttpStatusCode.FORBIDDEN).json({
             message: "Your request is banned",
           });
-
-          return;
         }
 
         next();
@@ -51,7 +46,7 @@ export default function auth(roles) {
         });
       }
 
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
         message: Exception.SERVER_ERROR,
       });
     }

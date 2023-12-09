@@ -157,6 +157,23 @@ const getCommuneByName = async (req, res) => {
   }
 };
 
+const countCommuneRecords = async (req, res) => {
+  try {
+    const search_text = req.query.search_text
+
+    const count = await Commune.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get commune records number successfully",
+      result: count
+    })
+  } catch (error) {
+    console.log(error)
+    return res.json(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.INTERNAL_SERVER_ERROR
+    })
+  }
+}
+
 export default {
   addNewCommune,
   deleteAllCommune,
@@ -165,5 +182,6 @@ export default {
   getCommuneByDistrictId,
   updateCommuneById,
   getCommuneByPagination,
-  getCommuneByName
+  getCommuneByName,
+  countCommuneRecords
 };

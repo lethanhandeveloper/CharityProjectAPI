@@ -53,8 +53,25 @@ const deleteItemTypeById = async (req, res) => {
     });
   }
 };
+
+const countItemTypeRecords = async (req, res) => {
+  try {
+    const count = await ItemType.countDocuments()
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get item type records number successfully",
+      result: count
+    })
+  } catch (error) {
+    console.log(error)
+    return res.json(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.INTERNAL_SERVER_ERROR
+    })
+  }
+}
+
 export default {
   addNewItemType,
   getAllItemType,
   deleteItemTypeById,
+  countItemTypeRecords
 };

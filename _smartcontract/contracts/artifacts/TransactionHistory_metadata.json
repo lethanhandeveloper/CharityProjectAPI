@@ -18,6 +18,11 @@
 						"type": "string"
 					},
 					{
+						"internalType": "address",
+						"name": "donatorAddress",
+						"type": "address"
+					},
+					{
 						"internalType": "uint256",
 						"name": "value",
 						"type": "uint256"
@@ -76,6 +81,11 @@
 								"type": "string"
 							},
 							{
+								"internalType": "address",
+								"name": "donatorAddress",
+								"type": "address"
+							},
+							{
 								"internalType": "uint256",
 								"name": "value",
 								"type": "uint256"
@@ -89,6 +99,122 @@
 						"internalType": "struct TransactionHistory.TransactionInfo[]",
 						"name": "",
 						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_donatorId",
+						"type": "string"
+					}
+				],
+				"name": "getDonateByUser",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "donatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "donatorAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "time",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TransactionHistory.TransactionInfo",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_campaignId",
+						"type": "string"
+					}
+				],
+				"name": "getTransactionHistoryByCampaignId",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "donatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "donatorAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "time",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct TransactionHistory.TransactionInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_donatorAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "_campaignId",
+						"type": "string"
+					}
+				],
+				"name": "isDonatedtoCampaign",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -126,6 +252,11 @@
 						"internalType": "string",
 						"name": "donatorId",
 						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "donatorAddress",
+						"type": "address"
 					},
 					{
 						"internalType": "uint256",
@@ -170,11 +301,11 @@
 	},
 	"sources": {
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0x463447cb0a9bd273f3f8aed1053e21e8b63df0ce18bf1b714c45fc2a6b229121",
+			"keccak256": "0x36fe6cc790ef0da8b03bf4318c9be3bac5a8f740d2b41d48259a25e19ccb537c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://78704584f7227848763d545fe4b3e2aab081e2c213850bb56950746faf834d09",
-				"dweb:/ipfs/QmWMc5NEWzb1iXmXeqVZnoxabYRfHEtnJnG2jSugSgMEZE"
+				"bzz-raw://65ca3021a5abfd3b55f6e45b36929139fb463f8a3874db6dcc0840f29abba39c",
+				"dweb:/ipfs/QmXFowRbN7hhayv4SnkBv2CVRnAiRoRnvqfQ9GnYx7aEsG"
 			]
 		}
 	},

@@ -49,12 +49,15 @@ router.post(
   CampaignController.CampaignController.getCampaignByFilter
 );
 router.post("/list", CampaignController.CampaignController.getCampaignByFilter);
-
+router.get("/home", CampaignController.CampaignController.getCampaignHome);
+router.patch(
+  "/updateStatus",
+  CampaignController.CampaignController.updateStatus
+);
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
 router.get(
   "/user",
   CampaignController.CampaignController.getCampaignByCurrentUser
 );
-router.get("/home", CampaignController.CampaignController.getCampaignHome);
 
 export default router;

@@ -5,14 +5,14 @@ export default mongoose.model(
   new Schema({
     id: { type: ObjectId },
     lat: {
-      type: String,
+      type: Number,
       require: true,
     },
     long: {
-      type: String,
+      type: Number,
       require: true,
     },
-    campaign: {
+    campaignId: {
       type: Schema.ObjectId,
       required: true,
       ref: "Campaign",

@@ -175,7 +175,6 @@ const addNewVerificationRequest = async (req, res) => {
       message: "Create Verification Request Successfully",
     });
   } catch (error) {
-    console.log(error);
     await session.abortTransaction();
 
     if (error.message === "UserNotExists") {
@@ -207,7 +206,7 @@ const getAllVerificationRequest = async (req, res) => {
     const requests = await VerificationRequest.find();
     let personalGeneralInfo;
     let organizationGeneralInfo;
-    let returnRequestArr = [];
+
     const returnRequest = await Promise.all(
       
       requests.map(async (request) => {
@@ -217,8 +216,6 @@ const getAllVerificationRequest = async (req, res) => {
         let surveyInfoVerification = await SurveyInfoVerification.findById(
           request.surveyInfoVerificationId
         );
-        console.log(request);
-        let generalInfo;
 
         if (request.type === 1) {
           personalGeneralInfo = await PersonalGeneralInfo.findById(
@@ -296,13 +293,11 @@ const updateRequestStatus = async (req, res) => {
 
 const getVerificationRequestByPagination = async (req, res) => {
   try {
-    const {
-      page,
-      no_item_per_page,
-    } = req.body;
+    const { page, no_item_per_page } = req.body;
     const skip = (page - 1) * no_item_per_page;
 
-    const requests = await VerificationRequest.find().skip(skip)
+    const requests = await VerificationRequest.find()
+      .skip(skip)
       .limit(no_item_per_page)
       .exec();
 
@@ -317,8 +312,6 @@ const getVerificationRequestByPagination = async (req, res) => {
         let surveyInfoVerification = await SurveyInfoVerification.findById(
           request.surveyInfoVerificationId
         );
-        console.log(request);
-        let generalInfo;
 
         if (request.type === 1) {
           personalGeneralInfo = await PersonalGeneralInfo.findById(

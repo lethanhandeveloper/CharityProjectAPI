@@ -52,6 +52,7 @@ export default mongoose.model(
     },
     status: {
       type: String,
+      //start, draft, end
       require: true,
     },
   })

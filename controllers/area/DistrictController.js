@@ -86,8 +86,7 @@ const deleteDistrictbyId = async (req, res) => {
 
 const updateDistrictById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const { name, provinceId } = req.body;
+    const { name, provinceId, id } = req.body;
 
     await District.findByIdAndUpdate(id, { name, provinceId });
 
@@ -109,15 +108,13 @@ const updateDistrictById = async (req, res) => {
 
 const getDistrictByPagination = async (req, res) => {
   try {
-    const {
-      search_text,
-      page,
-      no_item_per_page,
-    } = req.body;
+    const { search_text, page, no_item_per_page } = req.body;
 
     const skip = (page - 1) * no_item_per_page;
 
-    const districts = await District.find({ name : { $regex: new RegExp(search_text, 'i') } })
+    const districts = await District.find({
+      name: { $regex: new RegExp(search_text, "i") },
+    })
       .skip(skip)
       .limit(no_item_per_page)
       .exec();
@@ -135,8 +132,8 @@ const getDistrictByPagination = async (req, res) => {
 
 const getDistrictByName = async (req, res) => {
   try {
-    const name = req.params.name
-    const districts = await District.find({name: new RegExp(name, 'i') })
+    const name = req.params.name;
+    const districts = await District.find({ name: new RegExp(name, "i") });
     res.status(HttpStatusCode.OK).json({
       message: "Get all Districts successfully",
       result: districts,
@@ -150,19 +147,21 @@ const getDistrictByName = async (req, res) => {
 
 const countDistrictRecords = async (req, res) => {
   try {
-    const search_text = req.query.search_text
-    const count = await District.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    const search_text = req.query.search_text;
+    const count = await District.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
     return res.status(HttpStatusCode.OK).json({
       message: "Get district records number successfully",
-      result: count
-    })
+      result: count,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.json(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.INTERNAL_SERVER_ERROR
-    })
+      message: Exception.INTERNAL_SERVER_ERROR,
+    });
   }
-}
+};
 
 export default {
   addNewDistrict,
@@ -172,5 +171,5 @@ export default {
   updateDistrictById,
   getDistrictByPagination,
   getDistrictByName,
-  countDistrictRecords
+  countDistrictRecords,
 };

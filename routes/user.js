@@ -59,6 +59,11 @@ router.get(
   VerificationController.getAllVerificationRequest
 );
 router.patch(
+  "/verification/update/:id",
+  auth([Role.user]),
+  VerificationController.updateMyRequestById
+);
+router.patch(
   "/verification/:id",
   auth([Role.admin]),
   VerificationController.updateRequestStatus
@@ -67,14 +72,10 @@ router.patch(
 router.post(
   "/verification/paginate",
   auth([Role.admin]),
-  VerificationController.updateRequestStatus
+  VerificationController.getVerificationRequestByPagination
 );
 
-router.get(
-  "/verification/:id",
-  auth([Role.admin, Role.organization, Role.personal]),
-  VerificationController.getRequestById
-);
+router.get("/verification/:id", VerificationController.getRequestById);
 
 // router.patch('/user/verification', checkToken, VerificationController.addNewVerificationRequest)
 router.patch(

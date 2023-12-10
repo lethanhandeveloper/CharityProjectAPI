@@ -11,7 +11,6 @@ contract Campaign {
         string title;
         uint currentValue;
         uint targetValue;
-        uint donatorCount; //dem co bao nhieu nguoi dong gop vao chien dich
         uint256 endDate;
     }
 
@@ -45,7 +44,6 @@ contract Campaign {
         newCampaign.creatorUserName = creatorUserName;
         newCampaign.title = title;
         newCampaign.targetValue = targetValue;
-        newCampaign.donatorCount = 0;
         newCampaign.currentValue = currentValue;
         newCampaign.endDate = endDate;
 
@@ -86,9 +84,9 @@ contract Campaign {
             ) {
                 campaignInfoArray[i].currentValue += msg.value;
                 
-                if(!TransactionHistory(transactionHistoryAddress).isDonatedtoCampaign(msg.sender, campaignId)) {
-                    campaignInfoArray[i].donatorCount++;
-                }
+                // if(!TransactionHistory(transactionHistoryAddress).isDonatedtoCampaign(msg.sender, campaignId)) {
+                //     campaignInfoArray[i].donatorCount++;
+                // }
 
 
                 TransactionHistory(transactionHistoryAddress)

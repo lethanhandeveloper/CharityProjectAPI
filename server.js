@@ -33,7 +33,7 @@ app.use("/authsdt", (req, res) => {
   const client = twilio(accountSid, authToken);
 
   client.messages
-    .create({ from: '+84337464921', body: 'Ahoy, world!', to: '+84337464921' })
+    .create({ from: '+84386599223', body: 'Ahoy, world!', to: '+84337464921' })
     .then(message => console.log(message.sid));
 });
 

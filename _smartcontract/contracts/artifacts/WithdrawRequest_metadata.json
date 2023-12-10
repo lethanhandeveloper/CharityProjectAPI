@@ -1,0 +1,168 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_campaignId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_toAddress",
+						"type": "address"
+					}
+				],
+				"name": "addNewWithdrawRequest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "generateRandomId",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "nonce",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_campaignAddress",
+						"type": "address"
+					}
+				],
+				"name": "setCampaignAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "withdrawRequestArray",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "campaignId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "approvedQuantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "toAddress",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/WithdrawRequest.sol": "WithdrawRequest"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Campaign.sol": {
+			"keccak256": "0xb68128923933eae2407e857e2d4873f695249b98473bf0d39f337ff26efd4162",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://56123caf132a83d0341d513e4093797fd088cd561d12932f410c7c7b53b5d4f7",
+				"dweb:/ipfs/QmaoLCph7PFd65y12J8uF3toLyx66Z9BxvwjWToBsApjrN"
+			]
+		},
+		"contracts/TransactionHistory.sol": {
+			"keccak256": "0x36fe6cc790ef0da8b03bf4318c9be3bac5a8f740d2b41d48259a25e19ccb537c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://65ca3021a5abfd3b55f6e45b36929139fb463f8a3874db6dcc0840f29abba39c",
+				"dweb:/ipfs/QmXFowRbN7hhayv4SnkBv2CVRnAiRoRnvqfQ9GnYx7aEsG"
+			]
+		},
+		"contracts/WithdrawRequest.sol": {
+			"keccak256": "0xa34d08f1d959725c847f6d85507f6cb557491961b118e28f73828dc4b45b7787",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d1397a72d25c69e7d2d5fd9c50eca51d191a75e895f53fc31ecc71fa0a503ad4",
+				"dweb:/ipfs/QmeVuXELp4dHWBrjhdcPu8hFJVFo51vYfJGjphZXsStKXs"
+			]
+		}
+	},
+	"version": 1
+}

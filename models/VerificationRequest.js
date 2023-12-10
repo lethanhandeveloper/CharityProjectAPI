@@ -21,22 +21,9 @@ export default mongoose.model(
       type: ObjectId,
       ref: "CommitInfoVerification",
     },
-    surveyInfoVerificationId: {
-      type: ObjectId,
-      ref: "SurveyInfoVerification",
-    },
-    personalImgUrl: {
-      type: String,
-    },
-    filePdf: {
-      type: String,
-    },
-    citizenIdentificationCard: {
-      type: String,
-    },
     requestedUserId: {
       type: ObjectId,
-      ref: "User"
+      ref: "User",
     },
     status: {
       type: Number,

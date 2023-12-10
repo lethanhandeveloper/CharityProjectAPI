@@ -92,7 +92,7 @@ router.post(
   CampaignController.CampaignController.getCampaignByPagination
 );
 
-router.get(
+router.post(
   "/user",
   CampaignController.CampaignController.getCampaignByCurrentUser
 );

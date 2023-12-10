@@ -40,7 +40,10 @@ router.delete(
 );
 
 router.get("/itemtype", CampaignController.ItemTypeController.getAllItemType);
-router.get("/itemtype/paginate", CampaignController.ItemTypeController.getItemTypeByPagination);
+router.get(
+  "/itemtype/paginate",
+  CampaignController.ItemTypeController.getItemTypeByPagination
+);
 router.post(
   "/itemtype",
   auth([Role.admin]),
@@ -59,8 +62,6 @@ router.delete(
   CampaignController.ItemTypeController.deleteItemTypeById
 );
 
-
-
 router.post(
   "/",
   auth([Role.admin]),
@@ -72,6 +73,7 @@ router.post(
   CampaignController.CampaignController.getCampaignByFilter
 );
 router.post("/list", CampaignController.CampaignController.getCampaignByFilter);
+router.post("/byuser", CampaignController.CampaignController.getCampaignByUser);
 router.get("/home", CampaignController.CampaignController.getCampaignHome);
 router.patch(
   "/updateStatus",
@@ -85,7 +87,10 @@ router.get(
 );
 
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
-router.post("/paginate", CampaignController.CampaignController.getCampaignByPagination);
+router.post(
+  "/paginate",
+  CampaignController.CampaignController.getCampaignByPagination
+);
 
 router.get(
   "/user",

@@ -33,8 +33,8 @@ const getListActive = async (req, res) => {
 
 const addNewBanner = async (req, res) => {
   try {
-    const { url, title, description } = req.body;
-    await Banner.create({ url, title, description, isActive: true });
+    const { imageUrl, title, description } = req.body;
+    await Banner.create({ imageUrl, title, description, isActive: true });
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
     });
@@ -47,10 +47,10 @@ const addNewBanner = async (req, res) => {
 
 const updateBaner = async (req, res) => {
   try {
-    const { id, url, title, description, isActive } = req.body;
+    const { id, imageUrl, title, description, isActive } = req.body;
     await Banner.findByIdAndUpdate(id, {
       title,
-      url,
+      imageUrl,
       description,
       isActive,
     });

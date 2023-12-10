@@ -27,7 +27,7 @@ router.patch(
   AreaController.ProvinceController.updateProvinceById
 );
 
-router.get("/province/count", auth([Role.admin]) , AreaController.ProvinceController.countProvinceRecords);
+router.get("/province/count/:id", auth([Role.admin]) , AreaController.ProvinceController.countProvinceRecords);
 
 router.post(
   "/province/paginate",

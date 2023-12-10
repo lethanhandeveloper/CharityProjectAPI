@@ -70,9 +70,33 @@ const countCategoryRecords = async (req, res) => {
   }
 }
 
+const getCategoryByPagination = async (req, res) => {
+  try {
+
+    const { search_text, page, no_item_per_page } = req.body;
+
+    const skip = (page - 1) * no_item_per_page;
+
+    const categories = await CampaignCategory.find({ name : { $regex: new RegExp(search_text, 'i') } })
+      .skip(skip)
+      .limit(no_item_per_page)
+      .exec();
+
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get campaign category successfully",
+      result: categories,
+    });
+  } catch (error) {
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   addNewCampaignCategory,
   getAllCampaignCategory,
   deleteCampaignCategoryById,
-  countCategoryRecords
+  countCategoryRecords,
+  getCategoryByPagination
 };

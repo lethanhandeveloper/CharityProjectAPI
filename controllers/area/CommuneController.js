@@ -120,13 +120,14 @@ const updateCommuneById = async (req, res) => {
 const getCommuneByPagination = async (req, res) => {
   try {
     const {
+      search_text,
       page,
       no_item_per_page,
     } = req.body;
 
     const skip = (page - 1) * no_item_per_page;
 
-    const communes = await Commune.find()
+    const communes = await Commune.find({ name : { $regex: new RegExp(search_text, 'i') } })
       .skip(skip)
       .limit(no_item_per_page)
       .exec();

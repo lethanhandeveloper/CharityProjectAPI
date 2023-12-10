@@ -110,13 +110,14 @@ const updateDistrictById = async (req, res) => {
 const getDistrictByPagination = async (req, res) => {
   try {
     const {
+      search_text,
       page,
       no_item_per_page,
     } = req.body;
 
     const skip = (page - 1) * no_item_per_page;
 
-    const districts = await District.find()
+    const districts = await District.find({ name : { $regex: new RegExp(search_text, 'i') } })
       .skip(skip)
       .limit(no_item_per_page)
       .exec();

@@ -255,6 +255,29 @@ const countCampaignRecords = async (req, res) => {
   }
 }
 
+const getCampaignByPagination = async (req, res) => {
+  try {
+
+    const { search_text, page, no_item_per_page } = req.body;
+
+    const skip = (page - 1) * no_item_per_page;
+
+    const campaigns = await Campaign.find({ title : { $regex: new RegExp(search_text, 'i') } })
+      .skip(skip)
+      .limit(no_item_per_page)
+      .exec();
+
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get campaigns successfully",
+      result: campaigns,
+    });
+  } catch (error) {
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 export default {
   getCampaignByFilter,
   addNewCampaign,
@@ -264,5 +287,6 @@ export default {
   getCampaignByCurrentUser,
   getCampaignByStatus,
   getCampaignHome,
-  countCampaignRecords
+  countCampaignRecords,
+  getCampaignByPagination
 };

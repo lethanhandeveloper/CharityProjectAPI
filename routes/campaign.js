@@ -27,6 +27,12 @@ router.get(
   CampaignController.CategoryController.countCategoryRecords
 );
 
+router.post(
+  "/category/paginate",
+  auth([Role.admin]),
+  CampaignController.CategoryController.getCategoryByPagination
+);
+
 router.delete(
   "/category/:id",
   auth([Role.admin]),
@@ -34,6 +40,7 @@ router.delete(
 );
 
 router.get("/itemtype", CampaignController.ItemTypeController.getAllItemType);
+router.get("/itemtype/paginate", CampaignController.ItemTypeController.getItemTypeByPagination);
 router.post(
   "/itemtype",
   auth([Role.admin]),
@@ -78,6 +85,8 @@ router.get(
 );
 
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
+router.post("/paginate", CampaignController.CampaignController.getCampaignByPagination);
+
 router.get(
   "/user",
   CampaignController.CampaignController.getCampaignByCurrentUser

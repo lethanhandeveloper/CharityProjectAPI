@@ -293,10 +293,29 @@ const updateRequestStatus = async (req, res) => {
 
 const getVerificationRequestByPagination = async (req, res) => {
   try {
-    const { page, no_item_per_page } = req.body;
+    const { search_text, page, no_item_per_page } = req.body;
     const skip = (page - 1) * no_item_per_page;
 
-    const requests = await VerificationRequest.find()
+    const personalInfo = await PersonalGeneralInfo.find({ name : { $regex: new RegExp(search_text, 'i')} })
+    const organizationInfo = await OrganizationGeneralInfo.find({name : { $regex: new RegExp(search_text, 'i')}})
+    
+    let personalGeneralInfoIdArr = [];
+    let organizationGeneralInfoIdArr = [];
+
+    personalInfo.forEach(pi => {
+      personalGeneralInfoIdArr.push(pi._id)
+    })
+
+    organizationInfo.forEach(oi => {
+      organizationGeneralInfoIdArr.push(oi._id)
+    })
+    
+    const requests = await VerificationRequest.find({
+      $or: [
+        { personalGeneralInfoId: { $in: personalGeneralInfoIdArr } },
+        { organizationGeneralInfoId: { $in: organizationGeneralInfoIdArr } }
+      ]
+    })
       .skip(skip)
       .limit(no_item_per_page)
       .exec();
@@ -348,6 +367,7 @@ const getVerificationRequestByPagination = async (req, res) => {
       result: returnRequest,
     });
   } catch (error) {
+    console.log(error)
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
     });
@@ -631,10 +651,13 @@ const updateMyRequestById = async (req, res) => {
 
 const countVerificationRequestRecords = async (req, res) => {
   try {
-    const count = await VerificationRequest.countDocuments()
+    const search_text = req.query.search_text
+    const personalCount = await PersonalGeneralInfo.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    const organizationCount = await OrganizationGeneralInfo.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+
     return res.status(HttpStatusCode.OK).json({
       message: "Get verification request number successfully",
-      result: count
+      result: personalCount + organizationCount
     })
   } catch (error) {
     //console.log(error)
@@ -643,6 +666,8 @@ const countVerificationRequestRecords = async (req, res) => {
     })
   }
 }
+
+
 
 export default {
   addNewVerificationRequest,

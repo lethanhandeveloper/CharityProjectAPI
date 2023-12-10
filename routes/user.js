@@ -55,6 +55,14 @@ router.patch(
   VerificationController.updateRequestStatus
 );
 
+router.post(
+  "/verification/paginate",
+  auth([Role.admin]),
+  VerificationController.updateRequestStatus
+);
+
+
+
 router.get("/verification/:id", auth([Role.admin, Role.organization, Role.personal]) , VerificationController.getRequestById);
 
 

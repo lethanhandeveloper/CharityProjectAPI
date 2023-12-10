@@ -11,21 +11,30 @@ const router = express.Router();
 
 router.post(
   "/register/getcode",
-  requestLimit,
+  // requestLimit,
   UserController.sendRegistionCode
 );
-router.get(
-  "/refreshtoken",
-  UserController.getAccessToken
-);
+router.get("/refreshtoken", UserController.getAccessToken);
 
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
-router.get("/getbyname/:name", auth([Role.admin]) ,  UserController.getUserByName);
+router.get(
+  "/getbyname/:name",
+  auth([Role.admin]),
+  UserController.getUserByName
+);
 router.patch("/", UserController.updateMyUserInfo);
 
-router.get("/verification/myrequest", auth([Role.personal, Role.organization, Role.user]) , VerificationController.getRequestByCurrentUser)
-router.post("/verification/myrequest/:id", auth([Role.personal, Role.organization, Role.user]) , VerificationController.updateMyRequestById)
+router.get(
+  "/verification/myrequest",
+  auth([Role.personal, Role.organization, Role.user]),
+  VerificationController.getRequestByCurrentUser
+);
+router.post(
+  "/verification/myrequest/:id",
+  auth([Role.personal, Role.organization, Role.user]),
+  VerificationController.updateMyRequestById
+);
 
 router.post(
   "/verification/paginate",
@@ -61,10 +70,11 @@ router.post(
   VerificationController.updateRequestStatus
 );
 
-
-
-router.get("/verification/:id", auth([Role.admin, Role.organization, Role.personal]) , VerificationController.getRequestById);
-
+router.get(
+  "/verification/:id",
+  auth([Role.admin, Role.organization, Role.personal]),
+  VerificationController.getRequestById
+);
 
 // router.patch('/user/verification', checkToken, VerificationController.addNewVerificationRequest)
 router.patch(

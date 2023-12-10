@@ -86,6 +86,22 @@ const getCampaignByCurrentUser = async (req, res) => {
     });
   }
 };
+
+const getCampaignByUser = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const campaigns = await Campaign.find({ creatorId: id }).exec();
+    res.status(HttpStatusCode.OK).json({
+      message: "Get All Campaigns successfully",
+      result: campaigns,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
+
 const getCampaignDetail = async (req, res) => {
   try {
     const id = req.params.id;
@@ -285,6 +301,7 @@ export default {
   getAllCampaign,
   getCampaignDetail,
   getCampaignByCurrentUser,
+  getCampaignByUser,
   getCampaignByStatus,
   getCampaignHome,
   countCampaignRecords,

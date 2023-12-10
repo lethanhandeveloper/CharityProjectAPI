@@ -4,7 +4,7 @@ export default mongoose.model(
   "Banner",
   new Schema({
     id: { type: Schema.ObjectId },
-    url: {
+    imageUrl: {
       type: String,
       require: true,
     },

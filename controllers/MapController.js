@@ -4,7 +4,7 @@ import Message from "../utils/Message.js";
 import Banner from "../models/Banner.js";
 const getMapList = async (req, res) => {
   try {
-    const data = await Map.find().exec();
+    const data = await Map.find().populate("campaignId").exec();
     res.status(HttpStatusCode.OK).json({
       result: data,
       message: Message.success,

@@ -7,7 +7,6 @@ import {
   PersonalGeneralInfo,
   OrganizationGeneralInfo,
   CommitInfoVerification,
-  SurveyInfoVerification,
 } from "../models/index.js";
 
 const addNewVerificationRequest = async (req, res) => {
@@ -22,50 +21,26 @@ const addNewVerificationRequest = async (req, res) => {
 
     let createdPGI = null;
     let createdOGI = null;
-    const {
-      optionCommitOne,
-      optionCommitTwo,
-      optionCommitThree,
-      optionCommitFour,
-      optionCommitFive,
-      publicBankAccount,
-      goalName,
-      targetAmount,
-      startDate,
-      endDate,
-    } = req.body.commitInfoVerification;
-
-    const {
-      optionSurveyOne,
-      optionSurveyTwo,
-      optionSurveyThree,
-      optionSurveyFour,
-      optionSurveyFive,
-      lawOneOption,
-      lawTwoOption,
-      lawThreeOption,
-      lawFourOption,
-      lawFiveOption,
-      chanel,
-    } = req.body.surveyInfoVerification;
+    const { goalName, targetAmount, startDate, endDate } =
+      req.body.commitInfoVerification;
 
     let user;
 
     if (type === 1) {
       const {
         personalGeneralInfo: {
-          personalName,
+          name,
           dateOfBirth,
           phoneNumber,
           email,
           socialNetworkLink,
-          personalAddress,
+          address,
           roleOnClub,
           clubName,
           logo,
           underOrg,
           actionDescSociaLink,
-          personalAchivementDoc,
+          achivementDoc,
           personalUserName,
         },
       } = req.body;
@@ -79,24 +54,24 @@ const addNewVerificationRequest = async (req, res) => {
       }
 
       createdPGI = await PersonalGeneralInfo.create({
-        name: personalName,
+        name,
         dateOfBirth,
         phoneNumber,
         email,
         socialNetworkLink,
-        address: personalAddress,
+        address,
         roleOnClub,
         clubName,
         logo,
         underOrg,
         actionDescSociaLink,
-        achivementDoc: personalAchivementDoc,
+        achivementDoc,
         userId: user._id,
       });
     } else if (type === 2) {
       const {
         organizationGeneralInfo: {
-          organizationName,
+          name,
           establishedDate,
           website,
           operationField,
@@ -119,7 +94,7 @@ const addNewVerificationRequest = async (req, res) => {
       }
 
       createdOGI = await OrganizationGeneralInfo.create({
-        name: organizationName,
+        name,
         establishedDate,
         website,
         operationField,
@@ -134,30 +109,10 @@ const addNewVerificationRequest = async (req, res) => {
     }
 
     const createdCIV = await CommitInfoVerification.create({
-      optionCommitOne,
-      optionCommitTwo,
-      optionCommitThree,
-      optionCommitFour,
-      optionCommitFive,
-      publicBankAccount,
       goalName,
       targetAmount,
       startDate,
       endDate,
-    });
-
-    const createdSIV = await SurveyInfoVerification.create({
-      optionSurveyOne,
-      optionSurveyTwo,
-      optionSurveyThree,
-      optionSurveyFour,
-      optionSurveyFive,
-      lawOneOption,
-      lawTwoOption,
-      lawThreeOption,
-      lawFourOption,
-      lawFiveOption,
-      chanel,
     });
 
     await VerificationRequest.create({
@@ -165,8 +120,8 @@ const addNewVerificationRequest = async (req, res) => {
       personalGeneralInfoId: createdPGI?._id,
       organizationGeneralInfoId: createdOGI?._id,
       commitInfoVerificationId: createdCIV._id,
-      surveyInfoVerificationId: createdSIV._id,
-      requestedUserId: user._id
+
+      requestedUserId: user._id,
     });
 
     await session.commitTransaction();
@@ -208,13 +163,9 @@ const getAllVerificationRequest = async (req, res) => {
     let organizationGeneralInfo;
 
     const returnRequest = await Promise.all(
-      
       requests.map(async (request) => {
         let commitInfoVerification = await CommitInfoVerification.findById(
           request.commitInfoVerificationId
-        );
-        let surveyInfoVerification = await SurveyInfoVerification.findById(
-          request.surveyInfoVerificationId
         );
 
         if (request.type === 1) {
@@ -228,7 +179,6 @@ const getAllVerificationRequest = async (req, res) => {
             status: request.status,
             personalGeneralInfo,
             commitInfoVerification,
-            surveyInfoVerification,
           };
         } else {
           organizationGeneralInfo = await OrganizationGeneralInfo.findById(
@@ -241,7 +191,6 @@ const getAllVerificationRequest = async (req, res) => {
             status: request.status,
             organizationGeneralInfo,
             commitInfoVerification,
-            surveyInfoVerification,
           };
         }
       })
@@ -296,25 +245,29 @@ const getVerificationRequestByPagination = async (req, res) => {
     const { search_text, page, no_item_per_page } = req.body;
     const skip = (page - 1) * no_item_per_page;
 
-    const personalInfo = await PersonalGeneralInfo.find({ name : { $regex: new RegExp(search_text, 'i')} })
-    const organizationInfo = await OrganizationGeneralInfo.find({name : { $regex: new RegExp(search_text, 'i')}})
-    
+    const personalInfo = await PersonalGeneralInfo.find({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
+    const organizationInfo = await OrganizationGeneralInfo.find({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
+
     let personalGeneralInfoIdArr = [];
     let organizationGeneralInfoIdArr = [];
 
-    personalInfo.forEach(pi => {
-      personalGeneralInfoIdArr.push(pi._id)
-    })
+    personalInfo.forEach((pi) => {
+      personalGeneralInfoIdArr.push(pi._id);
+    });
 
-    organizationInfo.forEach(oi => {
-      organizationGeneralInfoIdArr.push(oi._id)
-    })
-    
+    organizationInfo.forEach((oi) => {
+      organizationGeneralInfoIdArr.push(oi._id);
+    });
+
     const requests = await VerificationRequest.find({
       $or: [
         { personalGeneralInfoId: { $in: personalGeneralInfoIdArr } },
-        { organizationGeneralInfoId: { $in: organizationGeneralInfoIdArr } }
-      ]
+        { organizationGeneralInfoId: { $in: organizationGeneralInfoIdArr } },
+      ],
     })
       .skip(skip)
       .limit(no_item_per_page)
@@ -322,14 +275,11 @@ const getVerificationRequestByPagination = async (req, res) => {
 
     let personalGeneralInfo;
     let organizationGeneralInfo;
-    let returnRequestArr = [];
+
     const returnRequest = await Promise.all(
       requests.map(async (request) => {
         let commitInfoVerification = await CommitInfoVerification.findById(
           request.commitInfoVerificationId
-        );
-        let surveyInfoVerification = await SurveyInfoVerification.findById(
-          request.surveyInfoVerificationId
         );
 
         if (request.type === 1) {
@@ -343,7 +293,6 @@ const getVerificationRequestByPagination = async (req, res) => {
             status: request.status,
             personalGeneralInfo,
             commitInfoVerification,
-            surveyInfoVerification,
           };
         } else {
           organizationGeneralInfo = await OrganizationGeneralInfo.findById(
@@ -356,7 +305,6 @@ const getVerificationRequestByPagination = async (req, res) => {
             status: request.status,
             organizationGeneralInfo,
             commitInfoVerification,
-            surveyInfoVerification,
           };
         }
       })
@@ -367,7 +315,7 @@ const getVerificationRequestByPagination = async (req, res) => {
       result: returnRequest,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
     });
@@ -376,28 +324,27 @@ const getVerificationRequestByPagination = async (req, res) => {
 
 const getRequestByCurrentUser = async (req, res) => {
   try {
-    const token = req.headers?.authorization?.split(" ")[1]
-    const user = await jwt.verify(token, process.env.JWT_SECRET)
+    const token = req.headers?.authorization?.split(" ")[1];
+    const user = await jwt.verify(token, process.env.JWT_SECRET);
 
-    const requests = await VerificationRequest.find({ requestedUserId: user.data._doc._id });
+    const requests = await VerificationRequest.find({
+      requestedUserId: user.data._doc._id,
+    });
     let personalGeneralInfo;
     let organizationGeneralInfo;
-    let returnRequestArr = [];
+
     const returnRequest = await Promise.all(
       requests.map(async (request) => {
         let commitInfoVerification = await CommitInfoVerification.findById(
           request.commitInfoVerificationId
         );
-        let surveyInfoVerification = await SurveyInfoVerification.findById(
-          request.surveyInfoVerificationId
-        );
-        console.log(request);
-        let generalInfo;
 
         if (request.type === 1) {
           personalGeneralInfo = await PersonalGeneralInfo.findById(
             request.personalGeneralInfoId
-          ).find({  }).populate("userId");
+          )
+            .find({})
+            .populate("userId");
 
           return {
             id: request._id,
@@ -405,7 +352,6 @@ const getRequestByCurrentUser = async (req, res) => {
             status: request.status,
             personalGeneralInfo,
             commitInfoVerification,
-            surveyInfoVerification,
           };
         } else {
           organizationGeneralInfo = await OrganizationGeneralInfo.findById(
@@ -418,25 +364,23 @@ const getRequestByCurrentUser = async (req, res) => {
             status: request.status,
             organizationGeneralInfo,
             commitInfoVerification,
-            surveyInfoVerification,
           };
         }
       })
     );
-    
 
     res.status(HttpStatusCode.OK).json({
       message: "Get all verification request successfully",
       result: returnRequest,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 const getRequestById = async (req, res) => {
   try {
-    const requestId =  req.params.id
+    const requestId = req.params.id;
     const request = await VerificationRequest.findById(requestId);
     let personalGeneralInfo;
     let organizationGeneralInfo;
@@ -445,14 +389,11 @@ const getRequestById = async (req, res) => {
     let commitInfoVerification = await CommitInfoVerification.findById(
       request.commitInfoVerificationId
     );
-    let surveyInfoVerification = await SurveyInfoVerification.findById(
-      request.surveyInfoVerificationId
-    );
 
     if (request.type === 1) {
       personalGeneralInfo = await PersonalGeneralInfo.findById(
         request.personalGeneralInfoId
-      )
+      );
 
       returnRequest = {
         id: request._id,
@@ -460,12 +401,11 @@ const getRequestById = async (req, res) => {
         status: request.status,
         personalGeneralInfo,
         commitInfoVerification,
-        surveyInfoVerification,
       };
     } else {
       organizationGeneralInfo = await OrganizationGeneralInfo.findById(
         request.organizationGeneralInfoId
-      )
+      );
 
       returnRequest = {
         id: request._id,
@@ -473,75 +413,77 @@ const getRequestById = async (req, res) => {
         status: request.status,
         organizationGeneralInfo,
         commitInfoVerification,
-        surveyInfoVerification,
       };
     }
 
     res.status(HttpStatusCode.OK).json({
       message: "Get verification request successfully",
-      result: returnRequest
+      result: returnRequest,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR
-    })
+      message: Exception.SERVER_ERROR,
+    });
   }
-}
+};
 
 const updateMyRequestById = async (req, res) => {
-  const token = req.headers?.authorization?.split(" ")[1]
-  const user = await jwt.verify(token, process.env.JWT_SECRET)
+  const token = req.headers?.authorization?.split(" ")[1];
+  const user = await jwt.verify(token, process.env.JWT_SECRET);
 
-  const requestId = req.params.id
+  const requestId = req.params.id;
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const request = await VerificationRequest.findById(requestId)
-    if(!request){
+    const request = await VerificationRequest.findById(requestId);
+    if (!request) {
       throw new Exception("Notfound");
     }
 
-    if(request.requestedUserId != user.data._doc._id){
+    if (request.requestedUserId != user.data._doc._id) {
       throw new Exception("Unauthorized");
     }
 
-    console.log(request.personalGeneralInfoId)
-    
-    if(request.type === 1){
-      const { 
-        personalName,
+    console.log(request.personalGeneralInfoId);
+
+    if (request.type === 1) {
+      const {
+        name,
         dateOfBirth,
         phoneNumber,
         email,
         socialNetworkLink,
-        personalAddress,
+        address,
         roleOnClub,
         clubName,
         logo,
         underOrg,
         actionDescSociaLink,
-        personalAchivementDoc
-       } = req.body.personalGeneralInfo
-  
-      await PersonalGeneralInfo.findOneAndUpdate({_id : request.personalGeneralInfoId}, {
-        name: personalName,
-        dateOfBirth,
-        phoneNumber,
-        email,
-        socialNetworkLink,
-        address: personalAddress,
-        roleOnClub,
-        clubName,
-        logo,
-        underOrg,
-        actionDescSociaLink,
-        achivementDoc: personalAchivementDoc
-      })
-    }else{
+        achivementDoc,
+      } = req.body.personalGeneralInfo;
+
+      await PersonalGeneralInfo.findOneAndUpdate(
+        { _id: request.personalGeneralInfoId },
+        {
+          name,
+          dateOfBirth,
+          phoneNumber,
+          email,
+          socialNetworkLink,
+          address,
+          roleOnClub,
+          clubName,
+          logo,
+          underOrg,
+          actionDescSociaLink,
+          achivementDoc,
+        }
+      );
+    } else {
       const {
         organizationGeneralInfo: {
-          organizationName,
+          name,
           establishedDate,
           website,
           operationField,
@@ -554,18 +496,21 @@ const updateMyRequestById = async (req, res) => {
         },
       } = req.body;
 
-      await OrganizationGeneralInfo.findOneAndUpdate({ _id : request.organizationGeneralInfoId } , {
-        name: organizationName,
-        establishedDate,
-        website,
-        operationField,
-        address,
-        actionDescSocialLink,
-        achivementDoc,
-        representativeName,
-        representativePhoneNumber,
-        representativeEmail,
-      })
+      await OrganizationGeneralInfo.findOneAndUpdate(
+        { _id: request.organizationGeneralInfoId },
+        {
+          name,
+          establishedDate,
+          website,
+          operationField,
+          address,
+          actionDescSocialLink,
+          achivementDoc,
+          representativeName,
+          representativePhoneNumber,
+          representativeEmail,
+        }
+      );
     }
 
     const {
@@ -581,93 +526,63 @@ const updateMyRequestById = async (req, res) => {
       endDate,
     } = req.body.commitInfoVerification;
 
-    const {
-      optionSurveyOne,
-      optionSurveyTwo,
-      optionSurveyThree,
-      optionSurveyFour,
-      optionSurveyFive,
-      lawOneOption,
-      lawTwoOption,
-      lawThreeOption,
-      lawFourOption,
-      lawFiveOption,
-      chanel,
-    } = req.body.surveyInfoVerification;
+    await CommitInfoVerification.findByIdAndUpdate(
+      request.commitInfoVerificationId,
+      {
+        goalName,
+        targetAmount,
+        startDate,
+        endDate,
+      }
+    );
 
-    await CommitInfoVerification.findByIdAndUpdate(request.commitInfoVerificationId, {
-      optionCommitOne : optionCommitOne,
-      optionCommitTwo,
-      optionCommitThree,
-      optionCommitFour,
-      optionCommitFive,
-      publicBankAccount,
-      goalName,
-      targetAmount,
-      startDate,
-      endDate,
-    })
-    
-    console.log(request.surveyInfoVerificationId)
-    await SurveyInfoVerification.findByIdAndUpdate(request.surveyInfoVerificationId, {
-      optionSurveyOne: false,
-      optionSurveyTwo,
-      optionSurveyThree,
-      optionSurveyFour,
-      optionSurveyFive,
-      lawOneOption,
-      lawTwoOption,
-      lawThreeOption,
-      lawFourOption,
-      lawFiveOption,
-      chanel,
-    })
-
-    session.commitTransaction()
+    session.commitTransaction();
 
     return res.status(HttpStatusCode.NO_CONTENT).json({
-      message: "Update verification request successfully"
-    })
+      message: "Update verification request successfully",
+    });
   } catch (error) {
-    console.log(error)
-    session.abortTransaction()
-    if(error.message === 'Unauthorized'){
+    console.log(error);
+    session.abortTransaction();
+    if (error.message === "Unauthorized") {
       return res.status(HttpStatusCode.UNAUTHORIZED).json({
-        message: "You don't have right to call this route"
-      })
+        message: "You don't have right to call this route",
+      });
     }
 
-    if(error.message === 'Notfound'){
+    if (error.message === "Notfound") {
       return res.status(HttpStatusCode.NOT_FOUND).json({
-        message: "This verification request is not exists"
-      })
+        message: "This verification request is not exists",
+      });
     }
 
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR
-    })
+      message: Exception.SERVER_ERROR,
+    });
   }
-}
+};
 
 const countVerificationRequestRecords = async (req, res) => {
   try {
-    const search_text = req.query.search_text
-    const personalCount = await PersonalGeneralInfo.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
-    const organizationCount = await OrganizationGeneralInfo.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    const search_text = req.query.search_text;
+    const personalCount = await PersonalGeneralInfo.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
+    const organizationCount = await OrganizationGeneralInfo.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
 
     return res.status(HttpStatusCode.OK).json({
       message: "Get verification request number successfully",
-      result: personalCount + organizationCount
-    })
+      result: personalCount + organizationCount,
+    });
   } catch (error) {
     //console.log(error)
     return res.json(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.INTERNAL_SERVER_ERROR
-    })
+      message: Exception.INTERNAL_SERVER_ERROR,
+    });
   }
-}
-
-
+};
 
 export default {
   addNewVerificationRequest,
@@ -677,5 +592,5 @@ export default {
   getRequestByCurrentUser,
   getRequestById,
   updateMyRequestById,
-  countVerificationRequestRecords
+  countVerificationRequestRecords,
 };

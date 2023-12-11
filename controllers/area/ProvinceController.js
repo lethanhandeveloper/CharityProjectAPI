@@ -56,8 +56,7 @@ const deleteProvinceById = async (req, res) => {
 
 const updateProvinceById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const { name } = req.body;
+    const { id, name } = req.body;
 
     await Province.findByIdAndUpdate(id, { name });
 
@@ -73,12 +72,13 @@ const updateProvinceById = async (req, res) => {
 
 const getProvinceByPagination = async (req, res) => {
   try {
-
     const { search_text, page, no_item_per_page } = req.body;
 
     const skip = (page - 1) * no_item_per_page;
 
-    const provinces = await Province.find({ name : { $regex: new RegExp(search_text, 'i') } })
+    const provinces = await Province.find({
+      name: { $regex: new RegExp(search_text, "i") },
+    })
       .skip(skip)
       .limit(no_item_per_page)
       .exec();
@@ -111,19 +111,21 @@ const getProvinceByName = async (req, res) => {
 
 const countProvinceRecords = async (req, res) => {
   try {
-    const search_text = req.query.search_text
-    const count = await Province.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    const search_text = req.query.search_text;
+    const count = await Province.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
     return res.status(HttpStatusCode.OK).json({
       message: "Get province records number successfully",
-      result: count
-    })
+      result: count,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.json(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.INTERNAL_SERVER_ERROR
-    })
+      message: Exception.INTERNAL_SERVER_ERROR,
+    });
   }
-}
+};
 
 export default {
   addNewProvince,
@@ -132,5 +134,5 @@ export default {
   updateProvinceById,
   getProvinceByPagination,
   getProvinceByName,
-  countProvinceRecords
+  countProvinceRecords,
 };

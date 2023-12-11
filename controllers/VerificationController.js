@@ -19,116 +19,99 @@ const addNewVerificationRequest = async (req, res) => {
       throw new Exception("NotANumber");
     }
 
-    let createdPGI = null;
-    let createdOGI = null;
-    const { goalName, targetAmount, startDate, endDate } =
-      req.body.commitInfoVerification;
+    const token = req.headers?.authorization?.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      const user = await User.findById(decoded.data._doc._id).exec();
+      console.log(user);
+      let createdPGI = null;
+      let createdOGI = null;
+      const { goalName, targetAmount, startDate, endDate } =
+        req.body.commitInfoVerification;
 
-    let user;
-
-    if (type === 1) {
-      const {
-        personalGeneralInfo: {
+      if (type === 1) {
+        const {
+          personalGeneralInfo: {
+            name,
+            dateOfBirth,
+            phoneNumber,
+            representativeEmail,
+            socialNetworkLink,
+            address,
+            roleOnClub,
+            clubName,
+            logo,
+            underOrg,
+            actionDescSocialLink,
+            achivementDoc,
+          },
+        } = req.body;
+        createdPGI = await PersonalGeneralInfo.create({
           name,
           dateOfBirth,
           phoneNumber,
-          email,
+          representativeEmail,
           socialNetworkLink,
           address,
           roleOnClub,
           clubName,
           logo,
           underOrg,
-          actionDescSociaLink,
+          actionDescSocialLink,
           achivementDoc,
-          personalUserName,
-        },
-      } = req.body;
+          userId: user._id,
+        });
+      } else if (type === 2) {
+        const {
+          organizationGeneralInfo: {
+            name,
+            establishedDate,
+            website,
+            operationField,
+            address,
+            actionDescSocialLink,
+            achivementDoc,
+            representativeName,
+            representativePhoneNumber,
+            representativeEmail,
+          },
+        } = req.body;
 
-      user = await User.findOne({
-        userName: personalUserName.toString(),
-      });
-
-      if (!user) {
-        throw new Exception("UserNotExists");
-      }
-
-      createdPGI = await PersonalGeneralInfo.create({
-        name,
-        dateOfBirth,
-        phoneNumber,
-        email,
-        socialNetworkLink,
-        address,
-        roleOnClub,
-        clubName,
-        logo,
-        underOrg,
-        actionDescSociaLink,
-        achivementDoc,
-        userId: user._id,
-      });
-    } else if (type === 2) {
-      const {
-        organizationGeneralInfo: {
+        createdOGI = await OrganizationGeneralInfo.create({
           name,
           establishedDate,
           website,
           operationField,
           address,
-          organizationUserName,
+          userId: user._id,
           actionDescSocialLink,
           achivementDoc,
           representativeName,
           representativePhoneNumber,
           representativeEmail,
-        },
-      } = req.body;
-
-      user = await User.findOne({
-        userName: organizationUserName.toString(),
-      });
-
-      if (!user) {
-        throw new Exception("UserNotExists");
+        });
       }
 
-      createdOGI = await OrganizationGeneralInfo.create({
-        name,
-        establishedDate,
-        website,
-        operationField,
-        address,
-        userId: user._id,
-        actionDescSocialLink,
-        achivementDoc,
-        representativeName,
-        representativePhoneNumber,
-        representativeEmail,
+      const createdCIV = await CommitInfoVerification.create({
+        goalName,
+        targetAmount,
+        startDate,
+        endDate,
       });
-    }
 
-    const createdCIV = await CommitInfoVerification.create({
-      goalName,
-      targetAmount,
-      startDate,
-      endDate,
+      await VerificationRequest.create({
+        type,
+        personalGeneralInfoId: createdPGI?._id,
+        organizationGeneralInfoId: createdOGI?._id,
+        commitInfoVerificationId: createdCIV._id,
+
+        requestedUserId: user._id,
+      });
+
+      res.status(HttpStatusCode.CREATED).json({
+        message: "Create Verification Request Successfully",
+      });
     });
-
-    await VerificationRequest.create({
-      type,
-      personalGeneralInfoId: createdPGI?._id,
-      organizationGeneralInfoId: createdOGI?._id,
-      commitInfoVerificationId: createdCIV._id,
-
-      requestedUserId: user._id,
-    });
-
     await session.commitTransaction();
-
-    res.status(HttpStatusCode.CREATED).json({
-      message: "Create Verification Request Successfully",
-    });
   } catch (error) {
     await session.abortTransaction();
 
@@ -513,18 +496,8 @@ const updateMyRequestById = async (req, res) => {
       );
     }
 
-    const {
-      optionCommitOne,
-      optionCommitTwo,
-      optionCommitThree,
-      optionCommitFour,
-      optionCommitFive,
-      publicBankAccount,
-      goalName,
-      targetAmount,
-      startDate,
-      endDate,
-    } = req.body.commitInfoVerification;
+    const { goalName, targetAmount, startDate, endDate } =
+      req.body.commitInfoVerification;
 
     await CommitInfoVerification.findByIdAndUpdate(
       request.commitInfoVerificationId,

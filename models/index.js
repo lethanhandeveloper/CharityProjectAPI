@@ -9,25 +9,23 @@ import Campaign from "./Campaign.js";
 import PersonalGeneralInfo from "./PersonalGeneralInfo.js";
 import OrganizationGeneralInfo from "./OrganizationGeneralInfo.js";
 import CommitInfoVerification from "./CommitInfoVerification.js";
-import SurveyInfoVerification from "./SurveyInfoVerification.js"
-import VerificationRequest from "./VerificationRequest.js"
-import EmailRegistrationCode from "./EmailRegistrationCode.js"
-import RequestLimit from './RequestLimit.js'
+import VerificationRequest from "./VerificationRequest.js";
+import EmailRegistrationCode from "./EmailRegistrationCode.js";
+import RequestLimit from "./RequestLimit.js";
 
 export {
-    User,
-    Commune,
-    District,
-    Province,
-    Map,
-    Banner,
-    CampaignCategory,
-    Campaign,
-    PersonalGeneralInfo,
-    OrganizationGeneralInfo,
-    CommitInfoVerification,
-    SurveyInfoVerification,
-    VerificationRequest,
-    EmailRegistrationCode,
-    RequestLimit
+  User,
+  Commune,
+  District,
+  Province,
+  Map,
+  Banner,
+  CampaignCategory,
+  Campaign,
+  PersonalGeneralInfo,
+  OrganizationGeneralInfo,
+  CommitInfoVerification,
+  VerificationRequest,
+  EmailRegistrationCode,
+  RequestLimit,
 };

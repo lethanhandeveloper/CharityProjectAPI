@@ -102,5 +102,6 @@ router.post(
 );
 
 router.get("/home", UserController.getUserOrgina);
+router.post("/setactive", auth([Role.admin]), UserController.setActive);
 
 export default router;

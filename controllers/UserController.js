@@ -262,6 +262,22 @@ const updateAvatar = async (req, res) => {
     });
   }
 };
+const setActive = async (req, res) => {
+  try {
+    const { id, isActive } = req.body;
+    await User.findByIdAndUpdate(id, {
+      isActive,
+    });
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Update user info successfully",
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.BAD_REQUEST).json({
+      message: "User info is not valid",
+    });
+  }
+};
 
 const getUserListByPage = async (req, res) => {
   try {
@@ -330,7 +346,7 @@ const sendRegistionCode = async (req, res) => {
       message: "Send registration code mail successfully",
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "Server is error" });
@@ -431,7 +447,6 @@ const getUserByName = async (req, res) => {
   }
 };
 
-
 export default {
   register,
   login,
@@ -444,5 +459,6 @@ export default {
   getAccessToken,
   getUserOrgina,
   countUser,
-  getUserByName
+  getUserByName,
+  setActive,
 };

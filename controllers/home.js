@@ -7,16 +7,10 @@ import Personal from "../models/PersonalGeneralInfo.js";
 
 const getCountForHome = async (req, res) => {
   try {
-<<<<<<< HEAD
     const userCount = await User.countDocuments();
 
     const campaignCount = await Campaign.countDocuments();
     const organizationCount = await Origanization.countDocuments();
-=======
-    const userCount = await User.count();
-    const campaignCount = await Campaign.count();
-    const organizationCount = await Origanization.count();
->>>>>>> 87dbf5e ( change api)
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
       result: {
@@ -34,7 +28,6 @@ const getCountForHome = async (req, res) => {
 
 const getCountForAdmin = async (req, res) => {
   try {
-<<<<<<< HEAD
     const userCount = await User.countDocuments();
     const campaignCount = await Campaign.countDocuments();
     const campaignFinishCount = await Campaign.countDocuments();
@@ -42,15 +35,7 @@ const getCountForAdmin = async (req, res) => {
     const personalCount = await Personal.countDocuments();
     const campaignInMonth = await Campaign.countDocuments();
     const userInMonth = await User.countDocuments();
-=======
-    const userCount = await User.count();
-    const campaignCount = await Campaign.count();
-    const campaignFinishCount = await Campaign.count();
-    const organizationCount = await Origanization.count();
-    const personalCount = await Personal.count();
-    const campaignInMonth = await Campaign.count();
-    const userInMonth = await User.count();
->>>>>>> 87dbf5e ( change api)
+
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
       result: {

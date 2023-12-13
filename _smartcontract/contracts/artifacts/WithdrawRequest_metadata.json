@@ -48,6 +48,46 @@
 			},
 			{
 				"inputs": [],
+				"name": "getAllWithdrawRequest",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "approvedQuantity",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "toAddress",
+								"type": "address"
+							}
+						],
+						"internalType": "struct WithdrawRequest.WithdrawRequestInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "nonce",
 				"outputs": [
 					{
@@ -156,11 +196,11 @@
 			]
 		},
 		"contracts/WithdrawRequest.sol": {
-			"keccak256": "0xa34d08f1d959725c847f6d85507f6cb557491961b118e28f73828dc4b45b7787",
+			"keccak256": "0x9bc71b49649d80b41070b991b70b3bc18657d12ba884a7d6e42c5d78328c24de",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d1397a72d25c69e7d2d5fd9c50eca51d191a75e895f53fc31ecc71fa0a503ad4",
-				"dweb:/ipfs/QmeVuXELp4dHWBrjhdcPu8hFJVFo51vYfJGjphZXsStKXs"
+				"bzz-raw://71ea3d32f7aff02941b13173a02b654803dc7f1b00f8b6bd1fb400842799ae0c",
+				"dweb:/ipfs/QmUBFEdZGEsfxR5heK8gmeS9Bbi8ZaRjzFtn8LN5GKhFEh"
 			]
 		}
 	},

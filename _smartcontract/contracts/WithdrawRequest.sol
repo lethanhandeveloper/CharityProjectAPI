@@ -15,10 +15,10 @@ contract WithdrawRequest {
     struct WithdrawRequestInfo {
         uint256 id;
         string campaignId;
-        uint approvedQuantity;
+        bool isApproved;
         uint value;
-        address toAddress;
-    }
+        address payable toAddress;
+    } 
 
     WithdrawRequestInfo[] public withdrawRequestArray;
 
@@ -34,27 +34,84 @@ contract WithdrawRequest {
         campaignAddress = _campaignAddress;
     }
 
-    
-
-    function addNewWithdrawRequest(string memory _campaignId, uint _value, address _toAddress) public {
-        require(Campaign(campaignAddress).getCampaignById(_campaignId).currentValue >= _value, "This campaign's balance is less than your value");
-
-        WithdrawRequestInfo memory wri;
-        wri.id = generateRandomId();
-        wri.campaignId = _campaignId;
-        wri.approvedQuantity = 0;
-        wri.value = _value;
-        wri.toAddress = _toAddress;
+    function addNewWithdrawRequest(
+        string memory _campaignId,
+        uint _value,
+        address _toAddress
+    ) public {
+        //require(Campaign(campaignAddress).getCampaignById(_campaignId).currentValue >= _value, "This campaign's balance is less than your value");
+        WithdrawRequestInfo memory wri = WithdrawRequestInfo(
+            generateRandomId(),
+            _campaignId,
+            false,
+            _value,
+            _toAddress
+        );
 
         withdrawRequestArray.push(wri);
     }
 
     function generateRandomId() public returns (uint256) {
-        uint256 randomId = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao, nonce)));
+        uint256 randomId = uint256(
+            keccak256(
+                abi.encodePacked(block.timestamp, block.prevrandao, nonce)
+            )
+        );
         nonce++;
         return randomId;
     }
-}
 
+    function getAllWithdrawRequest()
+        public
+        view
+        returns (WithdrawRequestInfo[] memory)
+    {
+        return withdrawRequestArray;
+    }
+
+    function getWithdrawRequestById(
+        uint256 _id
+    ) external view returns (WithdrawRequestInfo memory) {
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(withdrawRequestArray[i].id)) ==
+                keccak256(abi.encodePacked(_id))
+            ) {
+                return withdrawRequestArray[i];
+            }
+        }
+
+        revert('Not found');
+    }
+
+    function getWithdrawRequestByCampaignId(
+        uint256 _campaignId
+    ) public view returns (WithdrawRequestInfo memory) {
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(withdrawRequestArray[i].campaignId)) ==
+                keccak256(abi.encodePacked(_campaignId))
+            ) {
+                return withdrawRequestArray[i];
+            }
+        }
+
+        revert('Not found');
+    }
+
+    function approveWithdrawRequest(uint256 _id) public onlyAdmin(){
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(withdrawRequestArray[i].id)) ==
+                keccak256(abi.encodePacked(_id))
+            ) {
+                withdrawRequestArray[i].isApproved = true;
+                return;
+            }
+        }
+
+        revert('Not found');
+    }
+}
 
 //remixd -s _smartcontract --remix-ide https://remix.ethereum.org

@@ -16,6 +16,7 @@ contract Campaign {
 
     address adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     address transactionHistoryAddress;
+    address withdrawRequestAddress;
 
     CampaignInfo[] public campaignInfoArray;
 
@@ -29,6 +30,10 @@ contract Campaign {
 
     function setTransactionHistoryAddress(address _transactionHistoryAddress) public onlyAdmin {
         transactionHistoryAddress = _transactionHistoryAddress;
+    }
+
+    function setWithdrawRequestAddress(address _withdrawRequestAddress) public onlyAdmin {
+        withdrawRequestAddress = _withdrawRequestAddress;
     }
 
     function addNewCampaign(
@@ -83,12 +88,7 @@ contract Campaign {
                 keccak256(abi.encodePacked(campaignId))
             ) {
                 campaignInfoArray[i].currentValue += msg.value;
-                
-                // if(!TransactionHistory(transactionHistoryAddress).isDonatedtoCampaign(msg.sender, campaignId)) {
-                //     campaignInfoArray[i].donatorCount++;
-                // }
-
-
+     
                 TransactionHistory(transactionHistoryAddress)
                     .addNewTransactionHistory(
                         campaignId,
@@ -104,6 +104,14 @@ contract Campaign {
         revert("Not found");
     }
 
-    
+    function withdraw(uint256 _withdrawRequestId) public onlyAdmin() {
+        WithdrawRequest.WithdrawRequestInfo memory withdrawRequest = WithdrawRequest(withdrawRequestAddress).getWithdrawRequestById(_withdrawRequestId);
+        CampaignInfo memory campaign = getCampaignById(withdrawRequest.campaignId);
+        require(withdrawRequest.isApproved == true, "Request has been not approved");
+        require(address(this).balance >= withdrawRequest.value, "Insufficient balance in the contract");
+
+        campaign.currentValue -= withdrawRequest.value;
+        payable(withdrawRequest.toAddress).transfer(withdrawRequest.value);
+    }
     
 }

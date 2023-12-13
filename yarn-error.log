@@ -1,0 +1,47 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Users\issac.le\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\issac.le\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\TortoiseGit\bin;C:\Program Files (x86)\GnuPG\bin;C:\Users\issac.le\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Microsoft SQL Server\150\Tools\Binn;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn;C:\Program Files\dotnet;C:\Users\issac.le\AppData\Local\Microsoft\WindowsApps;C:\Users\issac.le\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\issac.le\AppData\Roaming\npm;C:\Users\issac.le\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\issac.le\.dotnet\tools;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.17.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\Users\issac.le\CodeTest\CharityProjectAPI\node_modules\bcrypt\lib\binding\napi-v3\bcrypt_lib.node'
+
+npm manifest: 
+  {
+    "type": "module",
+    "dependencies": {
+      "bcrypt": "^5.1.1",
+      "cors": "^2.8.5",
+      "date-and-time": "^3.0.3",
+      "dotenv": "^16.3.1",
+      "ejs": "^3.1.9",
+      "express": "^4.18.2",
+      "google-auth-library": "^9.4.1",
+      "jsonwebtoken": "^9.0.2",
+      "mongoose": "^8.0.0",
+      "nodemailer": "^6.9.7",
+      "nodemon": "^3.0.1",
+      "request-ip": "^3.3.0",
+      "twilio": "^4.19.3",
+      "validator": "^13.11.0"
+    },
+    "scripts": {
+      "start": "nodemon server.js"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

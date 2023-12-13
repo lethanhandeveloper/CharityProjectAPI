@@ -4,7 +4,7 @@ import CampaignController from "./campaign/index.js";
 import MapController from "./MapController.js";
 import BannerController from "./BannerController.js";
 import VerificationController from "./VerificationController.js";
-
+import HomeController from "./home.js";
 export {
   UserController,
   AreaController,
@@ -12,4 +12,5 @@ export {
   BannerController,
   CampaignController,
   VerificationController,
+  HomeController,
 };

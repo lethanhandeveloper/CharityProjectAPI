@@ -74,10 +74,9 @@ router.post(
   auth([Role.admin]),
   VerificationController.getVerificationRequestByPagination
 );
-
+router.get("/verification/user/:id", VerificationController.getRequestByUserId);
 router.get("/verification/:id", VerificationController.getRequestById);
 
-// router.patch('/user/verification', checkToken, VerificationController.addNewVerificationRequest)
 router.patch(
   "/avatar",
   auth([Role.user, Role.admin]),

@@ -11,21 +11,30 @@ const router = express.Router();
 
 router.post(
   "/register/getcode",
-  requestLimit,
+  // requestLimit,
   UserController.sendRegistionCode
 );
-router.get(
-  "/refreshtoken",
-  UserController.getAccessToken
-);
+router.get("/refreshtoken", UserController.getAccessToken);
 
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
-router.get("/getbyname/:name", auth([Role.admin]) ,  UserController.getUserByName);
+router.get(
+  "/getbyname/:name",
+  auth([Role.admin]),
+  UserController.getUserByName
+);
 router.patch("/", UserController.updateMyUserInfo);
 
-router.get("/verification/myrequest", auth([Role.personal, Role.organization, Role.user]) , VerificationController.getRequestByCurrentUser)
-router.post("/verification/myrequest/:id", auth([Role.personal, Role.organization, Role.user]) , VerificationController.updateMyRequestById)
+router.get(
+  "/verification/myrequest",
+  auth([Role.personal, Role.organization, Role.user]),
+  VerificationController.getRequestByCurrentUser
+);
+router.post(
+  "/verification/myrequest/:id",
+  auth([Role.personal, Role.organization, Role.user]),
+  VerificationController.updateMyRequestById
+);
 
 router.post(
   "/verification/paginate",
@@ -50,6 +59,11 @@ router.get(
   VerificationController.getAllVerificationRequest
 );
 router.patch(
+  "/verification/update/:id",
+  auth([Role.user]),
+  VerificationController.updateMyRequestById
+);
+router.patch(
   "/verification/:id",
   auth([Role.admin]),
   VerificationController.updateRequestStatus
@@ -58,13 +72,10 @@ router.patch(
 router.post(
   "/verification/paginate",
   auth([Role.admin]),
-  VerificationController.updateRequestStatus
+  VerificationController.getVerificationRequestByPagination
 );
 
-
-
-router.get("/verification/:id", auth([Role.admin, Role.organization, Role.personal]) , VerificationController.getRequestById);
-
+router.get("/verification/:id", VerificationController.getRequestById);
 
 // router.patch('/user/verification', checkToken, VerificationController.addNewVerificationRequest)
 router.patch(
@@ -91,5 +102,6 @@ router.post(
 );
 
 router.get("/home", UserController.getUserOrgina);
+router.post("/setactive", auth([Role.admin]), UserController.setActive);
 
 export default router;

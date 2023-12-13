@@ -113,23 +113,20 @@ const updateCommuneById = async (req, res) => {
       message: "Server is error",
     });
   }
-
-  
 };
 
 const getCommuneByPagination = async (req, res) => {
   try {
-    const {
-      search_text,
-      page,
-      no_item_per_page,
-    } = req.body;
+    const { search_text, page, no_item_per_page } = req.body;
 
     const skip = (page - 1) * no_item_per_page;
 
-    const communes = await Commune.find({ name : { $regex: new RegExp(search_text, 'i') } })
+    const communes = await Commune.find({
+      name: { $regex: new RegExp(search_text, "i") },
+    })
       .skip(skip)
       .limit(no_item_per_page)
+      .populate("districtId")
       .exec();
 
     res.status(HttpStatusCode.OK).json({
@@ -145,8 +142,8 @@ const getCommuneByPagination = async (req, res) => {
 
 const getCommuneByName = async (req, res) => {
   try {
-    const name = req.params.name
-    const Communes = await Commune.find({name: new RegExp(name, 'i') })
+    const name = req.params.name;
+    const Communes = await Commune.find({ name: new RegExp(name, "i") });
     res.status(HttpStatusCode.OK).json({
       message: "Get all Communes successfully",
       result: Communes,
@@ -160,20 +157,22 @@ const getCommuneByName = async (req, res) => {
 
 const countCommuneRecords = async (req, res) => {
   try {
-    const search_text = req.query.search_text
+    const search_text = req.query.search_text;
 
-    const count = await Commune.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
+    const count = await Commune.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
     return res.status(HttpStatusCode.OK).json({
       message: "Get commune records number successfully",
-      result: count
-    })
+      result: count,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.json(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.INTERNAL_SERVER_ERROR
-    })
+      message: Exception.INTERNAL_SERVER_ERROR,
+    });
   }
-}
+};
 
 export default {
   addNewCommune,
@@ -184,5 +183,5 @@ export default {
   updateCommuneById,
   getCommuneByPagination,
   getCommuneByName,
-  countCommuneRecords
+  countCommuneRecords,
 };

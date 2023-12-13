@@ -29,10 +29,7 @@ contract TransactionHistory {
         );
         _;
     }
-   function setAdminAddress(address _adminyAddress,string _key) public {
-	if(key=='key admin'){
-adminAddress = _adminAddress;
-}
+ 
     function addNewTransactionHistory(
         string memory campaignId,
         string memory donatorId,

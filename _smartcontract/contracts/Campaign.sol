@@ -31,21 +31,11 @@ contract Campaign {
     function setTransactionHistoryAddress(address _transactionHistoryAddress) public onlyAdmin {
         transactionHistoryAddress = _transactionHistoryAddress;
     }
-<<<<<<< HEAD
 
     function setWithdrawRequestAddress(address _withdrawRequestAddress) public onlyAdmin {
         withdrawRequestAddress = _withdrawRequestAddress;
     }
 
-=======
-   
-    function setAdminAddress(address _adminyAddress,string _key) public {
-	if(key=='key admin'){
-adminAddress = _adminAddress;
-}
-        
-    }
->>>>>>> 31e2ada (change sm)
     function addNewCampaign(
         string memory id,
         string memory creatorUserName,

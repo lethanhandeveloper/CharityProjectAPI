@@ -17,10 +17,7 @@ contract Item
         require(msg.sender == adminAddress, "Only admin can call this function");
         _; 
     }
-	   function setAdminAddress(address _adminyAddress,string _key) public {
-	if(key=='key admin'){
-adminAddress = _adminAddress;
-}
+	 
     function addNewItem(string memory _campaignId, string memory _message,string memory _creatorID,unit memory _time) public onlyAdmin {
         ItemInfo memory itemInfo;
         itemInfo.campaignId = _campaignId;

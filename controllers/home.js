@@ -35,6 +35,7 @@ const getCountForAdmin = async (req, res) => {
     const personalCount = await Personal.countDocuments();
     const campaignInMonth = await Campaign.countDocuments();
     const userInMonth = await User.countDocuments();
+
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
       result: {

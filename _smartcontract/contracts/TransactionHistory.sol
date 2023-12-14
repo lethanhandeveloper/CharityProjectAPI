@@ -9,7 +9,7 @@ contract TransactionHistory {
         string donatorId;
         address donatorAddress;
         uint value;
-        uint256 time;
+        string time;
     }
 
     TransactionInfo[] public transactionInfoArray;
@@ -35,7 +35,7 @@ contract TransactionHistory {
         string memory donatorId,
         address donatorAddress,
         uint value,
-        uint256 time
+        string memory time
     ) external onlyCampaignContract {
         TransactionInfo memory newTransaction;
         newTransaction.campaignId = campaignId;

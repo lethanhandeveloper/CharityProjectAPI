@@ -7,7 +7,7 @@ contract Item
         string campaignId;
         string message;
         string creatorId;
-        uint256 time;
+        string time;
     }
 
     address adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4; 
@@ -18,7 +18,7 @@ contract Item
         _; 
     }
 	 
-    function addNewItem(string memory _campaignId, string memory _message,string memory _creatorID,unit memory _time) public onlyAdmin {
+    function addNewItem(string memory _campaignId, string memory _message,string memory _creatorID,string memory _time) public onlyAdmin {
         ItemInfo memory itemInfo;
         itemInfo.campaignId = _campaignId;
         itemInfo.message = _message;

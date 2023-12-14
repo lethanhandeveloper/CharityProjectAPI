@@ -15,8 +15,10 @@ contract WithdrawRequest {
     struct WithdrawRequestInfo {
         uint256 id;
         string campaignId;
+	string createdId;
         bool isApproved;
         uint value;
+	string time;
         address payable toAddress;
     } 
 
@@ -37,14 +39,18 @@ contract WithdrawRequest {
     function addNewWithdrawRequest(
         string memory _campaignId,
         uint _value,
-        address _toAddress
+        address _toAddress,
+	string memory _time,
+	string memory _createId
     ) public {
         //require(Campaign(campaignAddress).getCampaignById(_campaignId).currentValue >= _value, "This campaign's balance is less than your value");
         WithdrawRequestInfo memory wri = WithdrawRequestInfo(
             generateRandomId(),
             _campaignId,
+	    _createdId,
             false,
             _value,
+	    _time,
             _toAddress
         );
 
@@ -85,7 +91,7 @@ contract WithdrawRequest {
     }
 
     function getWithdrawRequestByCampaignId(
-        uint256 _campaignId
+        string memory _campaignId
     ) public view returns (WithdrawRequestInfo memory) {
         for (uint i = 0; i < withdrawRequestArray.length; i++) {
             if (

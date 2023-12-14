@@ -410,6 +410,57 @@ const getRequestById = async (req, res) => {
     });
   }
 };
+const getRequestByUserId = async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const request = await VerificationRequest.findOne({
+      requestedUserId: requestId,
+    });
+    let personalGeneralInfo;
+    let organizationGeneralInfo;
+    let returnRequest;
+
+    let commitInfoVerification = await CommitInfoVerification.findById(
+      request.commitInfoVerificationId
+    );
+
+    if (request.type === 1) {
+      personalGeneralInfo = await PersonalGeneralInfo.findById(
+        request.personalGeneralInfoId
+      );
+
+      returnRequest = {
+        id: request._id,
+        type: request.type,
+        status: request.status,
+        personalGeneralInfo,
+        commitInfoVerification,
+      };
+    } else {
+      organizationGeneralInfo = await OrganizationGeneralInfo.findById(
+        request.organizationGeneralInfoId
+      );
+
+      returnRequest = {
+        id: request._id,
+        type: request.type,
+        status: request.status,
+        organizationGeneralInfo,
+        commitInfoVerification,
+      };
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Get verification request successfully",
+      result: returnRequest,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
 
 const updateMyRequestById = async (req, res) => {
   const token = req.headers?.authorization?.split(" ")[1];
@@ -566,4 +617,5 @@ export default {
   getRequestById,
   updateMyRequestById,
   countVerificationRequestRecords,
+  getRequestByUserId,
 };

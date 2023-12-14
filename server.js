@@ -6,11 +6,11 @@ import {
   mapRouter,
   bannerRouter,
   campaignRouter,
+  homeRouter,
 } from "./routes/index.js";
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
 import HttpStatusCode from "./utils/HttpStatusCode.js";
-
 
 dotenv.config();
 
@@ -24,17 +24,18 @@ app.use("/area", areaRouter);
 app.use("/map", mapRouter);
 app.use("/campaign", campaignRouter);
 app.use("/banner", bannerRouter);
+app.use("/home", homeRouter);
 
 import twilio from "twilio";
-
-app.use("/authsdt", (req, res) => {
-  const accountSid = 'ACf89eec8fd034140f10c92584c196fa9b';
-  const authToken = '982dde939ab1c991ed6c6f698a45899f';
+app.get("/authsdt", (req, res) => {
+  const accountSid = "AC52d5d50543024bd10c6ee92b6385940b";
+  const authToken = "15cb777012e7a50219355c403578141d";
   const client = twilio(accountSid, authToken);
-
   client.messages
-    .create({ from: '+84386599223', body: 'Ahoy, world!', to: '+84337464921' })
-    .then(message => console.log(message.sid));
+    .create({ from: "+12056712883", body: "Ahoy, world!", to: "+840383474327" })
+    .then((message) => console.log(message.sid));
+
+  res.status(200).json({ message: "Sucess" });
 });
 
 app.use((req, res) => {

@@ -3,5 +3,12 @@ import areaRouter from "../routes/area.js";
 import mapRouter from "../routes/map.js";
 import bannerRouter from "../routes/banner.js";
 import campaignRouter from "../routes/campaign.js";
-
-export { userRouter, areaRouter, mapRouter, bannerRouter, campaignRouter };
+import homeRouter from "../routes/home.js";
+export {
+  userRouter,
+  areaRouter,
+  mapRouter,
+  bannerRouter,
+  campaignRouter,
+  homeRouter,
+};

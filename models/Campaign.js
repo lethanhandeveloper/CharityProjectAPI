@@ -11,6 +11,10 @@ export default mongoose.model(
       required: true,
       ref: "User",
     },
+    createdDate: {
+      type: Date,
+      required: true,
+    },
     categoryId: {
       type: Schema.ObjectId,
       required: true,

@@ -25,6 +25,10 @@ export default mongoose.model(
       type: ObjectId,
       ref: "User",
     },
+    createdDate: {
+      required: true,
+      type: Date,
+    },
     status: {
       type: Number,
       default: 1,

@@ -21,6 +21,7 @@ contract WithdrawRequest {
 	    string time;
         address payable toAddress;
         string message;
+        string status;
     } 
 
     WithdrawRequestInfo[] public withdrawRequestArray;
@@ -43,7 +44,8 @@ contract WithdrawRequest {
         address payable _toAddress,
 	    string memory _time,
 	    string memory _createdId,
-        string memory _message
+        string memory _message,
+        string memory _status
     ) public {
         //require(Campaign(campaignAddress).getCampaignById(_campaignId).currentValue >= _value, "This campaign's balance is less than your value");
         WithdrawRequestInfo memory wri = WithdrawRequestInfo(
@@ -54,7 +56,8 @@ contract WithdrawRequest {
             _value,
 	        _time,
             _toAddress,
-            _message
+            _message,
+            _status
         );
 
         withdrawRequestArray.push(wri);
@@ -119,6 +122,19 @@ contract WithdrawRequest {
             }
         }
 
+        revert('Not found');
+    }
+
+    function updateStatus(uint256 _id,string memory _status) public onlyAdmin(){
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(withdrawRequestArray[i].id)) ==
+                keccak256(abi.encodePacked(_id))
+            ) {
+                withdrawRequestArray[i].status = _status;
+                return;
+            }
+        }
         revert('Not found');
     }
 }

@@ -15,10 +15,10 @@ contract WithdrawRequest {
     struct WithdrawRequestInfo {
         uint256 id;
         string campaignId;
-	    string createdId;
+	string createdId;
         bool isApproved;
         uint value;
-	    string time;
+	string time;
         address payable toAddress;
         string message;
         string status;

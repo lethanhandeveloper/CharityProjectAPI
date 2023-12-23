@@ -7,6 +7,7 @@ import {
   bannerRouter,
   campaignRouter,
   homeRouter,
+  feedbackRouter
 } from "./routes/index.js";
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
@@ -25,6 +26,7 @@ app.use("/map", mapRouter);
 app.use("/campaign", campaignRouter);
 app.use("/banner", bannerRouter);
 app.use("/home", homeRouter);
+app.use("/feedback", feedbackRouter);
 
 import twilio from "twilio";
 app.get("/authsdt", (req, res) => {

@@ -5,6 +5,8 @@ import MapController from "./MapController.js";
 import BannerController from "./BannerController.js";
 import VerificationController from "./VerificationController.js";
 import HomeController from "./home.js";
+import FeedbackController from "./FeedbackController.js";
+
 export {
   UserController,
   AreaController,
@@ -13,4 +15,5 @@ export {
   CampaignController,
   VerificationController,
   HomeController,
+  FeedbackController
 };

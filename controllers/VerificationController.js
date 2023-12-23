@@ -9,6 +9,33 @@ import {
   CommitInfoVerification,
 } from "../models/index.js";
 
+const isRequestExistsbyUserId = async (userId) => {
+  const personalGeneralInfo = await PersonalGeneralInfo.find({ userId });
+  const organizationGeneralInfo =  await OrganizationGeneralInfo.find({ userId });
+
+  if(personalGeneralInfo.length > 0) {
+    console.log(personalGeneralInfo)
+    personalGeneralInfo.forEach(async pgi => {
+      const isNotApproved = await VerificationRequest.find({ _id: pgi.personalGeneralInfoId, status: 1 })
+      if(isNotApproved){
+        console.log("ok")
+        return true;
+      }
+    });
+  }
+
+  if(organizationGeneralInfo > 0) {
+    personalGeneralInfo.forEach(async ogi => {
+      const isNotApproved = await VerificationRequest.find({ _id: ogi.personalGeneralInfoId, status: 1 })
+      if(isNotApproved){
+        return true;
+      }
+    });
+  }
+  
+  return false;
+}
+
 const addNewVerificationRequest = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -22,7 +49,12 @@ const addNewVerificationRequest = async (req, res) => {
     const token = req.headers?.authorization?.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       const user = await User.findById(decoded.data._doc._id).exec();
-      console.log(user);
+     
+      if(await isRequestExistsbyUserId(user._id)){
+        return res.status(HttpStatusCode.BAD_REQUEST).json({
+          message: "You have a request which is waiting for approval"
+        })
+      }
       let createdPGI = null;
       let createdOGI = null;
       const { goalName, targetAmount, startDate, endDate } =

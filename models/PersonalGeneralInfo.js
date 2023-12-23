@@ -59,8 +59,7 @@ export default mongoose.model(
       required: true,
     },
     achivementDoc: {
-      type: String,
-      required: true,
+      type: String
     },
     userId: {
       type: ObjectId,

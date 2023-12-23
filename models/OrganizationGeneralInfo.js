@@ -31,7 +31,6 @@ export default mongoose.model(
     },
     actionDescSocialLink: {
       type: Number,
-      required: true,
       enum: [1, 2, 3],
     },
     achivementDoc: {

@@ -76,6 +76,7 @@ const register = async (req, res) => {
       communeId,
       specificAddress,
       image_url,
+      isActive: true,
     });
 
     res.status(HttpStatusCode.OK).json({
@@ -88,6 +89,7 @@ const register = async (req, res) => {
 
     return;
   } catch (error) {
+    console.log(error)
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json(Exception.SERVER_ERROR);

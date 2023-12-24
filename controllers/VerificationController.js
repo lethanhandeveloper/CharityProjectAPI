@@ -11,28 +11,28 @@ import {
 
 const isRequestExistsbyUserId = async (userId) => {
   const personalGeneralInfo = await PersonalGeneralInfo.find({ userId });
-  const organizationGeneralInfo =  await OrganizationGeneralInfo.find({ userId });
+  const organizationGeneralInfo = await OrganizationGeneralInfo.find({ userId });
 
-  if(personalGeneralInfo.length > 0) {
+  if (personalGeneralInfo.length > 0) {
     console.log(personalGeneralInfo)
     personalGeneralInfo.forEach(async pgi => {
       const isNotApproved = await VerificationRequest.find({ _id: pgi.personalGeneralInfoId, status: 1 })
-      if(isNotApproved){
+      if (isNotApproved) {
         console.log("ok")
         return true;
       }
     });
   }
 
-  if(organizationGeneralInfo > 0) {
+  if (organizationGeneralInfo > 0) {
     personalGeneralInfo.forEach(async ogi => {
       const isNotApproved = await VerificationRequest.find({ _id: ogi.personalGeneralInfoId, status: 1 })
-      if(isNotApproved){
+      if (isNotApproved) {
         return true;
       }
     });
   }
-  
+
   return false;
 }
 
@@ -49,8 +49,8 @@ const addNewVerificationRequest = async (req, res) => {
     const token = req.headers?.authorization?.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       const user = await User.findById(decoded.data._doc._id).exec();
-     
-      if(await isRequestExistsbyUserId(user._id)){
+
+      if (await isRequestExistsbyUserId(user._id)) {
         return res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "You have a request which is waiting for approval"
         })
@@ -73,10 +73,10 @@ const addNewVerificationRequest = async (req, res) => {
             clubName,
             logo,
             underOrg,
-            actionDescSocialLink,
             achivementDoc,
           },
         } = req.body;
+  
         createdPGI = await PersonalGeneralInfo.create({
           name,
           dateOfBirth,
@@ -88,7 +88,6 @@ const addNewVerificationRequest = async (req, res) => {
           clubName,
           logo,
           underOrg,
-          actionDescSocialLink,
           achivementDoc,
           userId: user._id,
         });
@@ -100,7 +99,6 @@ const addNewVerificationRequest = async (req, res) => {
             website,
             operationField,
             address,
-            actionDescSocialLink,
             achivementDoc,
             representativeName,
             representativePhoneNumber,
@@ -115,7 +113,6 @@ const addNewVerificationRequest = async (req, res) => {
           operationField,
           address,
           userId: user._id,
-          actionDescSocialLink,
           achivementDoc,
           representativeName,
           representativePhoneNumber,
@@ -229,19 +226,31 @@ const updateRequestStatus = async (req, res) => {
     let verificationRequest = await VerificationRequest.findById(reqId);
     verificationRequest.status = status;
     verificationRequest.save();
-    let user;
+    let generalInfo;
 
     if (status === 2) {
       if (verificationRequest.type === 1) {
-        user = await PersonalGeneralInfo.findById(
+        generalInfo = await PersonalGeneralInfo.findById(
           verificationRequest.personalGeneralInfoId
         );
-        await User.findByIdAndUpdate(user.userId, { role: 2 });
+
+        await User.findByIdAndUpdate(generalInfo.userId, { 
+          name: generalInfo.name, 
+          phoneNumber: generalInfo.phoneNumber, 
+          email: generalInfo.representativeEmail,
+          role: 2 
+        });
       } else if (verificationRequest.type === 2) {
-        user = await OrganizationGeneralInfo.findById(
+        generalInfo = await OrganizationGeneralInfo.findById(
           verificationRequest.personalGeneralInfoId
         );
-        await User.findByIdAndUpdate(user.userId, { role: 3 });
+
+        await User.findByIdAndUpdate(generalInfo.userId, { 
+          name: generalInfo.name, 
+          phoneNumber: generalInfo.representativePhoneNumber, 
+          email: generalInfo.representativeEmail,
+          role: 3 
+        });
       }
     }
 

@@ -54,10 +54,9 @@ export default mongoose.model(
       enum: [1, 2, 3, 4, 5],
       required: true,
     },
-    actionDescSocialLink: {
-      type: String,
-      required: true,
-    },
+    // actionDescSocialLink: {
+    //   type: String
+    // },
     achivementDoc: {
       type: String
     },

@@ -23,6 +23,11 @@ router.get(
   auth([Role.admin]),
   UserController.getUserByName
 );
+router.get(
+  "/getbyid/:id",
+
+  UserController.getUserByID
+);
 router.patch("/", UserController.updateMyUserInfo);
 
 router.get(

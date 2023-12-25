@@ -15,7 +15,7 @@ contract Campaign {
 	uint donateCount;
     }
 
-    address adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b;
     address transactionHistoryAddress;
     address withdrawRequestAddress;
 
@@ -52,7 +52,7 @@ contract Campaign {
         newCampaign.targetValue = targetValue;
         newCampaign.currentValue = currentValue;
         newCampaign.endDate = endDate;
-	newCamapign.donateCount = 0;
+	    newCampaign.donateCount = 0;
         campaignInfoArray.push(newCampaign);
     }
 
@@ -78,7 +78,7 @@ contract Campaign {
     function donate(
         string memory campaignId,
         string memory donatorId,
-	string memory time,
+	    string memory time
     ) public payable {
         require(
             msg.value >= 200000000000000,
@@ -97,7 +97,7 @@ contract Campaign {
                         donatorId,
                         msg.sender,
                         msg.value,
-                        time,
+                        time
                     );
                 return;
             }
@@ -108,7 +108,6 @@ contract Campaign {
 
     function withdraw(uint256 _withdrawRequestId) public onlyAdmin() {
         WithdrawRequest.WithdrawRequestInfo memory withdrawRequest = WithdrawRequest(withdrawRequestAddress).getWithdrawRequestById(_withdrawRequestId);
-        CampaignInfo memory campaign = getCampaignById(withdrawRequest.campaignId);
         require(withdrawRequest.isApproved == true, "Request has been not approved");
         require(address(this).balance >= withdrawRequest.value, "Insufficient balance in the contract");
         payable(withdrawRequest.toAddress).transfer(withdrawRequest.value);

@@ -448,7 +448,20 @@ const getUserByName = async (req, res) => {
     });
   }
 };
-
+const getUserByID = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const users = await User.findById(id);
+    res.status(HttpStatusCode.OK).json({
+      message: "Get all Users successfully",
+      result: users,
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+};
 export default {
   register,
   login,
@@ -462,5 +475,6 @@ export default {
   getUserOrgina,
   countUser,
   getUserByName,
+  getUserByID,
   setActive,
 };

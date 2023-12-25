@@ -5,7 +5,7 @@ import "./Campaign.sol";
 
 contract WithdrawRequest {
     address campaignAddress;
-    address adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b;
     uint public nonce;
 
     constructor() {
@@ -15,11 +15,12 @@ contract WithdrawRequest {
     struct WithdrawRequestInfo {
         uint256 id;
         string campaignId;
-	string createdId;
+	    string createdId;
         bool isApproved;
         uint value;
-	string time;
+	    string time;
         address payable toAddress;
+        string message;
     } 
 
     WithdrawRequestInfo[] public withdrawRequestArray;
@@ -39,19 +40,21 @@ contract WithdrawRequest {
     function addNewWithdrawRequest(
         string memory _campaignId,
         uint _value,
-        address _toAddress,
-	string memory _time,
-	string memory _createId
+        address payable _toAddress,
+	    string memory _time,
+	    string memory _createdId,
+        string memory _message
     ) public {
         //require(Campaign(campaignAddress).getCampaignById(_campaignId).currentValue >= _value, "This campaign's balance is less than your value");
         WithdrawRequestInfo memory wri = WithdrawRequestInfo(
             generateRandomId(),
             _campaignId,
-	    _createdId,
+	        _createdId,
             false,
             _value,
-	    _time,
-            _toAddress
+	        _time,
+            _toAddress,
+            _message
         );
 
         withdrawRequestArray.push(wri);

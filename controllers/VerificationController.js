@@ -36,6 +36,14 @@ const isRequestExistsbyUserId = async (userId) => {
   return false;
 }
 
+const isPhoneNumberExistsInUser = async (phoneNumber) => {
+  return await User.exists({ phoneNumber })
+}
+
+const isEmailExistsInUser  = async (email) => {
+  return await User.exists({ email })
+}
+
 const addNewVerificationRequest = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -55,6 +63,8 @@ const addNewVerificationRequest = async (req, res) => {
           message: "You have a request which is waiting for approval"
         })
       }
+
+
       let createdPGI = null;
       let createdOGI = null;
       const { goalName, targetAmount, startDate, endDate } =
@@ -76,7 +86,19 @@ const addNewVerificationRequest = async (req, res) => {
             achivementDoc,
           },
         } = req.body;
+        
+        if (await isPhoneNumberExistsInUser(phoneNumber)) {
+          return res.status(HttpStatusCode.BAD_REQUEST).json({
+            message: "Phone number is exists"
+          })
+        }
   
+        if (await isEmailExistsInUser(representativeEmail)) {
+          return res.status(HttpStatusCode.BAD_REQUEST).json({
+            message: "Email is exists"
+          })
+        }
+
         createdPGI = await PersonalGeneralInfo.create({
           name,
           dateOfBirth,
@@ -105,6 +127,18 @@ const addNewVerificationRequest = async (req, res) => {
             representativeEmail,
           },
         } = req.body;
+
+        if (await isPhoneNumberExistsInUser(representativePhoneNumber)) {
+          return res.status(HttpStatusCode.BAD_REQUEST).json({
+            message: "Phone number is exists"
+          })
+        }
+  
+        if (await isEmailExistsInUser(representativeEmail)) {
+          return res.status(HttpStatusCode.BAD_REQUEST).json({
+            message: "Email is exists"
+          })
+        }
 
         createdOGI = await OrganizationGeneralInfo.create({
           name,

@@ -17,6 +17,7 @@ export default mongoose.model(
       required: true,
       ref: "Campaign",
     },
+    //NORMAL||EMERGENCY||ITEM
     type: {
       type: String,
       require: true,

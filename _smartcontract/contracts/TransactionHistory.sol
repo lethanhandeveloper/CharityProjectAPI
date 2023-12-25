@@ -2,14 +2,14 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract TransactionHistory {
-    address public adminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    address public adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b;
     address public campaignAddress;
     struct TransactionInfo {
         string campaignId;
         string donatorId;
         address donatorAddress;
         uint value;
-        uint256 time;
+        string time;
     }
 
     TransactionInfo[] public transactionInfoArray;
@@ -29,13 +29,13 @@ contract TransactionHistory {
         );
         _;
     }
- 
+
     function addNewTransactionHistory(
         string memory campaignId,
         string memory donatorId,
         address donatorAddress,
         uint value,
-        uint256 time
+        string memory time
     ) external onlyCampaignContract {
         TransactionInfo memory newTransaction;
         newTransaction.campaignId = campaignId;
@@ -98,6 +98,13 @@ contract TransactionHistory {
 
         return false;
     }
+    function resizeArray(TransactionInfo[] memory array, uint newSize) internal pure returns (TransactionInfo[] memory) {
+    TransactionInfo[] memory resizedArray = new TransactionInfo[](newSize);
+    for (uint i = 0; i < newSize; i++) {
+        resizedArray[i] = array[i];
+    }
+    return resizedArray;
+}
 
     function getTransactionHistoryByCampaignId(
         string memory _campaignId
@@ -119,6 +126,6 @@ contract TransactionHistory {
             }
         }
 
-        return returnTransactionInfoArr;
+        return resizeArray(returnTransactionInfoArr, count);
     }
 }

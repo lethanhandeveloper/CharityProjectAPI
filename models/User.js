@@ -66,5 +66,9 @@ export default mongoose.model(
     specificAddress: {
       type: String,
     },
+    createdDate: {
+      required: true,
+      type: Date,
+    },
   })
 );

@@ -105,7 +105,7 @@ router.post(
   UserController.getUserInActiveListByPage
 );
 
-router.get("/home", UserController.getUserOrgina);
+router.get("/home", auth([Role.user, Role.organization, Role.personal]) , UserController.getHomePageUser);
 router.post("/setactive", auth([Role.admin]), UserController.setActive);
 
 export default router;

@@ -408,15 +408,32 @@ const getAccessToken = async (req, res) => {
   }
 };
 
-const getUserOrgina = async (req, res) => {
+const getHomePageUser = async (req, res) => {
   try {
-    const UserList = await User.find().exec();
-    res.status(HttpStatusCode.OK).json({
-      result: UserList,
+    const users = await User.find({ $or: [
+      { role: 2 },
+      { role: 3 }
+    ] }).exec();
+    const returnUsers = users.map(user => ({
+      id: user._id,
+      name: user.name,
+      userName: user.userName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      gender: user.gender,
+      age: user.age,
+      image_url: user.image_url,
+      charityAccountNumber: user.charityAccountNumber,
+      createdDate: user.createdDate
+    }))
+
+    return res.status(HttpStatusCode.OK).json({
+      message: "Get home user succesfully",
+      result: returnUsers,
     });
   } catch (error) {
-    res.status(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR,
+    return res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR, 
     });
   }
 };
@@ -472,7 +489,7 @@ export default {
   getUserInActiveListByPage,
   sendRegistionCode,
   getAccessToken,
-  getUserOrgina,
+  getHomePageUser,
   countUser,
   getUserByName,
   getUserByID,

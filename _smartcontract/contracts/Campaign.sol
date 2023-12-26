@@ -15,7 +15,7 @@ contract Campaign {
 	uint donateCount;
     }
 
-    address adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b;
+    address adminAddress = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
     address transactionHistoryAddress;
     address withdrawRequestAddress;
 

@@ -66,6 +66,9 @@ export default mongoose.model(
     specificAddress: {
       type: String,
     },
+    charityAccountNumber: {
+      type: String
+    },
     createdDate: {
       required: true,
       type: Date,

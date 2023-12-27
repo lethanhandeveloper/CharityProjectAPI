@@ -8,7 +8,6 @@ import Personal from "../models/PersonalGeneralInfo.js";
 const getCountForHome = async (req, res) => {
   try {
     const userCount = await User.countDocuments();
-
     const campaignCount = await Campaign.countDocuments();
     const organizationCount = await Origanization.countDocuments();
     res.status(HttpStatusCode.OK).json({

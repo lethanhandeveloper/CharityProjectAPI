@@ -69,6 +69,10 @@ export default mongoose.model(
     charityAccountNumber: {
       type: String
     },
+    isActive: {
+      type: Boolean,
+      default: true
+    },
     createdDate: {
       required: true,
       type: Date,

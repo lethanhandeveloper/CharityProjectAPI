@@ -14,6 +14,19 @@ router.post(
   // requestLimit,
   UserController.sendRegistionCode
 );
+
+router.patch(
+  "/changeactivestatus/:id",
+  auth([Role.admin]),
+  // requestLimit,
+  UserController.changeActiveStatus
+);
+
+router.post(
+  "/phonenumber/getcode",
+  // requestLimit,
+  UserController.sendRegistionCode
+);
 router.get("/refreshtoken", UserController.getAccessToken);
 
 router.post("/register", UserController.register);

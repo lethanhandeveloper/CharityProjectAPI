@@ -1,9 +1,10 @@
 import Exception from "../utils/Exception.js";
 import HttpStatusCode from "../utils/HttpStatusCode.js";
+import User from '../models/User.js'
 import jwt from "jsonwebtoken";
 
 export default function auth(roles) {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
       const token = req.headers?.authorization?.split(" ")[1];
       let isExpired;
@@ -12,6 +13,13 @@ export default function auth(roles) {
 
       if (token) {
         jwtObject = jwt.verify(token, process.env.JWT_SECRET)
+        const user = await User.findById(jwtObject.data._doc._id)
+        console.log(user)
+        if(user.isActive == false){
+          return res.status(HttpStatusCode.FORBIDDEN).json({
+            message: "Your account is deactived. Please contact with admin for get more information"
+          })
+        }
         isExpired = Date.now() >= jwtObject.exp * 1000
       } else {
         return res.status(HttpStatusCode.BAD_REQUEST).json({

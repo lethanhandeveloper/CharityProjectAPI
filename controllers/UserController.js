@@ -12,6 +12,7 @@ import { sendRegistionCodeEmail } from "../services/Email.js";
 import requestIp from "request-ip";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import twilio from "twilio";
 
 const isUserExists = async ({ email, phoneNumber, userName }) => {
   const existingUser = await User.exists({
@@ -54,7 +55,7 @@ const register = async (req, res) => {
 
     if (await isUserExists({ email, phoneNumber, userName })) {
       res.status(HttpStatusCode.CONFLICT).json({
-        message: "Email or phone number is exists already",
+        message: "Email or phone number or username is exists already",
       });
       return;
     }
@@ -77,6 +78,7 @@ const register = async (req, res) => {
       specificAddress,
       image_url,
       isActive: true,
+      createdDate: Date.now()
     });
 
     res.status(HttpStatusCode.OK).json({
@@ -108,6 +110,12 @@ const login = async (req, res) => {
       let isMatch = await bcrypt.compare(password, existingUser.password);
 
       if (isMatch) {
+        if(existingUser.isActive === false) {
+          return res.status(HttpStatusCode.FORBIDDEN).json({
+            message: "Your account is deactived. Please contact with admin for get more information"
+          })
+        }
+
         const payLoad = {
           data: {
             ...existingUser,
@@ -479,6 +487,45 @@ const getUserByID = async (req, res) => {
     });
   }
 };
+
+const getPhoneNumberCode = async (req, res) => {
+  try {
+    const client = twilio(process.env.ACCOUNT_ID_TWILIO, AUTH_TOKEN_TWILIO);
+    client.messages
+    .create({ from: "+12056712883", body: "Ahoy, world!", to: "+840383474327" })
+    .then((message) => console.log(message.sid));
+
+    return res.status(200).json({ message: "Phone number code have sent successfully. Please check!" });
+  } catch (error) {
+    
+  }
+}
+
+const changeActiveStatus = async (req, res) => {
+  try {
+    const { isActive } = req.body
+    const userId = req.params.id
+    if(isActive){
+      console.log('ok')
+    }
+    if(typeof isActive !== 'undefined' && (parseInt(isActive) === 0 || parseInt(isActive) === 1)){
+      await User.findByIdAndUpdate(userId, { isActive: isActive === 1 ? true : false })
+      return res.status(HttpStatusCode.NO_CONTENT).json({
+        message: "Change user activation successfully"
+      })
+    }
+
+    return res.status(HttpStatusCode.BAD_REQUEST).json({
+      message: "The value is not valid"
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: "Server is error",
+    });
+  }
+}
+
 export default {
   register,
   login,
@@ -494,4 +541,6 @@ export default {
   getUserByName,
   getUserByID,
   setActive,
+  getPhoneNumberCode,
+  changeActiveStatus
 };

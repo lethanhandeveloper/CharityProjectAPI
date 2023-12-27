@@ -80,12 +80,6 @@ router.patch(
   CampaignController.CampaignController.updateStatus
 );
 
-router.get(
-  "/count",
-  auth([Role.admin]),
-  CampaignController.CampaignController.countCampaignRecords
-);
-
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
 router.post(
   "/paginate",

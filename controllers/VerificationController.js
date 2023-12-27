@@ -11,22 +11,30 @@ import {
 
 const isRequestExistsbyUserId = async (userId) => {
   const personalGeneralInfo = await PersonalGeneralInfo.find({ userId });
-  const organizationGeneralInfo = await OrganizationGeneralInfo.find({ userId });
+  const organizationGeneralInfo = await OrganizationGeneralInfo.find({
+    userId,
+  });
 
   if (personalGeneralInfo.length > 0) {
-    console.log(personalGeneralInfo)
-    personalGeneralInfo.forEach(async pgi => {
-      const isNotApproved = await VerificationRequest.find({ _id: pgi.personalGeneralInfoId, status: 1 })
+    console.log(personalGeneralInfo);
+    personalGeneralInfo.forEach(async (pgi) => {
+      const isNotApproved = await VerificationRequest.find({
+        _id: pgi.personalGeneralInfoId,
+        status: 1,
+      });
       if (isNotApproved) {
-        console.log("ok")
+        console.log("ok");
         return true;
       }
     });
   }
 
   if (organizationGeneralInfo > 0) {
-    personalGeneralInfo.forEach(async ogi => {
-      const isNotApproved = await VerificationRequest.find({ _id: ogi.personalGeneralInfoId, status: 1 })
+    personalGeneralInfo.forEach(async (ogi) => {
+      const isNotApproved = await VerificationRequest.find({
+        _id: ogi.personalGeneralInfoId,
+        status: 1,
+      });
       if (isNotApproved) {
         return true;
       }
@@ -34,7 +42,7 @@ const isRequestExistsbyUserId = async (userId) => {
   }
 
   return false;
-}
+};
 
 const isPhoneNumberExistsInUser = async (phoneNumber) => {
   return await User.exists({ phoneNumber })
@@ -60,8 +68,8 @@ const addNewVerificationRequest = async (req, res) => {
 
       if (await isRequestExistsbyUserId(user._id)) {
         return res.status(HttpStatusCode.BAD_REQUEST).json({
-          message: "You have a request which is waiting for approval"
-        })
+          message: "You have a request which is waiting for approval",
+        });
       }
 
 
@@ -86,6 +94,7 @@ const addNewVerificationRequest = async (req, res) => {
             achivementDoc,
           },
         } = req.body;
+
         
         if (await isPhoneNumberExistsInUser(phoneNumber)) {
           return res.status(HttpStatusCode.BAD_REQUEST).json({
@@ -98,6 +107,7 @@ const addNewVerificationRequest = async (req, res) => {
             message: "Email is exists"
           })
         }
+
 
         createdPGI = await PersonalGeneralInfo.create({
           name,
@@ -268,22 +278,22 @@ const updateRequestStatus = async (req, res) => {
           verificationRequest.personalGeneralInfoId
         );
 
-        await User.findByIdAndUpdate(generalInfo.userId, { 
-          name: generalInfo.name, 
-          phoneNumber: generalInfo.phoneNumber, 
+        await User.findByIdAndUpdate(generalInfo.userId, {
+          name: generalInfo.name,
+          phoneNumber: generalInfo.phoneNumber,
           email: generalInfo.representativeEmail,
-          role: 2 
+          role: 2,
         });
       } else if (verificationRequest.type === 2) {
         generalInfo = await OrganizationGeneralInfo.findById(
           verificationRequest.personalGeneralInfoId
         );
 
-        await User.findByIdAndUpdate(generalInfo.userId, { 
-          name: generalInfo.name, 
-          phoneNumber: generalInfo.representativePhoneNumber, 
+        await User.findByIdAndUpdate(generalInfo.userId, {
+          name: generalInfo.name,
+          phoneNumber: generalInfo.representativePhoneNumber,
           email: generalInfo.representativeEmail,
-          role: 3 
+          role: 3,
         });
       }
     }
@@ -367,10 +377,16 @@ const getVerificationRequestByPagination = async (req, res) => {
         }
       })
     );
-
+    const personalCount = await PersonalGeneralInfo.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
+    const organizationCount = await OrganizationGeneralInfo.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
     res.status(HttpStatusCode.OK).json({
       message: "Get all verification request successfully",
       result: returnRequest,
+      totalItems: organizationCount + personalCount,
     });
   } catch (error) {
     console.log(error);
@@ -661,28 +677,6 @@ const updateMyRequestById = async (req, res) => {
   }
 };
 
-const countVerificationRequestRecords = async (req, res) => {
-  try {
-    const search_text = req.query.search_text;
-    const personalCount = await PersonalGeneralInfo.countDocuments({
-      name: { $regex: new RegExp(search_text, "i") },
-    });
-    const organizationCount = await OrganizationGeneralInfo.countDocuments({
-      name: { $regex: new RegExp(search_text, "i") },
-    });
-
-    return res.status(HttpStatusCode.OK).json({
-      message: "Get verification request number successfully",
-      result: personalCount + organizationCount,
-    });
-  } catch (error) {
-    //console.log(error)
-    return res.json(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.INTERNAL_SERVER_ERROR,
-    });
-  }
-};
-
 export default {
   addNewVerificationRequest,
   getAllVerificationRequest,
@@ -691,6 +685,5 @@ export default {
   getRequestByCurrentUser,
   getRequestById,
   updateMyRequestById,
-  countVerificationRequestRecords,
   getRequestByUserId,
 };

@@ -47,12 +47,6 @@ router.post(
   VerificationController.getVerificationRequestByPagination
 );
 
-router.get(
-  "/verification/count",
-  auth([Role.admin]),
-  VerificationController.countVerificationRequestRecords
-);
-
 router.post(
   "/verification/:type",
   auth([Role.user]),

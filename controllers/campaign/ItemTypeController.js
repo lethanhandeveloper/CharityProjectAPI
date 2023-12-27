@@ -54,37 +54,25 @@ const deleteItemTypeById = async (req, res) => {
   }
 };
 
-const countItemTypeRecords = async (req, res) => {
-  try {
-    const search_text = req.query.search_text
-    const count = await ItemType.countDocuments({ name : { $regex: new RegExp(search_text, 'i') } })
-    return res.status(HttpStatusCode.OK).json({
-      message: "Get item type records number successfully",
-      result: count
-    })
-  } catch (error) {
-    console.log(error)
-    return res.json(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.INTERNAL_SERVER_ERROR
-    })
-  }
-}
-
 const getItemTypeByPagination = async (req, res) => {
   try {
-
     const { search_text, page, no_item_per_page } = req.body;
 
     const skip = (page - 1) * no_item_per_page;
 
-    const provinces = await ItemType.find({ name : { $regex: new RegExp(search_text, 'i') } })
+    const provinces = await ItemType.find({
+      name: { $regex: new RegExp(search_text, "i") },
+    })
       .skip(skip)
       .limit(no_item_per_page)
       .exec();
-
+    const count = await ItemType.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
     return res.status(HttpStatusCode.OK).json({
       message: "Get All Item Type successfully",
       result: provinces,
+      totalItems: count,
     });
   } catch (error) {
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -97,6 +85,5 @@ export default {
   addNewItemType,
   getAllItemType,
   deleteItemTypeById,
-  countItemTypeRecords,
-  getItemTypeByPagination
+  getItemTypeByPagination,
 };

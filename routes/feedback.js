@@ -6,53 +6,30 @@ import FeedbackController from "../controllers/FeedbackController.js";
 
 const router = express.Router();
 
-router.get(
-  "/count",
-  auth([Role.admin]),
-  FeedbackController.countFeedbackRecords
-)
-
 router.patch(
   "/setshowinhomepage/:id",
   auth([Role.admin]),
   FeedbackController.setShowInHomepage
-)
+);
 
-router.get(
-  "/getforhomepage",
-  FeedbackController.getForHomepage
-)
+router.get("/getforhomepage", FeedbackController.getForHomepage);
 
 router.post(
   "/paginate",
   auth([Role.admin]),
   FeedbackController.getFeedbackByPagination
-)
-
-
-router.post(
-  "/",
-  auth([Role.admin]),
-  FeedbackController.addNewFeedback
 );
 
-router.get(
-  "/",
-  FeedbackController.getAllFeedback
-)
+router.post("/", auth([Role.admin]), FeedbackController.addNewFeedback);
 
-router.put(
-  "/:id",
-  auth([Role.admin]),
-  FeedbackController.updateFeedbackById
-)
+router.get("/", FeedbackController.getAllFeedback);
+
+router.put("/:id", auth([Role.admin]), FeedbackController.updateFeedbackById);
 
 router.delete(
   "/:id",
   auth([Role.admin]),
   FeedbackController.deleteFeedbackById
-)
-
-
+);
 
 export default router;

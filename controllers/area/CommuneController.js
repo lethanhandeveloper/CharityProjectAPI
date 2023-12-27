@@ -128,10 +128,13 @@ const getCommuneByPagination = async (req, res) => {
       .limit(no_item_per_page)
       .populate("districtId")
       .exec();
-
+    const count = await Commune.countDocuments({
+      name: { $regex: new RegExp(search_text, "i") },
+    });
     res.status(HttpStatusCode.OK).json({
       message: "Get All Communes successfully",
       result: communes,
+      totalItems: count,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -155,25 +158,6 @@ const getCommuneByName = async (req, res) => {
   }
 };
 
-const countCommuneRecords = async (req, res) => {
-  try {
-    const search_text = req.query.search_text;
-
-    const count = await Commune.countDocuments({
-      name: { $regex: new RegExp(search_text, "i") },
-    });
-    return res.status(HttpStatusCode.OK).json({
-      message: "Get commune records number successfully",
-      result: count,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.json(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.INTERNAL_SERVER_ERROR,
-    });
-  }
-};
-
 export default {
   addNewCommune,
   deleteAllCommune,
@@ -183,5 +167,4 @@ export default {
   updateCommuneById,
   getCommuneByPagination,
   getCommuneByName,
-  countCommuneRecords,
 };

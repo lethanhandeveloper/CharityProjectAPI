@@ -21,12 +21,6 @@ router.post(
   CampaignController.CategoryController.addNewCampaignCategory
 );
 
-router.get(
-  "/category/count",
-  auth([Role.admin]),
-  CampaignController.CategoryController.countCategoryRecords
-);
-
 router.post(
   "/category/paginate",
   auth([Role.admin]),
@@ -48,12 +42,6 @@ router.post(
   "/itemtype",
   auth([Role.admin]),
   CampaignController.ItemTypeController.addNewItemType
-);
-
-router.get(
-  "/itemtype/count",
-  auth([Role.admin]),
-  CampaignController.ItemTypeController.countItemTypeRecords
 );
 
 router.delete(

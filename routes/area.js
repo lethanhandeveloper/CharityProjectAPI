@@ -27,12 +27,6 @@ router.patch(
   AreaController.ProvinceController.updateProvinceById
 );
 
-router.get(
-  "/province/count/:id",
-  auth([Role.admin]),
-  AreaController.ProvinceController.countProvinceRecords
-);
-
 router.post(
   "/province/paginate",
   AreaController.ProvinceController.getProvinceByPagination
@@ -66,12 +60,6 @@ router.post(
 );
 
 router.get(
-  "/district/count",
-  auth([Role.admin]),
-  AreaController.DistrictController.countDistrictRecords
-);
-
-router.get(
   "/district/getbyname/:name",
   AreaController.DistrictController.getDistrictByName
 );
@@ -85,12 +73,6 @@ router.post(
 router.get(
   "/commune/getbyname/:name",
   AreaController.CommuneController.getCommuneByName
-);
-
-router.get(
-  "/commune/count",
-  auth([Role.admin]),
-  AreaController.CommuneController.countCommuneRecords
 );
 
 router.get(

@@ -12,6 +12,7 @@ import CommitInfoVerification from "./CommitInfoVerification.js";
 import VerificationRequest from "./VerificationRequest.js";
 import EmailRegistrationCode from "./EmailRegistrationCode.js";
 import RequestLimit from "./RequestLimit.js";
+import PhoneNumberCode from "./PhoneNumberCode.js";
 
 export {
   User,
@@ -28,4 +29,5 @@ export {
   VerificationRequest,
   EmailRegistrationCode,
   RequestLimit,
+  PhoneNumberCode
 };

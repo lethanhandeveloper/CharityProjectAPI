@@ -7,12 +7,14 @@ import {
   User,
   EmailRegistrationCode,
   RequestLimit,
+  PhoneNumberCode
 } from "../models/index.js";
 import { sendRegistionCodeEmail } from "../services/Email.js";
 import requestIp from "request-ip";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
+import { generateRandomCode } from "../utils/Number.js";
 
 const isUserExists = async ({ email, phoneNumber, userName }) => {
   const existingUser = await User.exists({
@@ -488,16 +490,58 @@ const getUserByID = async (req, res) => {
   }
 };
 
+// const validatePhoneNumber = async (req, res) => {
+//   try {
+//     const { phoneNumber, code } = req.body
+//     const phonenocode = await PhoneNumberCode.findOne({ phoneNumber, code })
+//     console.log(phonenocode)
+//     if(!phonenocode){
+//       return res.status(HttpStatusCode.BAD_REQUEST).json({
+//         message: "Your request data is not valid"
+//       })
+//     }else{
+
+//     }
+//   } catch (error) {
+//     console.log(error)
+//     return res.status(HttpStatusCode.SERVER_ERROR).json({
+//       message: Exception.SERVER_ERROR
+//     })
+//   }
+// }
+
 const getPhoneNumberCode = async (req, res) => {
   try {
-    const client = twilio(process.env.ACCOUNT_ID_TWILIO, AUTH_TOKEN_TWILIO);
+    const client = twilio(process.env.ACCOUNT_ID_TWILIO, process.env.AUTH_TOKEN_TWILIO);
+    const code = generateRandomCode()
+    const { phoneNumber } = req.body
+    const expiredAt =
+      Date.now() + process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES * 60 * 1000;
+
+    let phonenocode = await PhoneNumberCode.findOne({ phoneNumber });
+    if (phonenocode) {
+      phonenocode.code = code;
+      phonenocode.expiredAt = expiredAt;
+
+      phonenocode.save();
+    } else {
+      PhoneNumberCode.create({
+        phoneNumber: phoneNumber ?? process.env.PHONE_NO_CODE_DEFAULT,
+        code: code,
+        expiredAt: expiredAt
+      });
+    }
+
     client.messages
-    .create({ from: "+12056712883", body: "Ahoy, world!", to: "+840383474327" })
+    .create({ from: "+12056712883", body: "Your email code validation is "+code, to: "+84337464921" })
     .then((message) => console.log(message.sid));
 
-    return res.status(200).json({ message: "Phone number code have sent successfully. Please check!" });
+    return res.status(200).json({ message: `Phone number code have sent successfully. The code is active within ${process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES}` });
   } catch (error) {
-    
+    console.log(error)
+    return res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR
+    })
   }
 }
 
@@ -542,5 +586,6 @@ export default {
   getUserByID,
   setActive,
   getPhoneNumberCode,
-  changeActiveStatus
+  changeActiveStatus,
+  // validatePhoneNumber
 };

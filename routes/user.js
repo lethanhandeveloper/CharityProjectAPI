@@ -22,11 +22,18 @@ router.patch(
   UserController.changeActiveStatus
 );
 
-router.post(
+router.get(
   "/phonenumber/getcode",
   // requestLimit,
-  UserController.sendRegistionCode
+  UserController.getPhoneNumberCode
 );
+
+// router.post(
+//   "/phonenumber/validate",
+//   // requestLimit,
+//   UserController.validatePhoneNumber
+// );
+
 router.get("/refreshtoken", UserController.getAccessToken);
 
 router.post("/register", UserController.register);

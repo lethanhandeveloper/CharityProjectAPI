@@ -8,7 +8,6 @@ import {
   EmailRegistrationCode,
   RequestLimit,
   PhoneNumberCode,
-
 } from "../models/index.js";
 import { sendRegistionCodeEmail } from "../services/Email.js";
 import requestIp from "request-ip";
@@ -511,10 +510,12 @@ const getUserByID = async (req, res) => {
 
 const getPhoneNumberCode = async (req, res) => {
   try {
-
-    const client = twilio(process.env.ACCOUNT_ID_TWILIO, process.env.AUTH_TOKEN_TWILIO);
-    const code = generateRandomCode()
-    const { phoneNumber } = req.body
+    const client = twilio(
+      process.env.ACCOUNT_ID_TWILIO,
+      process.env.AUTH_TOKEN_TWILIO
+    );
+    const code = generateRandomCode();
+    const { phoneNumber } = req.body;
     const expiredAt =
       Date.now() + process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES * 60 * 1000;
 
@@ -534,16 +535,21 @@ const getPhoneNumberCode = async (req, res) => {
 
     client.messages
 
-    .create({ from: "+12056712883", body: "Your email code validation is "+code, to: "+84337464921" })
-    .then((message) => console.log(message.sid));
+      .create({
+        from: "+12056712883",
+        body: "Your email code validation is " + code,
+        to: "+84337464921",
+      })
+      .then((message) => console.log(message.sid));
 
-    return res.status(200).json({ message: `Phone number code have sent successfully. The code is active within ${process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES}` });
+    return res.status(200).json({
+      message: `Phone number code have sent successfully. The code is active within ${process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES}`,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR
-    })
-
+      message: Exception.SERVER_ERROR,
+    });
   }
 };
 

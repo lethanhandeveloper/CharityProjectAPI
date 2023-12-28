@@ -29,6 +29,7 @@ const addNewCampaign = async (req, res) => {
         title,
         targetValue,
         endDate,
+        createdDate: Date.now(),
         description,
         thumbnail,
         fileUrl,
@@ -273,7 +274,7 @@ const getCampaignByPagination = async (req, res) => {
     return res.status(HttpStatusCode.OK).json({
       message: "Get campaigns successfully",
       result: campaigns,
-      totalItem: count,
+      totalItems: count,
     });
   } catch (error) {
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({

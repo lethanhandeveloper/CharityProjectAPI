@@ -85,5 +85,5 @@ export default {
   addNewCampaignCategory,
   getAllCampaignCategory,
   deleteCampaignCategoryById,
-  getCategoryByPagination,
+  getCategoryByPagination
 };

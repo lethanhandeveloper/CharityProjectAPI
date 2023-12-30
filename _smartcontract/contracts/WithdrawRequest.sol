@@ -5,7 +5,7 @@ import "./Campaign.sol";
 
 contract WithdrawRequest {
     address campaignAddress;
-    address adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b;
+    address adminAddress = 0x8c43a48745b5a4Dc666F0ba9aF9B6F41C065EC22;
     uint public nonce;
 
     constructor() {

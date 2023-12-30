@@ -20,8 +20,8 @@
 
     <script>
         // Replace with your smart contract address
-        const contractAddress = '0x5D777a12c55B956c162A3083406722Ae77dA8A9F';
-
+        const contractAddress = '0x9Df50b55ea0beeEfCc392706f1bA139D4baAD874';
+        var accounts;
         // Replace with your smart contract ABI
         const contractABI = [
             {
@@ -52,12 +52,87 @@
                         "type": "uint256"
                     },
                     {
-                        "internalType": "uint256",
+                        "internalType": "string",
                         "name": "endDate",
-                        "type": "uint256"
+                        "type": "string"
                     }
                 ],
                 "name": "addNewCampaign",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "campaignId",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "donatorId",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "time",
+                        "type": "string"
+                    }
+                ],
+                "name": "donate",
+                "outputs": [],
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "internalType": "uint256",
+                        "name": "value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "ReturnTransactionId",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_transactionHistoryAddress",
+                        "type": "address"
+                    }
+                ],
+                "name": "setTransactionHistoryAddress",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "_withdrawRequestAddress",
+                        "type": "address"
+                    }
+                ],
+                "name": "setWithdrawRequestAddress",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_withdrawRequestId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "withdraw",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -98,8 +173,26 @@
                         "type": "uint256"
                     },
                     {
-                        "internalType": "uint256",
+                        "internalType": "string",
                         "name": "endDate",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "donateCount",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "generateUniqueNumber",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
                         "type": "uint256"
                     }
                 ],
@@ -138,8 +231,13 @@
                                 "type": "uint256"
                             },
                             {
-                                "internalType": "uint256",
+                                "internalType": "string",
                                 "name": "endDate",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "donateCount",
                                 "type": "uint256"
                             }
                         ],
@@ -189,8 +287,13 @@
                                 "type": "uint256"
                             },
                             {
-                                "internalType": "uint256",
+                                "internalType": "string",
                                 "name": "endDate",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "donateCount",
                                 "type": "uint256"
                             }
                         ],
@@ -202,14 +305,36 @@
                 "stateMutability": "view",
                 "type": "function"
             }
-        ];
+        ]
+
         var contract = null;
 
         window.addEventListener('load', async () => {
-            const rpcUrl = 'http://localhost:8545';
+
+            // const rpcUrl = 'http://localhost:8545';
             // Modern dapp browsers
+            // if (window.ethereum) {
+            //     window.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+            //     try {
+            //         // Request account access
+            //         await ethereum.enable();
+            //     } catch (error) {
+            //         // User denied account access
+            //         console.error("User denied account access");
+            //     }
+            // }
+            // // Legacy dapp browsers
+            // else if (window.web3) {
+            //     window.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+            // }
+            // // Non-dapp browsers
+            // else {
+            //     console.log("Non-Ethereum browser detected. You should consider trying MetaMask!");
+            // }
+            // web3.eth.handleRevert = true
+            // Set the contract address and ABI
             if (window.ethereum) {
-                window.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+                window.web3 = new Web3(ethereum);
                 try {
                     // Request account access
                     await ethereum.enable();
@@ -220,25 +345,45 @@
             }
             // Legacy dapp browsers
             else if (window.web3) {
-                window.web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+                window.web3 = new Web3(web3.currentProvider);
             }
             // Non-dapp browsers
             else {
                 console.log("Non-Ethereum browser detected. You should consider trying MetaMask!");
             }
-            web3.eth.handleRevert = true
-            // Set the contract address and ABI
             contract = new web3.eth.Contract(contractABI, contractAddress);
-
+            try {
+                accounts = await web3.eth.getAccounts();
+                if (accounts.length > 0) {
+                    console.log('Connected Account:', accounts[0]);
+                } else {
+                    console.log('No connected accounts');
+                }
+            } catch (error) {
+                console.error('Error getting connected accounts:', error.message);
+            }
             // Display initial value
-            getValue();
+            await addValue();
         });
 
-        async function getValue() {
+        async function addValue() {
             try {
-                const value = await contract.methods.getCampaignById('12222').call();
-            // console.log(value);
+                console.log("okokkookk");
+                var transactionHash;
+                const value = await contract.methods.donate('1', '2292929', '29292929').send({
+                    from: accounts[0],
+                    value: web3.utils.toWei('2', 'finney')
+                }).on('transactionHash', function (hash) {
+                    transactionHash = hash;
+                })
+                    .on('receipt', function (receipt) {
+                        console.log(receipt.events);
+                    });
+
+                console.log("Transaction hash " + transactionHash);
+                console.log(value);
             } catch (error) {
+
                 console.log(error.message)
             }
         }

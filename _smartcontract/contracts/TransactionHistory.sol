@@ -2,9 +2,10 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract TransactionHistory {
-    address public adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b;
+    address public adminAddress = 0x8c43a48745b5a4Dc666F0ba9aF9B6F41C065EC22;
     address public campaignAddress;
     struct TransactionInfo {
+        uint256 id;
         string campaignId;
         string donatorId;
         address donatorAddress;
@@ -31,6 +32,7 @@ contract TransactionHistory {
     }
 
     function addNewTransactionHistory(
+        uint256 id,
         string memory campaignId,
         string memory donatorId,
         address donatorAddress,
@@ -38,6 +40,7 @@ contract TransactionHistory {
         string memory time
     ) external onlyCampaignContract {
         TransactionInfo memory newTransaction;
+        newTransaction.id = id;
         newTransaction.campaignId = campaignId;
         newTransaction.donatorId = donatorId;
         newTransaction.donatorAddress = donatorAddress;

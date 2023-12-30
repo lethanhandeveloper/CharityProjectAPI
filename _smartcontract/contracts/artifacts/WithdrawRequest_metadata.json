@@ -23,12 +23,45 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "address",
+						"internalType": "address payable",
 						"name": "_toAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_createdId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_message",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_status",
+						"type": "string"
 					}
 				],
 				"name": "addNewWithdrawRequest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "approveWithdrawRequest",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -63,9 +96,14 @@
 								"type": "string"
 							},
 							{
-								"internalType": "uint256",
-								"name": "approvedQuantity",
-								"type": "uint256"
+								"internalType": "string",
+								"name": "createdId",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "isApproved",
+								"type": "bool"
 							},
 							{
 								"internalType": "uint256",
@@ -73,14 +111,161 @@
 								"type": "uint256"
 							},
 							{
-								"internalType": "address",
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
+							},
+							{
+								"internalType": "address payable",
 								"name": "toAddress",
 								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "status",
+								"type": "string"
 							}
 						],
 						"internalType": "struct WithdrawRequest.WithdrawRequestInfo[]",
 						"name": "",
 						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_campaignId",
+						"type": "string"
+					}
+				],
+				"name": "getWithdrawRequestByCampaignId",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "createdId",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "isApproved",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
+							},
+							{
+								"internalType": "address payable",
+								"name": "toAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "status",
+								"type": "string"
+							}
+						],
+						"internalType": "struct WithdrawRequest.WithdrawRequestInfo",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "getWithdrawRequestById",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "createdId",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "isApproved",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
+							},
+							{
+								"internalType": "address payable",
+								"name": "toAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "status",
+								"type": "string"
+							}
+						],
+						"internalType": "struct WithdrawRequest.WithdrawRequestInfo",
+						"name": "",
+						"type": "tuple"
 					}
 				],
 				"stateMutability": "view",
@@ -116,6 +301,24 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_status",
+						"type": "string"
+					}
+				],
+				"name": "updateStatus",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
 					}
@@ -133,9 +336,14 @@
 						"type": "string"
 					},
 					{
-						"internalType": "uint256",
-						"name": "approvedQuantity",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "createdId",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isApproved",
+						"type": "bool"
 					},
 					{
 						"internalType": "uint256",
@@ -143,9 +351,24 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "address",
+						"internalType": "string",
+						"name": "time",
+						"type": "string"
+					},
+					{
+						"internalType": "address payable",
 						"name": "toAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "message",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "status",
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -180,27 +403,27 @@
 	},
 	"sources": {
 		"contracts/Campaign.sol": {
-			"keccak256": "0xb68128923933eae2407e857e2d4873f695249b98473bf0d39f337ff26efd4162",
+			"keccak256": "0xd63ff3b37e1a76230a8889693095862319864a3db5aa327fe0c20c336641ead6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://56123caf132a83d0341d513e4093797fd088cd561d12932f410c7c7b53b5d4f7",
-				"dweb:/ipfs/QmaoLCph7PFd65y12J8uF3toLyx66Z9BxvwjWToBsApjrN"
+				"bzz-raw://8dcb4cb921c7a71a0eb9f40c00f09b0df8f36184bf592a38b9c321d22bc11ade",
+				"dweb:/ipfs/QmPejXrH96VcvBgXcJi5yWMWFN9B4pFWWK2dFpNrmRqwJd"
 			]
 		},
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0x36fe6cc790ef0da8b03bf4318c9be3bac5a8f740d2b41d48259a25e19ccb537c",
+			"keccak256": "0x1c5df361270c9735b5ea3922fa90b768bea6da9da48f95564274a433dcf8645f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://65ca3021a5abfd3b55f6e45b36929139fb463f8a3874db6dcc0840f29abba39c",
-				"dweb:/ipfs/QmXFowRbN7hhayv4SnkBv2CVRnAiRoRnvqfQ9GnYx7aEsG"
+				"bzz-raw://787010200a5874e05fb925b7c516e72d39cfe708bcda25172e7a523147226305",
+				"dweb:/ipfs/QmNgrWp1489pxWHK5W8sfmXX5hagQQwZU9C6bwawqLL4Ly"
 			]
 		},
 		"contracts/WithdrawRequest.sol": {
-			"keccak256": "0x9bc71b49649d80b41070b991b70b3bc18657d12ba884a7d6e42c5d78328c24de",
+			"keccak256": "0x76691b7b961d1c01df6e835ac7e2f304728fc9af6949dd6fa4f3e5c2f9e0635c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://71ea3d32f7aff02941b13173a02b654803dc7f1b00f8b6bd1fb400842799ae0c",
-				"dweb:/ipfs/QmUBFEdZGEsfxR5heK8gmeS9Bbi8ZaRjzFtn8LN5GKhFEh"
+				"bzz-raw://26c5491fb4304f4fc3d6490b66a7ff4cae3009efc1719c117d4ed633baf6ef7b",
+				"dweb:/ipfs/QmeQ4H15JzRYdV4o4WZXv82qLEtNFJrhXn24u1GWkby6WF"
 			]
 		}
 	},

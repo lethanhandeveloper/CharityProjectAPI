@@ -15,18 +15,25 @@ contract Campaign {
 	uint donateCount;
     }
 
-    address adminAddress = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
+    uint256 private nonce = 0;
+    address adminAddress = 0x8c43a48745b5a4Dc666F0ba9aF9B6F41C065EC22;
     address transactionHistoryAddress;
     address withdrawRequestAddress;
 
     CampaignInfo[] public campaignInfoArray;
-
+    event ReturnTransactionId(uint256 indexed value); 
+    
     modifier onlyAdmin() {
         require(
             msg.sender == adminAddress,
             "Only admin can call this function"
         );
         _;
+    }
+
+    function generateUniqueNumber() public view returns (uint256) {
+        uint256 uniqueNumber = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, block.prevrandao)));
+        return uniqueNumber;
     }
 
     function setTransactionHistoryAddress(address _transactionHistoryAddress) public onlyAdmin {
@@ -90,15 +97,20 @@ contract Campaign {
                 keccak256(abi.encodePacked(campaignId))
             ) {
                 campaignInfoArray[i].currentValue += msg.value;
-     
+                
+                uint256 transactionHistoryId = generateUniqueNumber();
+
                 TransactionHistory(transactionHistoryAddress)
                     .addNewTransactionHistory(
+                        transactionHistoryId,
                         campaignId,
                         donatorId,
                         msg.sender,
                         msg.value,
                         time
                     );
+                
+                emit ReturnTransactionId(transactionHistoryId);
                 return;
             }
         }

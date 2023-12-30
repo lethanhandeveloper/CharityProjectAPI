@@ -13,6 +13,7 @@ import VerificationRequest from "./VerificationRequest.js";
 import EmailRegistrationCode from "./EmailRegistrationCode.js";
 import RequestLimit from "./RequestLimit.js";
 import PhoneNumberCode from "./PhoneNumberCode.js";
+import DonationTransactionHash from "./DonationTransactionHash.js";
 
 export {
   User,
@@ -29,5 +30,6 @@ export {
   VerificationRequest,
   EmailRegistrationCode,
   RequestLimit,
-  PhoneNumberCode
+  PhoneNumberCode,
+  DonationTransactionHash
 };

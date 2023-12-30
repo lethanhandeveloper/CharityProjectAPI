@@ -8,6 +8,11 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
 						"name": "campaignId",
 						"type": "string"
@@ -28,9 +33,9 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "string",
 						"name": "time",
-						"type": "uint256"
+						"type": "string"
 					}
 				],
 				"name": "addNewTransactionHistory",
@@ -71,6 +76,11 @@
 					{
 						"components": [
 							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
 								"internalType": "string",
 								"name": "campaignId",
 								"type": "string"
@@ -91,9 +101,9 @@
 								"type": "uint256"
 							},
 							{
-								"internalType": "uint256",
+								"internalType": "string",
 								"name": "time",
-								"type": "uint256"
+								"type": "string"
 							}
 						],
 						"internalType": "struct TransactionHistory.TransactionInfo[]",
@@ -117,6 +127,11 @@
 					{
 						"components": [
 							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
 								"internalType": "string",
 								"name": "campaignId",
 								"type": "string"
@@ -137,9 +152,9 @@
 								"type": "uint256"
 							},
 							{
-								"internalType": "uint256",
+								"internalType": "string",
 								"name": "time",
-								"type": "uint256"
+								"type": "string"
 							}
 						],
 						"internalType": "struct TransactionHistory.TransactionInfo",
@@ -163,6 +178,11 @@
 					{
 						"components": [
 							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
 								"internalType": "string",
 								"name": "campaignId",
 								"type": "string"
@@ -183,9 +203,9 @@
 								"type": "uint256"
 							},
 							{
-								"internalType": "uint256",
+								"internalType": "string",
 								"name": "time",
-								"type": "uint256"
+								"type": "string"
 							}
 						],
 						"internalType": "struct TransactionHistory.TransactionInfo[]",
@@ -244,6 +264,11 @@
 				"name": "transactionInfoArray",
 				"outputs": [
 					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
 						"internalType": "string",
 						"name": "campaignId",
 						"type": "string"
@@ -264,9 +289,9 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "string",
 						"name": "time",
-						"type": "uint256"
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -301,11 +326,11 @@
 	},
 	"sources": {
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0x36fe6cc790ef0da8b03bf4318c9be3bac5a8f740d2b41d48259a25e19ccb537c",
+			"keccak256": "0xe72f78c4804f719a824b2fbd3f230122875adb159d4c7e68de876a28495d3896",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://65ca3021a5abfd3b55f6e45b36929139fb463f8a3874db6dcc0840f29abba39c",
-				"dweb:/ipfs/QmXFowRbN7hhayv4SnkBv2CVRnAiRoRnvqfQ9GnYx7aEsG"
+				"bzz-raw://16660a1cb121e9c0c866d95569513c3628c3fef40cdde9e955c07964d5287f8b",
+				"dweb:/ipfs/QmRmBmdd3kbvRHRoUX7QJnvQrrGaNskZerSEHUGHQNtM49"
 			]
 		}
 	},

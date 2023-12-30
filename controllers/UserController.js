@@ -7,7 +7,7 @@ import {
   User,
   EmailRegistrationCode,
   RequestLimit,
-  PhoneNumberCode
+  PhoneNumberCode,
 } from "../models/index.js";
 import { sendRegistionCodeEmail } from "../services/Email.js";
 import requestIp from "request-ip";
@@ -80,7 +80,7 @@ const register = async (req, res) => {
       specificAddress,
       image_url,
       isActive: true,
-      createdDate: Date.now()
+      createdDate: Date.now(),
     });
 
     res.status(HttpStatusCode.OK).json({
@@ -93,7 +93,7 @@ const register = async (req, res) => {
 
     return;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json(Exception.SERVER_ERROR);
@@ -112,10 +112,11 @@ const login = async (req, res) => {
       let isMatch = await bcrypt.compare(password, existingUser.password);
 
       if (isMatch) {
-        if(existingUser.isActive === false) {
+        if (existingUser.isActive === false) {
           return res.status(HttpStatusCode.FORBIDDEN).json({
-            message: "Your account is deactived. Please contact with admin for get more information"
-          })
+            message:
+              "Your account is deactived. Please contact with admin for get more information",
+          });
         }
 
         const payLoad = {
@@ -420,11 +421,8 @@ const getAccessToken = async (req, res) => {
 
 const getHomePageUser = async (req, res) => {
   try {
-    const users = await User.find({ $or: [
-      { role: 2 },
-      { role: 3 }
-    ] }).exec();
-    const returnUsers = users.map(user => ({
+    const users = await User.find({ $or: [{ role: 2 }, { role: 3 }] }).exec();
+    const returnUsers = users.map((user) => ({
       id: user._id,
       name: user.name,
       userName: user.userName,
@@ -434,8 +432,8 @@ const getHomePageUser = async (req, res) => {
       age: user.age,
       image_url: user.image_url,
       charityAccountNumber: user.charityAccountNumber,
-      createdDate: user.createdDate
-    }))
+      createdDate: user.createdDate,
+    }));
 
     return res.status(HttpStatusCode.OK).json({
       message: "Get home user succesfully",
@@ -443,7 +441,7 @@ const getHomePageUser = async (req, res) => {
     });
   } catch (error) {
     return res.status(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR, 
+      message: Exception.SERVER_ERROR,
     });
   }
 };
@@ -512,9 +510,12 @@ const getUserByID = async (req, res) => {
 
 const getPhoneNumberCode = async (req, res) => {
   try {
-    const client = twilio(process.env.ACCOUNT_ID_TWILIO, process.env.AUTH_TOKEN_TWILIO);
-    const code = generateRandomCode()
-    const { phoneNumber } = req.body
+    const client = twilio(
+      process.env.ACCOUNT_ID_TWILIO,
+      process.env.AUTH_TOKEN_TWILIO
+    );
+    const code = generateRandomCode();
+    const { phoneNumber } = req.body;
     const expiredAt =
       Date.now() + process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES * 60 * 1000;
 
@@ -528,47 +529,59 @@ const getPhoneNumberCode = async (req, res) => {
       PhoneNumberCode.create({
         phoneNumber: phoneNumber ?? process.env.PHONE_NO_CODE_DEFAULT,
         code: code,
-        expiredAt: expiredAt
+        expiredAt: expiredAt,
       });
     }
 
     client.messages
-    .create({ from: "+12056712883", body: "Your email code validation is "+code, to: "+84337464921" })
-    .then((message) => console.log(message.sid));
 
-    return res.status(200).json({ message: `Phone number code have sent successfully. The code is active within ${process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES}` });
+      .create({
+        from: "+12056712883",
+        body: "Your email code validation is " + code,
+        to: "+84337464921",
+      })
+      .then((message) => console.log(message.sid));
+
+    return res.status(200).json({
+      message: `Phone number code have sent successfully. The code is active within ${process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES}`,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(HttpStatusCode.SERVER_ERROR).json({
-      message: Exception.SERVER_ERROR
-    })
+      message: Exception.SERVER_ERROR,
+    });
   }
-}
+};
 
 const changeActiveStatus = async (req, res) => {
   try {
-    const { isActive } = req.body
-    const userId = req.params.id
-    if(isActive){
-      console.log('ok')
+    const { isActive } = req.body;
+    const userId = req.params.id;
+    if (isActive) {
+      console.log("ok");
     }
-    if(typeof isActive !== 'undefined' && (parseInt(isActive) === 0 || parseInt(isActive) === 1)){
-      await User.findByIdAndUpdate(userId, { isActive: isActive === 1 ? true : false })
+    if (
+      typeof isActive !== "undefined" &&
+      (parseInt(isActive) === 0 || parseInt(isActive) === 1)
+    ) {
+      await User.findByIdAndUpdate(userId, {
+        isActive: isActive === 1 ? true : false,
+      });
       return res.status(HttpStatusCode.NO_CONTENT).json({
-        message: "Change user activation successfully"
-      })
+        message: "Change user activation successfully",
+      });
     }
 
     return res.status(HttpStatusCode.BAD_REQUEST).json({
-      message: "The value is not valid"
-    })
+      message: "The value is not valid",
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: "Server is error",
     });
   }
-}
+};
 
 export default {
   register,

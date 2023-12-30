@@ -45,12 +45,12 @@ const isRequestExistsbyUserId = async (userId) => {
 };
 
 const isPhoneNumberExistsInUser = async (phoneNumber) => {
-  return await User.exists({ phoneNumber })
-}
+  return await User.exists({ phoneNumber });
+};
 
-const isEmailExistsInUser  = async (email) => {
-  return await User.exists({ email })
-}
+const isEmailExistsInUser = async (email) => {
+  return await User.exists({ email });
+};
 
 const addNewVerificationRequest = async (req, res) => {
   const session = await mongoose.startSession();
@@ -71,7 +71,6 @@ const addNewVerificationRequest = async (req, res) => {
           message: "You have a request which is waiting for approval",
         });
       }
-
 
       let createdPGI = null;
       let createdOGI = null;
@@ -95,19 +94,17 @@ const addNewVerificationRequest = async (req, res) => {
           },
         } = req.body;
 
-        
         if (await isPhoneNumberExistsInUser(phoneNumber)) {
           return res.status(HttpStatusCode.BAD_REQUEST).json({
-            message: "Phone number is exists"
-          })
-        }
-  
-        if (await isEmailExistsInUser(representativeEmail)) {
-          return res.status(HttpStatusCode.BAD_REQUEST).json({
-            message: "Email is exists"
-          })
+            message: "Phone number is exists",
+          });
         }
 
+        if (await isEmailExistsInUser(representativeEmail)) {
+          return res.status(HttpStatusCode.BAD_REQUEST).json({
+            message: "Email is exists",
+          });
+        }
 
         createdPGI = await PersonalGeneralInfo.create({
           name,
@@ -140,14 +137,14 @@ const addNewVerificationRequest = async (req, res) => {
 
         if (await isPhoneNumberExistsInUser(representativePhoneNumber)) {
           return res.status(HttpStatusCode.BAD_REQUEST).json({
-            message: "Phone number is exists"
-          })
+            message: "Phone number is exists",
+          });
         }
-  
+
         if (await isEmailExistsInUser(representativeEmail)) {
           return res.status(HttpStatusCode.BAD_REQUEST).json({
-            message: "Email is exists"
-          })
+            message: "Email is exists",
+          });
         }
 
         createdOGI = await OrganizationGeneralInfo.create({
@@ -176,7 +173,7 @@ const addNewVerificationRequest = async (req, res) => {
         personalGeneralInfoId: createdPGI?._id,
         organizationGeneralInfoId: createdOGI?._id,
         commitInfoVerificationId: createdCIV._id,
-
+        createdDate: Date.now(),
         requestedUserId: user._id,
       });
 

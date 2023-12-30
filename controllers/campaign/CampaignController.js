@@ -29,6 +29,7 @@ const addNewCampaign = async (req, res) => {
         title,
         targetValue,
         endDate,
+        createdDate: Date.now(),
         description,
         thumbnail,
         fileUrl,

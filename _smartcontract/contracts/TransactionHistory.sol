@@ -7,10 +7,12 @@ contract TransactionHistory {
     struct TransactionInfo {
         uint256 id;
         string campaignId;
+        string ownerId;
         string donatorId;
         address donatorAddress;
         uint value;
         string time;
+
     }
 
     TransactionInfo[] public transactionInfoArray;
@@ -34,6 +36,7 @@ contract TransactionHistory {
     function addNewTransactionHistory(
         uint256 id,
         string memory campaignId,
+        string memory ownerId,
         string memory donatorId,
         address donatorAddress,
         uint value,
@@ -42,6 +45,7 @@ contract TransactionHistory {
         TransactionInfo memory newTransaction;
         newTransaction.id = id;
         newTransaction.campaignId = campaignId;
+        newTransaction.ownerId = ownerId;
         newTransaction.donatorId = donatorId;
         newTransaction.donatorAddress = donatorAddress;
         newTransaction.value = value;
@@ -62,22 +66,6 @@ contract TransactionHistory {
         address _campaignAddress
     ) public onlyAdminAddress {
         campaignAddress = _campaignAddress;
-    }
-
-    function getDonateByUser(
-        string memory _donatorId
-    ) public view returns (TransactionInfo memory) {
-        for (uint i = 0; i < transactionInfoArray.length; i++) {
-            if (
-                keccak256(
-                    abi.encodePacked(transactionInfoArray[i].donatorId)
-                ) == keccak256(abi.encodePacked(_donatorId))
-            ) {
-                return transactionInfoArray[i];
-            }
-        }
-
-        revert("Not found");
     }
 
     function isDonatedtoCampaign(
@@ -101,34 +89,64 @@ contract TransactionHistory {
 
         return false;
     }
-    function resizeArray(TransactionInfo[] memory array, uint newSize) internal pure returns (TransactionInfo[] memory) {
-    TransactionInfo[] memory resizedArray = new TransactionInfo[](newSize);
-    for (uint i = 0; i < newSize; i++) {
-        resizedArray[i] = array[i];
-    }
-    return resizedArray;
-}
 
-    function getTransactionHistoryByCampaignId(
-        string memory _campaignId
-    ) public view returns (TransactionInfo[] memory) {
-        TransactionInfo[] memory returnTransactionInfoArr = new TransactionInfo[](
-            transactionInfoArray.length
-        );
-
+    function getTransactionHistoryByCampaignId(string memory _campaignId) external view returns (TransactionInfo[] memory) {
         uint count = 0;
-
         for (uint i = 0; i < transactionInfoArray.length; i++) {
-            if (
-                keccak256(
-                    abi.encodePacked(transactionInfoArray[i].campaignId)
-                ) == keccak256(abi.encodePacked(_campaignId))
-            ) {
-                returnTransactionInfoArr[i] = transactionInfoArray[i];
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
                 count++;
             }
         }
 
-        return resizeArray(returnTransactionInfoArr, count);
+        TransactionInfo[] memory result = new TransactionInfo[](count);
+        count = 0;
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+                result[count] = transactionInfoArray[i];
+                count++;
+            }
+        }
+
+        return result;
+    }
+
+    function getDonateByUser(string memory _donatorId) external view returns (TransactionInfo[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].donatorId)) == keccak256(abi.encodePacked(_donatorId))) {
+                count++;
+            }
+        }
+
+        TransactionInfo[] memory result = new TransactionInfo[](count);
+        count = 0;
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].donatorId)) == keccak256(abi.encodePacked(_donatorId))) {
+                result[count] = transactionInfoArray[i];
+                count++;
+            }
+        }
+
+        return result;
+    }
+
+    function getDonateByOwner(string memory _ownerId) external view returns (TransactionInfo[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].ownerId)) == keccak256(abi.encodePacked(_ownerId))) {
+                count++;
+            }
+        }
+
+        TransactionInfo[] memory result = new TransactionInfo[](count);
+        count = 0;
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].ownerId)) == keccak256(abi.encodePacked(_ownerId))) {
+                result[count] = transactionInfoArray[i];
+                count++;
+            }
+        }
+
+        return result;
     }
 }

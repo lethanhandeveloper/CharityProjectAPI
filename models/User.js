@@ -13,10 +13,7 @@ export default mongoose.model(
         message: "Name must be at least 3 characters",
       },
     },
-    isActive: {
-      type: Boolean,
-      required: true,
-    },
+
     userName: {
       type: String,
       required: true,
@@ -67,11 +64,11 @@ export default mongoose.model(
       type: String,
     },
     charityAccountNumber: {
-      type: String
+      type: String,
     },
     isActive: {
       type: Boolean,
-      default: true
+      default: true,
     },
     createdDate: {
       required: true,

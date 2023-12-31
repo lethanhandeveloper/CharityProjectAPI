@@ -38,10 +38,10 @@ contract WithdrawRequest {
     struct WithdrawRequestInfo {
         uint256 id;
         string campaignId;
-	string createdId;
+	    string createdId;
         bool isApproved;
         uint value;
-	string time;
+	    string time;
         address payable toAddress;
         string message;
         string status;
@@ -113,19 +113,44 @@ contract WithdrawRequest {
         revert('Not found');
     }
 
-    function getWithdrawRequestByCampaignId(
-        string memory _campaignId
-    ) public view returns (WithdrawRequestInfo memory) {
+    function getWithdrawRequestByCampaignId(string memory _campaignId) public view returns (WithdrawRequestInfo[] memory) {
+        uint count = 0;
         for (uint i = 0; i < withdrawRequestArray.length; i++) {
-            if (
-                keccak256(abi.encodePacked(withdrawRequestArray[i].campaignId)) ==
-                keccak256(abi.encodePacked(_campaignId))
-            ) {
-                return withdrawRequestArray[i];
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+                count++;
             }
         }
 
-        revert('Not found');
+        WithdrawRequestInfo[] memory result = new WithdrawRequestInfo[](count);
+        uint resultIndex = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+                result[resultIndex] = withdrawRequestArray[i];
+                resultIndex++;
+            }
+        }
+
+        return result;
+    }
+
+  function getWithdrawRequestByCreatorId(string memory _creatorId) public view returns (WithdrawRequestInfo[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].createdId)) == keccak256(abi.encodePacked(_creatorId))) {
+                count++;
+            }
+        }
+
+        WithdrawRequestInfo[] memory result = new WithdrawRequestInfo[](count);
+        uint resultIndex = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].createdId)) == keccak256(abi.encodePacked(_creatorId))) {
+                result[resultIndex] = withdrawRequestArray[i];
+                resultIndex++;
+            }
+        }
+
+        return result;
     }
 
     function approveWithdrawRequest(uint256 _id) public onlyAdmin(){

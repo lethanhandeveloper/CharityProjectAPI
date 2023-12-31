@@ -7,7 +7,7 @@ import "./WithdrawRequest.sol";
 contract Campaign {
     struct CampaignInfo {
         string id;
-        string creatorUserName;
+        string creatorId;
         string title;
         uint currentValue;
         uint targetValue;
@@ -15,7 +15,7 @@ contract Campaign {
 	uint donateCount;
     }
 
-    address adminAddress = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
+    address adminAddress = 0x3D2E2fDd048938d1f53b7De8D72568d78d7969a8;
     address transactionHistoryAddress;
     address withdrawRequestAddress;
 
@@ -36,10 +36,17 @@ contract Campaign {
     function setWithdrawRequestAddress(address _withdrawRequestAddress) public onlyAdmin {
         withdrawRequestAddress = _withdrawRequestAddress;
     }
-
+event NewCampaignAdded(
+        string id,
+        string creatorId,
+        string title,
+        uint currentValue,
+        uint targetValue,
+        string endDate
+    );
     function addNewCampaign(
         string memory id,
-        string memory creatorUserName,
+        string memory creatorId,
         string memory title,
         uint currentValue,
         uint targetValue,
@@ -47,13 +54,21 @@ contract Campaign {
     ) public onlyAdmin {
         CampaignInfo memory newCampaign;
         newCampaign.id = id;
-        newCampaign.creatorUserName = creatorUserName;
+        newCampaign.creatorId = creatorId;
         newCampaign.title = title;
         newCampaign.targetValue = targetValue;
         newCampaign.currentValue = currentValue;
         newCampaign.endDate = endDate;
 	    newCampaign.donateCount = 0;
         campaignInfoArray.push(newCampaign);
+        //   emit NewCampaignAdded(
+        //     newCampaign.id,
+        //     newCampaign.creatorId,
+        //     newCampaign.title,
+        //     newCampaign.currentValue,
+        //     newCampaign.targetValue,
+        //     newCampaign.endDate
+        // );
     }
 
     function getCampaignById(
@@ -94,6 +109,7 @@ contract Campaign {
                 TransactionHistory(transactionHistoryAddress)
                     .addNewTransactionHistory(
                         campaignId,
+                        campaignInfoArray[i].creatorId,
                         donatorId,
                         msg.sender,
                         msg.value,

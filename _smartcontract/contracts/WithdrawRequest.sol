@@ -5,7 +5,7 @@ import "./Campaign.sol";
 
 contract WithdrawRequest {
     address campaignAddress;
-    address adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b;
+    address adminAddress = 0x3D2E2fDd048938d1f53b7De8D72568d78d7969a8;
     uint public nonce;
 
     constructor() {
@@ -47,7 +47,7 @@ contract WithdrawRequest {
         string memory _message,
         string memory _status
     ) public {
-        //require(Campaign(campaignAddress).getCampaignById(_campaignId).currentValue >= _value, "This campaign's balance is less than your value");
+        
         WithdrawRequestInfo memory wri = WithdrawRequestInfo(
             generateRandomId(),
             _campaignId,
@@ -139,4 +139,3 @@ contract WithdrawRequest {
     }
 }
 
-//remixd -s _smartcontract --remix-ide https://remix.ethereum.org

@@ -10,7 +10,7 @@ contract Item
         string time;
     }
 
-    address adminAddress = 0x40754E2791327413eD31812085DE3890Cc743C3b; 
+    address adminAddress = 0x3D2E2fDd048938d1f53b7De8D72568d78d7969a8; 
     ItemInfo[] public itemInfoArray;
 	
     modifier onlyAdmin() {

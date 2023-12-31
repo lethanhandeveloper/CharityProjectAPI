@@ -14,6 +14,49 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "id",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "creatorId",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "currentValue",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "targetValue",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "endDate",
+						"type": "string"
+					}
+				],
+				"name": "NewCampaignAdded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "uint256",
 						"name": "value",
@@ -32,7 +75,7 @@
 					},
 					{
 						"internalType": "string",
-						"name": "creatorUserName",
+						"name": "creatorId",
 						"type": "string"
 					},
 					{
@@ -78,7 +121,7 @@
 					},
 					{
 						"internalType": "string",
-						"name": "creatorUserName",
+						"name": "creatorId",
 						"type": "string"
 					},
 					{
@@ -159,7 +202,7 @@
 							},
 							{
 								"internalType": "string",
-								"name": "creatorUserName",
+								"name": "creatorId",
 								"type": "string"
 							},
 							{
@@ -215,7 +258,7 @@
 							},
 							{
 								"internalType": "string",
-								"name": "creatorUserName",
+								"name": "creatorId",
 								"type": "string"
 							},
 							{
@@ -263,6 +306,19 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_campaignId",
+						"type": "string"
+					}
+				],
+				"name": "refundAllByCampaignId",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -354,27 +410,27 @@
 			]
 		},
 		"contracts/Campaign.sol": {
-			"keccak256": "0x51a115a003f06c0ca5c42994f3ec3851abe3f642e04b8b6033c3650107cc7fae",
+			"keccak256": "0xe52e93a9ac1931fb20e2dc409bf5d4108f23cb0c528df08b4417ee2c449c65b0",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9a9fe55908aee16c0cc50f9076d1049ee6bc27620f22d97e93332bb8d75d2ce6",
-				"dweb:/ipfs/QmcBBWfcf71B59noSpoRbgYzaex3Hsd5aHG1fpQ7a2CwqY"
+				"bzz-raw://53dd3fb6150f4e15c714d43849b6d885578726339d50e6a7bd59ef0b6b6be595",
+				"dweb:/ipfs/QmfW3qDb61ynyurbJnii9XA3SMF6s37YRMhMwV7K49PEm4"
 			]
 		},
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0xdd294663d12a490b3fc39ef321f4f641861782403e892e1a93fb9d1defae1f2f",
+			"keccak256": "0x8c8d1edec5667695b4bcc53092d7e7beb38594c741b27757c649e4a3cbb5e96b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://42eea36f025bd7439d8b3e5bfc0761e953199b681602262fff0940b52db2cd14",
-				"dweb:/ipfs/QmdyRTQqkvVAEeR1NwMTfFoRHTuciwMnMwvnG5MHYktQ2n"
+				"bzz-raw://2d6e3c5c140b2cd9dd70527adf43bc164cbf26b7594d29fd3a2373c61e10cff7",
+				"dweb:/ipfs/QmYkExETqgmeHYd25qmpjm3QQ3w5ikX4ucQpz5QJEtGWnm"
 			]
 		},
 		"contracts/WithdrawRequest.sol": {
-			"keccak256": "0xdea0f3af22391d8d5ac66c9e9eebb4435a1e331df586c20d1cf300245431657c",
+			"keccak256": "0x8923a103b8406fc9d29361af5856ad0b1f9430a28c0327391e7bc687cedbe3b9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f04dc78baacaf7c533c350ced354679fd2d314aeef28ab88f03eb3c9e6353e16",
-				"dweb:/ipfs/QmNZrUuWi6GTDzi1THVwceCJkXNNZL8E5osequ9aiG6xyQ"
+				"bzz-raw://54e5d4a662c575ff90d85698cbd590bd28ba31ac69820f7cee9003009cac4abc",
+				"dweb:/ipfs/QmYvL2rB91dGh5vrmD5oY1guarLXLYA5EKHXjFrEvr7t6R"
 			]
 		}
 	},

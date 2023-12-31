@@ -24,6 +24,11 @@
 					},
 					{
 						"internalType": "string",
+						"name": "ownerId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "donatorId",
 						"type": "string"
 					},
@@ -50,7 +55,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "campaignAddress",
+				"name": "campaignContractAddress",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -92,6 +97,11 @@
 							},
 							{
 								"internalType": "string",
+								"name": "ownerId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
 								"name": "donatorId",
 								"type": "string"
 							},
@@ -104,6 +114,72 @@
 								"internalType": "uint256",
 								"name": "value",
 								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "isRefund",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
+							}
+						],
+						"internalType": "struct TransactionHistory.TransactionInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_ownerId",
+						"type": "string"
+					}
+				],
+				"name": "getDonateByOwner",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "ownerId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "donatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "donatorAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "isRefund",
+								"type": "bool"
 							},
 							{
 								"internalType": "string",
@@ -143,6 +219,11 @@
 							},
 							{
 								"internalType": "string",
+								"name": "ownerId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
 								"name": "donatorId",
 								"type": "string"
 							},
@@ -157,14 +238,19 @@
 								"type": "uint256"
 							},
 							{
+								"internalType": "bool",
+								"name": "isRefund",
+								"type": "bool"
+							},
+							{
 								"internalType": "string",
 								"name": "time",
 								"type": "string"
 							}
 						],
-						"internalType": "struct TransactionHistory.TransactionInfo",
+						"internalType": "struct TransactionHistory.TransactionInfo[]",
 						"name": "",
-						"type": "tuple"
+						"type": "tuple[]"
 					}
 				],
 				"stateMutability": "view",
@@ -194,6 +280,11 @@
 							},
 							{
 								"internalType": "string",
+								"name": "ownerId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
 								"name": "donatorId",
 								"type": "string"
 							},
@@ -206,6 +297,72 @@
 								"internalType": "uint256",
 								"name": "value",
 								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "isRefund",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
+							}
+						],
+						"internalType": "struct TransactionHistory.TransactionInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_campaignId",
+						"type": "string"
+					}
+				],
+				"name": "getTransactionHistoryByCampaignIdAndRefund",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "ownerId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "donatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "donatorAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "value",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "isRefund",
+								"type": "bool"
 							},
 							{
 								"internalType": "string",
@@ -249,7 +406,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_campaignAddress",
+						"name": "_campaignContractAddress",
 						"type": "address"
 					}
 				],
@@ -280,6 +437,11 @@
 					},
 					{
 						"internalType": "string",
+						"name": "ownerId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "donatorId",
 						"type": "string"
 					},
@@ -292,6 +454,11 @@
 						"internalType": "uint256",
 						"name": "value",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isRefund",
+						"type": "bool"
 					},
 					{
 						"internalType": "string",
@@ -331,11 +498,11 @@
 	},
 	"sources": {
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0xdd294663d12a490b3fc39ef321f4f641861782403e892e1a93fb9d1defae1f2f",
+			"keccak256": "0x8c8d1edec5667695b4bcc53092d7e7beb38594c741b27757c649e4a3cbb5e96b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://42eea36f025bd7439d8b3e5bfc0761e953199b681602262fff0940b52db2cd14",
-				"dweb:/ipfs/QmdyRTQqkvVAEeR1NwMTfFoRHTuciwMnMwvnG5MHYktQ2n"
+				"bzz-raw://2d6e3c5c140b2cd9dd70527adf43bc164cbf26b7594d29fd3a2373c61e10cff7",
+				"dweb:/ipfs/QmYkExETqgmeHYd25qmpjm3QQ3w5ikX4ucQpz5QJEtGWnm"
 			]
 		}
 	},

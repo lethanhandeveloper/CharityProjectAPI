@@ -12,8 +12,8 @@ contract TransactionHistory {
         string donatorId;
         address donatorAddress;
         uint value;
+        bool isRefund;
         string time;
-
     }
 
     TransactionInfo[] public transactionInfoArray;
@@ -54,6 +54,7 @@ contract TransactionHistory {
         newTransaction.donatorId = donatorId;
         newTransaction.donatorAddress = donatorAddress;
         newTransaction.value = value;
+        newTransaction.isRefund = false;
         newTransaction.time = time;
 
         transactionInfoArray.push(newTransaction);
@@ -68,25 +69,9 @@ contract TransactionHistory {
     }
 
     function setCampaignAddress(
-        address _campaignAddress
-    ) public onlyAdminAddress {
-        campaignAddress = _campaignAddress;
-    }
-
-    function getDonateByUser(
-        string memory _donatorId
-    ) public view returns (TransactionInfo memory) {
-        for (uint i = 0; i < transactionInfoArray.length; i++) {
-            if (
-                keccak256(
-                    abi.encodePacked(transactionInfoArray[i].donatorId)
-                ) == keccak256(abi.encodePacked(_donatorId))
-            ) {
-                return transactionInfoArray[i];
-            }
-        }
-
-        revert("Not found");
+        address _campaignContractAddress
+    ) public onlyDeployer {
+        campaignContractAddress = _campaignContractAddress;
     }
 
     function isDonatedtoCampaign(
@@ -123,6 +108,27 @@ contract TransactionHistory {
         count = 0;
         for (uint i = 0; i < transactionInfoArray.length; i++) {
             if (keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+                result[count] = transactionInfoArray[i];
+                count++;
+            }
+        }
+
+        return result;
+    }
+
+    function getTransactionHistoryByCampaignIdAndRefund(string memory _campaignId) external view returns (TransactionInfo[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+                count++;
+            }
+        }
+
+        TransactionInfo[] memory result = new TransactionInfo[](count);
+        count = 0;
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))
+                && transactionInfoArray[i].isRefund == false) {
                 result[count] = transactionInfoArray[i];
                 count++;
             }

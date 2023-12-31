@@ -156,11 +156,35 @@ event NewCampaignAdded(
         revert("Not found");
     }
 
-    function withdraw(uint256 _withdrawRequestId) public onlyAdmin() {
+    function withdraw(uint256 _withdrawRequestId) public onlyAdmin {
         WithdrawRequest.WithdrawRequestInfo memory withdrawRequest = WithdrawRequest(withdrawRequestContractAddress).getWithdrawRequestById(_withdrawRequestId);
         require(withdrawRequest.isApproved == true, "Request has been not approved");
         require(address(this).balance >= withdrawRequest.value, "Insufficient balance in the contract");
         payable(withdrawRequest.toAddress).transfer(withdrawRequest.value);
     }
     
+    function refundAllByCampaignId(string memory _campaignId) public onlyAdmin {
+        TransactionHistory.TransactionInfo[] memory transHistories = TransactionHistory(transactionHistoryContractAddress).getTransactionHistoryByCampaignIdAndRefund(_campaignId);
+        if(address(this).balance <= 0) {
+            revert("Insufficient balance in the contract");
+        }
+
+        if(transHistories.length < 1) {
+            revert("No have any transaction which can refund");
+        }
+
+        for(uint i = 0; i < transHistories.length; i++) {
+            payable(transHistories[i].donatorAddress).transfer(transHistories[i].value);
+            transHistories[i].isRefund = true;
+        }
+
+        for (uint i = 0; i < campaignInfoArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(campaignInfoArray[i].id)) ==
+                keccak256(abi.encodePacked(_campaignId))
+            ) {
+                campaignInfoArray[i].currentValue = 0;
+            }
+        }
+    }
 }

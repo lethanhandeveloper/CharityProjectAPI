@@ -39,7 +39,8 @@ const getCountForAdmin = async (req, res) => {
     newDate.setFullYear(newYear);
     newDate.setMonth(newMonth);
 
-    const userCount = await User.countDocuments();
+    const userActiveCount = await User.countDocuments();
+    const userDeactiveCount = await User.countDocuments();
     const campaignCount = await Campaign.countDocuments();
     const campaignFinishCount = await Campaign.countDocuments();
     const organizationCount = await Origanization.countDocuments();
@@ -54,7 +55,8 @@ const getCountForAdmin = async (req, res) => {
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
       result: {
-        userCount,
+        userActiveCount,
+        userDeactiveCount,
         campaignCount,
         organizationCount,
         campaignFinishCount,

@@ -242,7 +242,7 @@ const getCampaignHome = async (req, res) => {
 };
 const updateStatus = async (req, res) => {
   try {
-    const { id, status } = req.params;
+    const { id, status } = req.body;
     await Campaign.findByIdAndUpdate(id, {
       status: status,
     });

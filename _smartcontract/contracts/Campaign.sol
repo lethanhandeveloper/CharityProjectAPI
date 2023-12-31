@@ -8,7 +8,7 @@ import "./WithdrawRequest.sol";
 contract Campaign {
     struct CampaignInfo {
         string id;
-        string creatorUserName;
+        string creatorId;
         string title;
         uint currentValue;
         uint targetValue;
@@ -65,10 +65,17 @@ contract Campaign {
     function setAdminContractAddress(address _adminContractAddress) public onlyDeployer {
         adminContractAddress = _adminContractAddress;
     }
-
+event NewCampaignAdded(
+        string id,
+        string creatorId,
+        string title,
+        uint currentValue,
+        uint targetValue,
+        string endDate
+    );
     function addNewCampaign(
         string memory id,
-        string memory creatorUserName,
+        string memory creatorId,
         string memory title,
         uint currentValue,
         uint targetValue,
@@ -76,13 +83,21 @@ contract Campaign {
     ) public onlyAdmin {
         CampaignInfo memory newCampaign;
         newCampaign.id = id;
-        newCampaign.creatorUserName = creatorUserName;
+        newCampaign.creatorId = creatorId;
         newCampaign.title = title;
         newCampaign.targetValue = targetValue;
         newCampaign.currentValue = currentValue;
         newCampaign.endDate = endDate;
 	    newCampaign.donateCount = 0;
         campaignInfoArray.push(newCampaign);
+        //   emit NewCampaignAdded(
+        //     newCampaign.id,
+        //     newCampaign.creatorId,
+        //     newCampaign.title,
+        //     newCampaign.currentValue,
+        //     newCampaign.targetValue,
+        //     newCampaign.endDate
+        // );
     }
 
     function getCampaignById(
@@ -126,6 +141,7 @@ contract Campaign {
                     .addNewTransactionHistory(
                         transactionHistoryId,
                         campaignId,
+                        campaignInfoArray[i].creatorId,
                         donatorId,
                         msg.sender,
                         msg.value,

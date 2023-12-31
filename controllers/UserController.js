@@ -557,23 +557,12 @@ const changeActiveStatus = async (req, res) => {
   try {
     const { isActive } = req.body;
     const userId = req.params.id;
-    if (isActive) {
-      console.log("ok");
-    }
-    if (
-      typeof isActive !== "undefined" &&
-      (parseInt(isActive) === 0 || parseInt(isActive) === 1)
-    ) {
-      await User.findByIdAndUpdate(userId, {
-        isActive: isActive === 1 ? true : false,
-      });
-      return res.status(HttpStatusCode.NO_CONTENT).json({
-        message: "Change user activation successfully",
-      });
-    }
 
-    return res.status(HttpStatusCode.BAD_REQUEST).json({
-      message: "The value is not valid",
+    await User.findByIdAndUpdate(userId, {
+      isActive,
+    });
+    return res.status(HttpStatusCode.NO_CONTENT).json({
+      message: "Change user activation successfully",
     });
   } catch (error) {
     console.log(error);

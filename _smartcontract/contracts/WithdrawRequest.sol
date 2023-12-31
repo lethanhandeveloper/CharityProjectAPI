@@ -64,7 +64,7 @@ contract WithdrawRequest {
         string memory _message,
         string memory _status
     ) public {
-        //require(Campaign(campaignAddress).getCampaignById(_campaignId).currentValue >= _value, "This campaign's balance is less than your value");
+        
         WithdrawRequestInfo memory wri = WithdrawRequestInfo(
             generateRandomId(),
             _campaignId,
@@ -156,4 +156,3 @@ contract WithdrawRequest {
     }
 }
 
-//remixd -s _smartcontract --remix-ide https://remix.ethereum.org

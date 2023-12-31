@@ -6,6 +6,11 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -248,14 +253,27 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "isAdmin",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_transactionHistoryAddress",
+						"name": "_adminContractAddress",
 						"type": "address"
 					}
 				],
-				"name": "setTransactionHistoryAddress",
+				"name": "setAdminContractAddress",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -264,11 +282,24 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_withdrawRequestAddress",
+						"name": "_transactionHistoryContractAddress",
 						"type": "address"
 					}
 				],
-				"name": "setWithdrawRequestAddress",
+				"name": "settransactionHistoryContractAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_withdrawRequestContractAddress",
+						"type": "address"
+					}
+				],
+				"name": "setwithdrawRequestContractAddress",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -314,28 +345,36 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/Campaign.sol": {
-			"keccak256": "0x52dda32b2a0f9a31381e52728a64549b59af50d775330c1c8d43ac0a9aac2346",
+		"contracts/Admin.sol": {
+			"keccak256": "0xe89bcce44255cf8f43e33145315455aac605fa7d64dc68389ae822fd4305819c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e16d725f5bba46e727b195974b5c239fe6421ed53ca322fbf6d2b09d6b214ee3",
-				"dweb:/ipfs/QmdxntZt5moYTqGcs2uwKe3ugahtSBnDXi2ef8rx2kik4L"
+				"bzz-raw://673320bc86dad0957fd151844cdf8cae53cb20436865f22c84afa2594d23e6ad",
+				"dweb:/ipfs/QmQr6LpQdsLF3sAk9o8RYqU3ryAF2wQ6YYg3wppi4cdTdJ"
+			]
+		},
+		"contracts/Campaign.sol": {
+			"keccak256": "0x51a115a003f06c0ca5c42994f3ec3851abe3f642e04b8b6033c3650107cc7fae",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9a9fe55908aee16c0cc50f9076d1049ee6bc27620f22d97e93332bb8d75d2ce6",
+				"dweb:/ipfs/QmcBBWfcf71B59noSpoRbgYzaex3Hsd5aHG1fpQ7a2CwqY"
 			]
 		},
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0xe72f78c4804f719a824b2fbd3f230122875adb159d4c7e68de876a28495d3896",
+			"keccak256": "0xdd294663d12a490b3fc39ef321f4f641861782403e892e1a93fb9d1defae1f2f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://16660a1cb121e9c0c866d95569513c3628c3fef40cdde9e955c07964d5287f8b",
-				"dweb:/ipfs/QmRmBmdd3kbvRHRoUX7QJnvQrrGaNskZerSEHUGHQNtM49"
+				"bzz-raw://42eea36f025bd7439d8b3e5bfc0761e953199b681602262fff0940b52db2cd14",
+				"dweb:/ipfs/QmdyRTQqkvVAEeR1NwMTfFoRHTuciwMnMwvnG5MHYktQ2n"
 			]
 		},
 		"contracts/WithdrawRequest.sol": {
-			"keccak256": "0x6f01fc0cf8915dadea54f9e7c043a9ef8e62ced815e84eb665ab90f6e5f59ee2",
+			"keccak256": "0xdea0f3af22391d8d5ac66c9e9eebb4435a1e331df586c20d1cf300245431657c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d4408957cc88c36b2d2f77c8cd6654563f41277b7dbd7fc0c2e36e6468d9710b",
-				"dweb:/ipfs/QmZWCgAy4obFZWohaMk4WN5xYaEHcCTb85HUxmCX5T3Dit"
+				"bzz-raw://f04dc78baacaf7c533c350ced354679fd2d314aeef28ab88f03eb3c9e6353e16",
+				"dweb:/ipfs/QmNZrUuWi6GTDzi1THVwceCJkXNNZL8E5osequ9aiG6xyQ"
 			]
 		}
 	},

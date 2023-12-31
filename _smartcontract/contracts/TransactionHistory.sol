@@ -2,8 +2,9 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract TransactionHistory {
-    address public adminAddress = 0x8c43a48745b5a4Dc666F0ba9aF9B6F41C065EC22;
-    address public campaignAddress;
+    address public deployerAddress;
+    address public campaignContractAddress;
+
     struct TransactionInfo {
         uint256 id;
         string campaignId;
@@ -15,18 +16,22 @@ contract TransactionHistory {
 
     TransactionInfo[] public transactionInfoArray;
 
+    constructor() {
+        deployerAddress = msg.sender;
+    }
+
     modifier onlyCampaignContract() {
         require(
-            msg.sender == campaignAddress,
+            msg.sender == campaignContractAddress,
             "Only campaign contract call this function"
         );
         _;
     }
 
-    modifier onlyAdminAddress() {
+    modifier onlyDeployer() {
         require(
-            msg.sender == adminAddress,
-            "Only campaign contract call this function"
+            msg.sender == deployerAddress,
+            "Only deployer call this function"
         );
         _;
     }
@@ -58,10 +63,8 @@ contract TransactionHistory {
         return transactionInfoArray;
     }
 
-    function setCampaignAddress(
-        address _campaignAddress
-    ) public onlyAdminAddress {
-        campaignAddress = _campaignAddress;
+    function setcampaignContractAddress(address _campaignContractAddress) public onlyDeployer {
+        campaignContractAddress = _campaignContractAddress;
     }
 
     function getDonateByUser(
@@ -101,20 +104,25 @@ contract TransactionHistory {
 
         return false;
     }
-    function resizeArray(TransactionInfo[] memory array, uint newSize) internal pure returns (TransactionInfo[] memory) {
-    TransactionInfo[] memory resizedArray = new TransactionInfo[](newSize);
-    for (uint i = 0; i < newSize; i++) {
-        resizedArray[i] = array[i];
+
+    function resizeArray(
+        TransactionInfo[] memory array,
+        uint newSize
+    ) internal pure returns (TransactionInfo[] memory) {
+        TransactionInfo[] memory resizedArray = new TransactionInfo[](newSize);
+        for (uint i = 0; i < newSize; i++) {
+            resizedArray[i] = array[i];
+        }
+        return resizedArray;
     }
-    return resizedArray;
-}
 
     function getTransactionHistoryByCampaignId(
         string memory _campaignId
     ) public view returns (TransactionInfo[] memory) {
-        TransactionInfo[] memory returnTransactionInfoArr = new TransactionInfo[](
-            transactionInfoArray.length
-        );
+        TransactionInfo[]
+            memory returnTransactionInfoArr = new TransactionInfo[](
+                transactionInfoArray.length
+            );
 
         uint count = 0;
 

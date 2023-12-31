@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
+import "./Admin.sol";
 import "./TransactionHistory.sol";
 import "./WithdrawRequest.sol";
 
@@ -16,19 +17,36 @@ contract Campaign {
     }
 
     uint256 private nonce = 0;
-    address adminAddress = 0x8c43a48745b5a4Dc666F0ba9aF9B6F41C065EC22;
-    address transactionHistoryAddress;
-    address withdrawRequestAddress;
+    address deployerAddress;
+    address transactionHistoryContractAddress;
+    address withdrawRequestContractAddress;
+    address adminContractAddress;
 
     CampaignInfo[] public campaignInfoArray;
     event ReturnTransactionId(uint256 indexed value); 
     
+    constructor() {
+        deployerAddress = msg.sender;
+    }
+
+    modifier onlyDeployer() {
+        require(
+            msg.sender == deployerAddress,
+            "Only deployer can call this function"
+        );
+        _;
+    }
+
     modifier onlyAdmin() {
         require(
-            msg.sender == adminAddress,
+            isAdmin(),
             "Only admin can call this function"
         );
         _;
+    }
+
+    function isAdmin() public view returns (bool) {
+        return Admin(adminContractAddress).checkAdmin(msg.sender);
     }
 
     function generateUniqueNumber() public view returns (uint256) {
@@ -36,12 +54,16 @@ contract Campaign {
         return uniqueNumber;
     }
 
-    function setTransactionHistoryAddress(address _transactionHistoryAddress) public onlyAdmin {
-        transactionHistoryAddress = _transactionHistoryAddress;
+    function settransactionHistoryContractAddress(address _transactionHistoryContractAddress) public onlyDeployer {
+        transactionHistoryContractAddress = _transactionHistoryContractAddress;
     }
 
-    function setWithdrawRequestAddress(address _withdrawRequestAddress) public onlyAdmin {
-        withdrawRequestAddress = _withdrawRequestAddress;
+    function setwithdrawRequestContractAddress(address _withdrawRequestContractAddress) public onlyDeployer {
+        withdrawRequestContractAddress = _withdrawRequestContractAddress;
+    }
+
+    function setAdminContractAddress(address _adminContractAddress) public onlyDeployer {
+        adminContractAddress = _adminContractAddress;
     }
 
     function addNewCampaign(
@@ -100,7 +122,7 @@ contract Campaign {
                 
                 uint256 transactionHistoryId = generateUniqueNumber();
 
-                TransactionHistory(transactionHistoryAddress)
+                TransactionHistory(transactionHistoryContractAddress)
                     .addNewTransactionHistory(
                         transactionHistoryId,
                         campaignId,
@@ -119,7 +141,7 @@ contract Campaign {
     }
 
     function withdraw(uint256 _withdrawRequestId) public onlyAdmin() {
-        WithdrawRequest.WithdrawRequestInfo memory withdrawRequest = WithdrawRequest(withdrawRequestAddress).getWithdrawRequestById(_withdrawRequestId);
+        WithdrawRequest.WithdrawRequestInfo memory withdrawRequest = WithdrawRequest(withdrawRequestContractAddress).getWithdrawRequestById(_withdrawRequestId);
         require(withdrawRequest.isApproved == true, "Request has been not approved");
         require(address(this).balance >= withdrawRequest.value, "Insufficient balance in the contract");
         payable(withdrawRequest.toAddress).transfer(withdrawRequest.value);

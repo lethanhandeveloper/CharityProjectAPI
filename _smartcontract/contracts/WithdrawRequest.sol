@@ -1,15 +1,38 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
+import "./Admin.sol";
 import "./Campaign.sol";
 
 contract WithdrawRequest {
     address campaignAddress;
-    address adminAddress = 0x8c43a48745b5a4Dc666F0ba9aF9B6F41C065EC22;
+    address deployerAddress;
+    address adminContractAddress;
     uint public nonce;
 
     constructor() {
         nonce = 0;
+        deployerAddress = msg.sender;
+    }
+
+    modifier onlyDeployer() {
+        require(
+            msg.sender == deployerAddress,
+            "Only deployer can call this function"
+        );
+        _;
+    }
+
+    modifier onlyAdmin() {
+        require(
+            isAdmin(),
+            "Only admin can call this function"
+        );
+        _;
+    }
+
+    function isAdmin() public view returns (bool) {
+        return Admin(adminContractAddress).checkAdmin(msg.sender);
     }
 
     struct WithdrawRequestInfo {
@@ -26,16 +49,10 @@ contract WithdrawRequest {
 
     WithdrawRequestInfo[] public withdrawRequestArray;
 
-    modifier onlyAdmin() {
-        require(
-            msg.sender == adminAddress,
-            "Only admin can call this function"
-        );
-        _;
-    }
+    
 
-    function setCampaignAddress(address _campaignAddress) public onlyAdmin {
-        campaignAddress = _campaignAddress;
+    function setAdminContractAddress(address _adminContractAddress) public onlyDeployer {
+        adminContractAddress = _adminContractAddress;
     }
 
     function addNewWithdrawRequest(

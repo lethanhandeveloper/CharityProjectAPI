@@ -6,6 +6,11 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "string",
@@ -15,6 +20,16 @@
 					{
 						"internalType": "string",
 						"name": "_message",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_creatorID",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_time",
 						"type": "string"
 					}
 				],
@@ -38,11 +53,116 @@
 								"internalType": "string",
 								"name": "message",
 								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "creatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
 							}
 						],
 						"internalType": "struct Item.ItemInfo[]",
 						"name": "",
 						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_campaignId",
+						"type": "string"
+					}
+				],
+				"name": "getTransactionHistoryByCampaignId",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "creatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Item.ItemInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_creatorId",
+						"type": "string"
+					}
+				],
+				"name": "getTransactionHistoryByCreatorId",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "campaignId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "creatorId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "time",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Item.ItemInfo[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "isAdmin",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -67,9 +187,32 @@
 						"internalType": "string",
 						"name": "message",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "creatorId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "time",
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_adminContractAddress",
+						"type": "address"
+					}
+				],
+				"name": "setAdminAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -100,12 +243,20 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/Item.sol": {
-			"keccak256": "0xc1d2f96a612b60faeb6862da590ec2de4c9e9295ae7d6c24e710af758904539b",
+		"contracts/Admin.sol": {
+			"keccak256": "0xe89bcce44255cf8f43e33145315455aac605fa7d64dc68389ae822fd4305819c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4fa7f5d7e3bed1b3dd0d3973353e5696990ff6a363938d067f1a6d4ae62fcae8",
-				"dweb:/ipfs/Qmf7VBUzdECn4UhGsv3BNcKDZECLEKX7c9ayqVFZuiFT24"
+				"bzz-raw://673320bc86dad0957fd151844cdf8cae53cb20436865f22c84afa2594d23e6ad",
+				"dweb:/ipfs/QmQr6LpQdsLF3sAk9o8RYqU3ryAF2wQ6YYg3wppi4cdTdJ"
+			]
+		},
+		"contracts/Item.sol": {
+			"keccak256": "0x2ecbc8316a18ebbc0ca8f590328e4dc4eac288f0fc850f3280f3cf3f397ac172",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0c0fc4e39ab8e29dde6808cc943f7cdcea5a7fddae3920297a6ed35e27072129",
+				"dweb:/ipfs/QmboFcDy81mrrc8E9Yw4tudCtbKLEFyf5xJyVgMwzNArKy"
 			]
 		}
 	},

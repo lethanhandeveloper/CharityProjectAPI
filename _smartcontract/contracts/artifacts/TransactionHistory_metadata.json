@@ -6,6 +6,11 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -45,7 +50,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "adminAddress",
+				"name": "campaignAddress",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -58,7 +63,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "campaignAddress",
+				"name": "deployerAddress",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -326,11 +331,11 @@
 	},
 	"sources": {
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0xe72f78c4804f719a824b2fbd3f230122875adb159d4c7e68de876a28495d3896",
+			"keccak256": "0xdd294663d12a490b3fc39ef321f4f641861782403e892e1a93fb9d1defae1f2f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://16660a1cb121e9c0c866d95569513c3628c3fef40cdde9e955c07964d5287f8b",
-				"dweb:/ipfs/QmRmBmdd3kbvRHRoUX7QJnvQrrGaNskZerSEHUGHQNtM49"
+				"bzz-raw://42eea36f025bd7439d8b3e5bfc0761e953199b681602262fff0940b52db2cd14",
+				"dweb:/ipfs/QmdyRTQqkvVAEeR1NwMTfFoRHTuciwMnMwvnG5MHYktQ2n"
 			]
 		}
 	},

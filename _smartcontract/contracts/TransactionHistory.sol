@@ -14,6 +14,7 @@ contract TransactionHistory {
         uint value;
         bool isRefund;
         string time;
+        string timeRefund;
     }
 
     TransactionInfo[] public transactionInfoArray;
@@ -56,7 +57,7 @@ contract TransactionHistory {
         newTransaction.value = value;
         newTransaction.isRefund = false;
         newTransaction.time = time;
-
+        newTransaction.timeRefund='';
         transactionInfoArray.push(newTransaction);
     }
 
@@ -137,16 +138,7 @@ contract TransactionHistory {
         return result;
     }
 
-    function resizeArray(
-        TransactionInfo[] memory array,
-        uint newSize
-    ) internal pure returns (TransactionInfo[] memory) {
-        TransactionInfo[] memory resizedArray = new TransactionInfo[](newSize);
-        for (uint i = 0; i < newSize; i++) {
-            resizedArray[i] = array[i];
-        }
-        return resizedArray;
-    }
+  
 
     function getDonateByUser(string memory _donatorId) external view returns (TransactionInfo[] memory) {
         uint count = 0;

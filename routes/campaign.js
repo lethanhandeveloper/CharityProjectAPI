@@ -1,5 +1,8 @@
 import express from "express";
-import { CampaignController, DonationTransactionHash } from "../controllers/index.js";
+import {
+  CampaignController,
+  DonationTransactionHash,
+} from "../controllers/index.js";
 import auth from "../middlewares/auth.js";
 import Role from "../utils/Role.js";
 
@@ -45,7 +48,6 @@ router.get(
   DonationTransactionHash.getDonationTransactionHashByTransactionId
 );
 
-
 router.get("/itemtype", CampaignController.ItemTypeController.getAllItemType);
 router.get(
   "/itemtype/paginate",
@@ -83,7 +85,7 @@ router.patch(
 
 router.get("/:id", CampaignController.CampaignController.getCampaignDetail);
 router.post(
-  "/paginate",
+  "/paginate/:status",
   CampaignController.CampaignController.getCampaignByPagination
 );
 

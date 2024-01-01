@@ -259,17 +259,23 @@ const updateStatus = async (req, res) => {
 const getCampaignByPagination = async (req, res) => {
   try {
     const { search_text, page, no_item_per_page } = req.body;
-
+    const { status } = req.params;
     const skip = (page - 1) * no_item_per_page;
 
     const campaigns = await Campaign.find({
       title: { $regex: new RegExp(search_text, "i") },
+      status: status,
     })
       .skip(skip)
       .limit(no_item_per_page)
+      .populate("itemTypeId")
+      .populate("categoryId")
+      .populate("creatorId")
+      .populate("provinceId")
       .exec();
     const count = await Campaign.countDocuments({
       title: { $regex: new RegExp(search_text, "i") },
+      status: status,
     });
     return res.status(HttpStatusCode.OK).json({
       message: "Get campaigns successfully",

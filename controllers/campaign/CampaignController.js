@@ -106,7 +106,7 @@ const getCampaignByUser = async (req, res) => {
 const getCampaignDetail = async (req, res) => {
   try {
     const id = req.params.id;
-    const campaign = await Campaign.findById(id).exec();
+    const campaign = await Campaign.findById(id).populate("creatorId").exec();
 
     res.status(HttpStatusCode.OK).json({
       message: "Get All Campaign successfully",
@@ -164,6 +164,7 @@ const getCampaignByFilter = async (req, res) => {
 
     const campaigns = await Campaign.find(queryMongo)
       .skip(skip)
+      .populate("creatorId")
       .limit(no_item_per_page)
       .exec();
 

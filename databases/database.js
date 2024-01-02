@@ -5,7 +5,6 @@ async function connectDatabase() {
   try {
     let connection = await mongoose.connect(process.env.MONGO_URL);
   } catch (error) {
-    console.log(error)
     const { code } = error;
     if (error.code == 8000) {
       throw new Exception(Exception.WRONG_DB_USERNAME_PASSWORD);

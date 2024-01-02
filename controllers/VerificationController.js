@@ -16,14 +16,12 @@ const isRequestExistsbyUserId = async (userId) => {
   });
 
   if (personalGeneralInfo.length > 0) {
-    console.log(personalGeneralInfo);
     personalGeneralInfo.forEach(async (pgi) => {
       const isNotApproved = await VerificationRequest.find({
         _id: pgi.personalGeneralInfoId,
         status: 1,
       });
       if (isNotApproved) {
-        console.log("ok");
         return true;
       }
     });
@@ -386,7 +384,6 @@ const getVerificationRequestByPagination = async (req, res) => {
       totalItems: organizationCount + personalCount,
     });
   } catch (error) {
-    console.log(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
     });
@@ -492,7 +489,6 @@ const getRequestById = async (req, res) => {
       result: returnRequest,
     });
   } catch (error) {
-    console.log(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
     });
@@ -543,7 +539,6 @@ const getRequestByUserId = async (req, res) => {
       result: returnRequest,
     });
   } catch (error) {
-    console.log(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
     });
@@ -566,8 +561,6 @@ const updateMyRequestById = async (req, res) => {
     if (request.requestedUserId != user.data._doc._id) {
       throw new Exception("Unauthorized");
     }
-
-    console.log(request.personalGeneralInfoId);
 
     if (request.type === 1) {
       const {
@@ -654,7 +647,6 @@ const updateMyRequestById = async (req, res) => {
       message: "Update verification request successfully",
     });
   } catch (error) {
-    console.log(error);
     session.abortTransaction();
     if (error.message === "Unauthorized") {
       return res.status(HttpStatusCode.UNAUTHORIZED).json({

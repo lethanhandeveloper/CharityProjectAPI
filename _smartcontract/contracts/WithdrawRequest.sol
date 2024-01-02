@@ -162,6 +162,26 @@ contract WithdrawRequest {
 
         return result;
     }
+    
+     function getWithdrawRequestForAdmin() public view returns (WithdrawRequestInfo[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].isApproved)) == keccak256(abi.encodePacked("Pending"))) {
+                count++;
+            }
+        }
+
+        WithdrawRequestInfo[] memory result = new WithdrawRequestInfo[](count);
+        uint resultIndex = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].isApproved)) == keccak256(abi.encodePacked("Pending"))) {
+                result[resultIndex] = withdrawRequestArray[i];
+                resultIndex++;
+            }
+        }
+
+        return result;
+    }
 
     function approveWithdrawRequest(uint256 _id,string memory _status,string memory message, string memory timeApprove) public onlyAdmin(){
         for (uint i = 0; i < withdrawRequestArray.length; i++) {

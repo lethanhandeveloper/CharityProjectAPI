@@ -1,6 +1,6 @@
 import Exception from "../utils/Exception.js";
 import HttpStatusCode from "../utils/HttpStatusCode.js";
-import User from '../models/User.js'
+import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 export default function auth(roles) {
@@ -12,15 +12,16 @@ export default function auth(roles) {
       let jwtObject;
 
       if (token) {
-        jwtObject = jwt.verify(token, process.env.JWT_SECRET)
-        const user = await User.findById(jwtObject.data._doc._id)
-        console.log(user)
-        if(user.isActive == false){
+        jwtObject = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(jwtObject.data._doc._id);
+
+        if (user.isActive == false) {
           return res.status(HttpStatusCode.FORBIDDEN).json({
-            message: "Your account is deactived. Please contact with admin for get more information"
-          })
+            message:
+              "Your account is deactived. Please contact with admin for get more information",
+          });
         }
-        isExpired = Date.now() >= jwtObject.exp * 1000
+        isExpired = Date.now() >= jwtObject.exp * 1000;
       } else {
         return res.status(HttpStatusCode.BAD_REQUEST).json({
           message: "Token must be provided",
@@ -31,7 +32,6 @@ export default function auth(roles) {
         return res.status(HttpStatusCode.UNAUTHORIZED).json({
           message: "Token is expired",
         });
-
       } else {
         if (!roles.includes(jwtObject.data._doc.role)) {
           return res.status(HttpStatusCode.FORBIDDEN).json({

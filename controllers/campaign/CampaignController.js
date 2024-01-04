@@ -230,7 +230,7 @@ const getCampaignByStatus = async (req, res) => {
 
 const getCampaignHome = async (req, res) => {
   try {
-    const campaigns = await Campaign.find().exec();
+    const campaigns = await Campaign.find().populate("creatorId").exec();
     res.status(HttpStatusCode.OK).json({
       message: "Get All Campaigns successfully",
       result: campaigns,

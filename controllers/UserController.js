@@ -583,5 +583,5 @@ export default {
   setActive,
   getPhoneNumberCode,
   changeActiveStatus,
-  // validatePhoneNumber
+  validatePhoneNumber
 };

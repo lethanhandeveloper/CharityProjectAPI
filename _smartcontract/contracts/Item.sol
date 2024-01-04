@@ -62,10 +62,19 @@ contract Item {
     function getTransactionHistoryByCampaignId(
         string memory _campaignId
     ) public view returns (ItemInfo[] memory) {
-        ItemInfo[] memory returnItemInfo = new ItemInfo[](itemInfoArray.length);
+        
 
         uint count = 0;
-
+        for (uint i = 0; i < itemInfoArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(itemInfoArray[i].campaignId)) ==
+                keccak256(abi.encodePacked(_campaignId))
+            ) {
+              
+                count++;
+            }
+        }
+        ItemInfo[] memory returnItemInfo = new ItemInfo[](count);
         for (uint i = 0; i < itemInfoArray.length; i++) {
             if (
                 keccak256(abi.encodePacked(itemInfoArray[i].campaignId)) ==
@@ -78,24 +87,22 @@ contract Item {
         return returnItemInfo;
     }
 
-    function resizeArray(
-        ItemInfo[] memory array,
-        uint newSize
-    ) internal pure returns (ItemInfo[] memory) {
-        ItemInfo[] memory resizedArray = new ItemInfo[](newSize);
-        for (uint i = 0; i < newSize; i++) {
-            resizedArray[i] = array[i];
-        }
-        return resizedArray;
-    }
+    
 
     function getTransactionHistoryByCreatorId(
         string memory _creatorId
     ) public view returns (ItemInfo[] memory) {
-        ItemInfo[] memory returnItemInfo = new ItemInfo[](itemInfoArray.length);
-
         uint count = 0;
-
+        for (uint i = 0; i < itemInfoArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(itemInfoArray[i].creatorId)) ==
+                keccak256(abi.encodePacked(_creatorId))
+            ) {
+               
+                count++;
+            }
+        }
+         ItemInfo[] memory returnItemInfo = new ItemInfo[](count);
         for (uint i = 0; i < itemInfoArray.length; i++) {
             if (
                 keccak256(abi.encodePacked(itemInfoArray[i].creatorId)) ==
@@ -105,6 +112,6 @@ contract Item {
                 count++;
             }
         }
-        return resizeArray(returnItemInfo, count);
+        return returnItemInfo;
     }
 }

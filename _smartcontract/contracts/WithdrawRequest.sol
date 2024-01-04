@@ -38,13 +38,16 @@ contract WithdrawRequest {
     struct WithdrawRequestInfo {
         uint256 id;
         string campaignId;
-	string createdId;
-        bool isApproved;
+	    string createdId;
+        string isApproved;
         uint value;
-	string time;
+	    string time;
+        string timeApprove;
+        string messageAprrove;
         address payable toAddress;
         string message;
-        string status;
+        string fileURL;
+       
     } 
 
     WithdrawRequestInfo[] public withdrawRequestArray;
@@ -54,27 +57,34 @@ contract WithdrawRequest {
     function setAdminContractAddress(address _adminContractAddress) public onlyDeployer {
         adminContractAddress = _adminContractAddress;
     }
+    function setContractAddress(address _campaignAddress) public onlyDeployer {
+        campaignAddress = _campaignAddress;
+    }
 
     function addNewWithdrawRequest(
         string memory _campaignId,
+        string memory _createdId,
         uint _value,
-        address payable _toAddress,
+        string memory _status,
 	    string memory _time,
-	    string memory _createdId,
+        address payable _toAddress,
         string memory _message,
-        string memory _status
+        string memory _fileUrl
     ) public {
-        
+        Campaign.CampaignInfo memory campaignData = Campaign(campaignAddress).getCampaignById(_campaignId);
+        require(campaignData.creatorAddress == msg.sender, "Request has been not approved");
         WithdrawRequestInfo memory wri = WithdrawRequestInfo(
             generateRandomId(),
             _campaignId,
 	        _createdId,
-            false,
+            _status,
             _value,
 	        _time,
+            _time,
+            "",
             _toAddress,
             _message,
-            _status
+            _fileUrl
         );
 
         withdrawRequestArray.push(wri);
@@ -113,45 +123,79 @@ contract WithdrawRequest {
         revert('Not found');
     }
 
-    function getWithdrawRequestByCampaignId(
-        string memory _campaignId
-    ) public view returns (WithdrawRequestInfo memory) {
+    function getWithdrawRequestByCampaignId(string memory _campaignId) public view returns (WithdrawRequestInfo[] memory) {
+        uint count = 0;
         for (uint i = 0; i < withdrawRequestArray.length; i++) {
-            if (
-                keccak256(abi.encodePacked(withdrawRequestArray[i].campaignId)) ==
-                keccak256(abi.encodePacked(_campaignId))
-            ) {
-                return withdrawRequestArray[i];
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+                count++;
             }
         }
 
-        revert('Not found');
+        WithdrawRequestInfo[] memory result = new WithdrawRequestInfo[](count);
+        uint resultIndex = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+                result[resultIndex] = withdrawRequestArray[i];
+                resultIndex++;
+            }
+        }
+
+        return result;
     }
 
-    function approveWithdrawRequest(uint256 _id) public onlyAdmin(){
+  function getWithdrawRequestByCreatorId(string memory _creatorId) public view returns (WithdrawRequestInfo[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].createdId)) == keccak256(abi.encodePacked(_creatorId))) {
+                count++;
+            }
+        }
+
+        WithdrawRequestInfo[] memory result = new WithdrawRequestInfo[](count);
+        uint resultIndex = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].createdId)) == keccak256(abi.encodePacked(_creatorId))) {
+                result[resultIndex] = withdrawRequestArray[i];
+                resultIndex++;
+            }
+        }
+
+        return result;
+    }
+    
+     function getWithdrawRequestForAdmin() public view returns (WithdrawRequestInfo[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].isApproved)) == keccak256(abi.encodePacked("Pending"))) {
+                count++;
+            }
+        }
+
+        WithdrawRequestInfo[] memory result = new WithdrawRequestInfo[](count);
+        uint resultIndex = 0;
+        for (uint i = 0; i < withdrawRequestArray.length; i++) {
+            if (keccak256(abi.encodePacked(withdrawRequestArray[i].isApproved)) == keccak256(abi.encodePacked("Pending"))) {
+                result[resultIndex] = withdrawRequestArray[i];
+                resultIndex++;
+            }
+        }
+
+        return result;
+    }
+
+    function approveWithdrawRequest(uint256 _id,string memory _status,string memory message, string memory timeApprove) public onlyAdmin(){
         for (uint i = 0; i < withdrawRequestArray.length; i++) {
             if (
                 keccak256(abi.encodePacked(withdrawRequestArray[i].id)) ==
                 keccak256(abi.encodePacked(_id))
             ) {
-                withdrawRequestArray[i].isApproved = true;
+                withdrawRequestArray[i].isApproved = _status;
+                withdrawRequestArray[i].timeApprove = timeApprove;
+                withdrawRequestArray[i].messageAprrove = message;
                 return;
             }
         }
 
-        revert('Not found');
-    }
-
-    function updateStatus(uint256 _id,string memory _status) public onlyAdmin(){
-        for (uint i = 0; i < withdrawRequestArray.length; i++) {
-            if (
-                keccak256(abi.encodePacked(withdrawRequestArray[i].id)) ==
-                keccak256(abi.encodePacked(_id))
-            ) {
-                withdrawRequestArray[i].status = _status;
-                return;
-            }
-        }
         revert('Not found');
     }
 }

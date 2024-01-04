@@ -11,9 +11,11 @@ contract Campaign {
         string creatorId;
         string title;
         uint currentValue;
-        uint targetValue;
+        uint targetValue; 
         string endDate;
-	uint donateCount;
+	    uint donateValue;
+        address creatorAddress;
+       
     }
 
     uint256 private nonce = 0;
@@ -65,7 +67,7 @@ contract Campaign {
     function setAdminContractAddress(address _adminContractAddress) public onlyDeployer {
         adminContractAddress = _adminContractAddress;
     }
-event NewCampaignAdded(
+    event NewCampaignAdded(
         string id,
         string creatorId,
         string title,
@@ -79,7 +81,8 @@ event NewCampaignAdded(
         string memory title,
         uint currentValue,
         uint targetValue,
-        string memory endDate
+        string memory endDate,
+        address creatorAdress
     ) public onlyAdmin {
         CampaignInfo memory newCampaign;
         newCampaign.id = id;
@@ -88,16 +91,10 @@ event NewCampaignAdded(
         newCampaign.targetValue = targetValue;
         newCampaign.currentValue = currentValue;
         newCampaign.endDate = endDate;
-	    newCampaign.donateCount = 0;
+	    newCampaign.donateValue = 0;
+        newCampaign.creatorAddress= creatorAdress;
         campaignInfoArray.push(newCampaign);
-        //   emit NewCampaignAdded(
-        //     newCampaign.id,
-        //     newCampaign.creatorId,
-        //     newCampaign.title,
-        //     newCampaign.currentValue,
-        //     newCampaign.targetValue,
-        //     newCampaign.endDate
-        // );
+      
     }
 
     function getCampaignById(
@@ -134,6 +131,7 @@ event NewCampaignAdded(
                 keccak256(abi.encodePacked(campaignId))
             ) {
                 campaignInfoArray[i].currentValue += msg.value;
+                campaignInfoArray[i].donateValue += msg.value;
                 
                 uint256 transactionHistoryId = generateUniqueNumber();
 
@@ -158,12 +156,22 @@ event NewCampaignAdded(
 
     function withdraw(uint256 _withdrawRequestId) public onlyAdmin {
         WithdrawRequest.WithdrawRequestInfo memory withdrawRequest = WithdrawRequest(withdrawRequestContractAddress).getWithdrawRequestById(_withdrawRequestId);
-        require(withdrawRequest.isApproved == true, "Request has been not approved");
+        require( keccak256(abi.encodePacked(withdrawRequest.isApproved)) ==
+                keccak256(abi.encodePacked("Approve")), "Request has been not approved");
         require(address(this).balance >= withdrawRequest.value, "Insufficient balance in the contract");
-        payable(withdrawRequest.toAddress).transfer(withdrawRequest.value);
+           for (uint i = 0; i < campaignInfoArray.length; i++) {
+            if (
+                keccak256(abi.encodePacked(campaignInfoArray[i].id)) ==
+                keccak256(abi.encodePacked(withdrawRequest.campaignId))
+            ) {
+                require(campaignInfoArray[i].currentValue >= withdrawRequest.value, "Insufficient balance in the contract");
+                campaignInfoArray[i].currentValue=campaignInfoArray[i].currentValue-withdrawRequest.value;
+                payable(withdrawRequest.toAddress).transfer(withdrawRequest.value);
+            }
+        }
     }
     
-    function refundAllByCampaignId(string memory _campaignId) public onlyAdmin {
+    function refundAllByCampaignId(string memory _campaignId,string memory _timeRefund) public onlyAdmin {
         TransactionHistory.TransactionInfo[] memory transHistories = TransactionHistory(transactionHistoryContractAddress).getTransactionHistoryByCampaignIdAndRefund(_campaignId);
         if(address(this).balance <= 0) {
             revert("Insufficient balance in the contract");
@@ -176,6 +184,7 @@ event NewCampaignAdded(
         for(uint i = 0; i < transHistories.length; i++) {
             payable(transHistories[i].donatorAddress).transfer(transHistories[i].value);
             transHistories[i].isRefund = true;
+            transHistories[i].timeRefund = _timeRefund;
         }
 
         for (uint i = 0; i < campaignInfoArray.length; i++) {

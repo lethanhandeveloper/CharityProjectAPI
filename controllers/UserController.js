@@ -93,7 +93,6 @@ const register = async (req, res) => {
 
     return;
   } catch (error) {
-    console.log(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json(Exception.SERVER_ERROR);
@@ -359,7 +358,6 @@ const sendRegistionCode = async (req, res) => {
       message: "Send registration code mail successfully",
     });
   } catch (error) {
-    console.log(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "Server is error" });
@@ -488,25 +486,23 @@ const getUserByID = async (req, res) => {
   }
 };
 
-// const validatePhoneNumber = async (req, res) => {
-//   try {
-//     const { phoneNumber, code } = req.body
-//     const phonenocode = await PhoneNumberCode.findOne({ phoneNumber, code })
-//     console.log(phonenocode)
-//     if(!phonenocode){
-//       return res.status(HttpStatusCode.BAD_REQUEST).json({
-//         message: "Your request data is not valid"
-//       })
-//     }else{
+const validatePhoneNumber = async (req, res) => {
+  try {
+    const { phoneNumber, code } = req.body;
+    const phonenocode = await PhoneNumberCode.findOne({ phoneNumber, code });
 
-//     }
-//   } catch (error) {
-//     console.log(error)
-//     return res.status(HttpStatusCode.SERVER_ERROR).json({
-//       message: Exception.SERVER_ERROR
-//     })
-//   }
-// }
+    if (!phonenocode) {
+      return res.status(HttpStatusCode.BAD_REQUEST).json({
+        message: "Your request data is not valid",
+      });
+    } else {
+    }
+  } catch (error) {
+    return res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
 
 const getPhoneNumberCode = async (req, res) => {
   try {
@@ -546,7 +542,6 @@ const getPhoneNumberCode = async (req, res) => {
       message: `Phone number code have sent successfully. The code is active within ${process.env.PHONENO_CODE_EXPIRED_AFTER_MINUTES}`,
     });
   } catch (error) {
-    console.log(error);
     return res.status(HttpStatusCode.SERVER_ERROR).json({
       message: Exception.SERVER_ERROR,
     });
@@ -565,7 +560,6 @@ const changeActiveStatus = async (req, res) => {
       message: "Change user activation successfully",
     });
   } catch (error) {
-    console.log(error);
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: "Server is error",
     });
@@ -589,5 +583,5 @@ export default {
   setActive,
   getPhoneNumberCode,
   changeActiveStatus,
-  // validatePhoneNumber
+  validatePhoneNumber
 };

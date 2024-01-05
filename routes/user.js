@@ -15,6 +15,22 @@ router.post(
   UserController.sendRegistionCode
 );
 
+router.post(
+  "/email/donate",
+  // requestLimit,
+  UserController.sendDonate
+);
+router.post(
+  "/email/cancel",
+  // requestLimit,
+  UserController.sendCancel
+);
+router.post(
+  "/email/finish",
+  // requestLimit,
+  UserController.sendFinish
+);
+
 router.patch(
   "/changeactivestatus/:id",
   auth([Role.admin]),

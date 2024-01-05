@@ -15,6 +15,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
 import { generateRandomCode } from "../utils/Number.js";
+import { sendEmailByType } from "../services/EmailCustom.js";
 
 const isUserExists = async ({ email, phoneNumber, userName }) => {
   const existingUser = await User.exists({
@@ -320,6 +321,7 @@ const getUserInActiveListByPage = async (req, res) => {
 const sendRegistionCode = async (req, res) => {
   try {
     const { toEmail } = req.body;
+    console.log(toEmail, "check");
     const rgcode = await sendRegistionCodeEmail(toEmail);
     const expiredAt =
       Date.now() + process.env.REGISTRATION_EXPIRED_AFTER_MINUTES * 60 * 1000;
@@ -353,6 +355,60 @@ const sendRegistionCode = async (req, res) => {
         nextRequestAt: expiredAt,
       });
     }
+
+    res.status(200).json({
+      message: "Send registration code mail successfully",
+    });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server is error" });
+  }
+};
+const sendDonate = async (req, res) => {
+  try {
+    const { toEmail, endDate, userName, campaignName, valueDonate } = req.body;
+    console.log(toEmail, endDate, userName, campaignName, valueDonate);
+    await sendEmailByType(
+      { toEmail, endDate, userName, campaignName, valueDonate },
+      "Donate"
+    );
+
+    res.status(200).json({
+      message: "Send registration code mail successfully",
+    });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server is error" });
+  }
+};
+const sendCancel = async (req, res) => {
+  try {
+    const { toEmail, endDate, userName, campaignName, reson } = req.body;
+    console.log(toEmail, endDate, userName, campaignName, reson);
+    await sendEmailByType(
+      { toEmail, endDate, userName, campaignName, valueDonate: reson },
+      "Cancel"
+    );
+
+    res.status(200).json({
+      message: "Send registration code mail successfully",
+    });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server is error" });
+  }
+};
+const sendFinish = async (req, res) => {
+  try {
+    const { toEmail, endDate, userName, campaignName } = req.body;
+    console.log(toEmail, endDate, userName, campaignName);
+    await sendEmailByType(
+      { toEmail, endDate, userName, campaignName, valueDonate: "" },
+      "Finish"
+    );
 
     res.status(200).json({
       message: "Send registration code mail successfully",
@@ -583,5 +639,8 @@ export default {
   setActive,
   getPhoneNumberCode,
   changeActiveStatus,
-  validatePhoneNumber
+  validatePhoneNumber,
+  sendDonate,
+  sendCancel,
+  sendFinish,
 };

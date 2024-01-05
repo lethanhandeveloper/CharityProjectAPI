@@ -442,7 +442,7 @@ const getRequestByCurrentUser = async (req, res) => {
       result: returnRequest,
     });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 

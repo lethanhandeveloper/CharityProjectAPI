@@ -4,7 +4,8 @@ import nodemailer from "nodemailer";
 import ejs from "ejs";
 import { OAuth2Client } from "google-auth-library";
 
-async function sendRegistionCodeEmail(toEmail, type) {
+async function sendEmailByType(data, type) {
+  const { toEmail } = data;
   const myOAuth2Client = new OAuth2Client(
     process.env.GOOGLE_MAILER_CLIENT_ID,
     process.env.GOOGLE_MAILER_CLIENT_SECRET
@@ -45,43 +46,43 @@ async function sendRegistionCodeEmail(toEmail, type) {
         title.template = "./templates/forgotPass.ejs";
         break;
       case "Register":
-        title = "Đăng ký thành công";
-        "./templates/registrationcodeemail.ejs";
+        title.name = "Đăng ký thành công";
+        title.template = "./templates/registrationcodeemail.ejs";
         break;
       case "Withdaw":
-        title = "Thông báo rút tiền";
-        "./templates/infor.ejs";
+        title.name = "Thông báo rút tiền";
+        title.template = "./templates/infor.ejs";
         break;
-      case "EndCampaign":
-        title = "Thông báo kết thúc chiến dịch";
-        "./templates/infor.ejs";
+      case "Finish":
+        title.name = "Thông báo kết thúc chiến dịch";
+        title.template = "./templates/donate.ejs";
         break;
-      case "CancelCampaign":
-        title = "Thông báo hủy chiến dịch";
-        "./templates/infor.ejs";
+      case "Cancel":
+        title.name = "Thông báo hủy chiến dịch";
+        title.template = "./templates/donate.ejs";
+        break;
+      case "Donate":
+        title.name = "Thông báo ủng hộ";
+        title.template = "./templates/donate.ejs";
         break;
       default:
         break;
     }
-    const emailTemplate = await fs.readFileSync(
-      "./templates/registrationcodeemail.ejs",
-      "utf8"
-    );
-    const rgcode = generateRandomCode();
-    const renderedHtml = ejs.render(emailTemplate, { rgcode });
+    const emailTemplate = await fs.readFileSync(title.template, "utf8");
+
+    const renderedHtml = ejs.render(emailTemplate, data);
 
     const mailOptions = {
       to: toEmail, // Gửi đến ai?
-      subject: title, // Tiêu đề email
+      subject: title.name, // Tiêu đề email
       html: renderedHtml,
     };
     // Gọi hành động gửi email
     await transport.sendMail(mailOptions);
-
-    return rgcode;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
 
-export { sendRegistionCodeEmail };
+export { sendEmailByType };

@@ -321,7 +321,7 @@ const getUserInActiveListByPage = async (req, res) => {
 const sendRegistionCode = async (req, res) => {
   try {
     const { toEmail } = req.body;
-    console.log(toEmail, "check");
+
     const rgcode = await sendRegistionCodeEmail(toEmail);
     const expiredAt =
       Date.now() + process.env.REGISTRATION_EXPIRED_AFTER_MINUTES * 60 * 1000;
@@ -368,7 +368,7 @@ const sendRegistionCode = async (req, res) => {
 const sendDonate = async (req, res) => {
   try {
     const { toEmail, endDate, userName, campaignName, valueDonate } = req.body;
-    console.log(toEmail, endDate, userName, campaignName, valueDonate);
+
     await sendEmailByType(
       { toEmail, endDate, userName, campaignName, valueDonate },
       "Donate"
@@ -386,7 +386,7 @@ const sendDonate = async (req, res) => {
 const sendCancel = async (req, res) => {
   try {
     const { toEmail, endDate, userName, campaignName, reson } = req.body;
-    console.log(toEmail, endDate, userName, campaignName, reson);
+
     await sendEmailByType(
       { toEmail, endDate, userName, campaignName, valueDonate: reson },
       "Cancel"
@@ -404,7 +404,7 @@ const sendCancel = async (req, res) => {
 const sendFinish = async (req, res) => {
   try {
     const { toEmail, endDate, userName, campaignName } = req.body;
-    console.log(toEmail, endDate, userName, campaignName);
+
     await sendEmailByType(
       { toEmail, endDate, userName, campaignName, valueDonate: "" },
       "Finish"
@@ -575,7 +575,6 @@ const getPhoneNumberCode = async (req, res) => {
     if (phonenocode) {
       phonenocode.code = code;
       phonenocode.expiredAt = expiredAt;
-
       phonenocode.save();
     } else {
       PhoneNumberCode.create({
@@ -588,9 +587,9 @@ const getPhoneNumberCode = async (req, res) => {
     client.messages
 
       .create({
-        from: "+12056712883",
+        from: process.env.PHONE_SET_UP,
         body: "Your email code validation is " + code,
-        to: "+84337464921",
+        to: phoneNumber,
       })
       .then((message) => console.log(message.sid));
 

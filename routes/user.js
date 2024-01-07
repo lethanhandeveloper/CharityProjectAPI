@@ -38,7 +38,7 @@ router.patch(
   UserController.changeActiveStatus
 );
 
-router.get(
+router.post(
   "/phonenumber/getcode",
   // requestLimit,
   UserController.getPhoneNumberCode
@@ -78,7 +78,7 @@ router.post(
 );
 
 router.post(
-  "/verification/paginate",
+  "/verification/paginate/:status",
   auth([Role.admin]),
   VerificationController.getVerificationRequestByPagination
 );
@@ -104,11 +104,6 @@ router.patch(
   VerificationController.updateRequestStatus
 );
 
-router.post(
-  "/verification/paginate",
-  auth([Role.admin]),
-  VerificationController.getVerificationRequestByPagination
-);
 router.get("/verification/user/:id", VerificationController.getRequestByUserId);
 router.get("/verification/:id", VerificationController.getRequestById);
 

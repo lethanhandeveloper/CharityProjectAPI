@@ -9,6 +9,7 @@ contract Item {
         string message;
         string creatorId;
         string time;
+        string fileUrl;
     }
 
     address deployerAddress;
@@ -44,14 +45,15 @@ contract Item {
         string memory _campaignId,
         string memory _message,
         string memory _creatorID,
-        string memory _time
+        string memory _time,
+        string memory _fileUrl
     ) public onlyAdmin {
         ItemInfo memory itemInfo;
         itemInfo.campaignId = _campaignId;
         itemInfo.message = _message;
         itemInfo.creatorId = _creatorID;
         itemInfo.time = _time;
-
+        itemInfo.fileUrl =_fileUrl;
         itemInfoArray.push(itemInfo);
     }
 

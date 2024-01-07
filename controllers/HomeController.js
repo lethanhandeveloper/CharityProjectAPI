@@ -42,11 +42,13 @@ const getCountForAdmin = async (req, res) => {
     const userActiveCount = await User.countDocuments();
     const userDeactiveCount = await User.countDocuments();
     const campaignCount = await Campaign.countDocuments();
-    const campaignFinishCount = await Campaign.countDocuments();
+    const campaignFinishCount = await Campaign.find({
+      status: "END",
+    }).countDocuments();
     const organizationCount = await Origanization.countDocuments();
     const personalCount = await Personal.countDocuments();
     const campaignInMonth = await Campaign.find({
-      createdDate: { $gte: newDate },
+      status: "START",
     }).countDocuments();
     const userInMonth = await User.find({
       createdDate: { $gte: newDate },

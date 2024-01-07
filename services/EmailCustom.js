@@ -80,7 +80,6 @@ async function sendEmailByType(data, type) {
     // Gọi hành động gửi email
     await transport.sendMail(mailOptions);
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }

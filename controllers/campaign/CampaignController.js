@@ -130,16 +130,6 @@ const getCampaignByFilter = async (req, res) => {
       status,
     } = req.body;
 
-    // const query = {
-    //   $and: [
-    //     { provinceId: provinceId },
-    //     { categoryId: categoryId },
-    //     { itemTypeId: itemTypeId },
-    //     { creatorId: creatorId },
-    //     { $or: [{ title: search_text }] },
-    //   ],
-    // };
-
     const query = [];
     if (provinceId) {
       query.push({ provinceId: provinceId });
@@ -147,19 +137,22 @@ const getCampaignByFilter = async (req, res) => {
     if (categoryId) {
       query.push({ categoryId: categoryId });
     }
-    if (status) {
-      query.push({ status: status });
-    }
     if (search_text) {
       query.push({ title: { $regex: new RegExp(search_text, "i") } });
     }
 
     let queryMongo = {};
-    if (query.length > 0) {
+    if (status) {
       queryMongo = {
-        $and: [...query],
+        $and: [...query, { status: status }],
+      };
+    } else {
+      queryMongo = {
+        $and: [...query, { $or: [{ status: "START" }, { status: "END" }] }],
       };
     }
+
+    console.log(queryMongo);
     const skip = (page - 1) * no_item_per_page;
 
     const campaigns = await Campaign.find(queryMongo)
@@ -230,7 +223,11 @@ const getCampaignByStatus = async (req, res) => {
 
 const getCampaignHome = async (req, res) => {
   try {
-    const campaigns = await Campaign.find().populate("creatorId").exec();
+    const campaigns = await Campaign.find({
+      $or: [{ status: "START" }, { status: "END" }],
+    })
+      .populate("creatorId")
+      .exec();
     res.status(HttpStatusCode.OK).json({
       message: "Get All Campaigns successfully",
       result: campaigns,

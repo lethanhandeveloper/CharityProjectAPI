@@ -16,6 +16,7 @@ const addNewCampaign = async (req, res) => {
       description,
       thumbnail,
       fileUrl,
+      addressWallet,
     } = req.body;
     const token = req.headers?.authorization?.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
@@ -34,6 +35,7 @@ const addNewCampaign = async (req, res) => {
         thumbnail,
         fileUrl,
         status: "DRAFT",
+        addressWallet,
       });
 
       res.status(HttpStatusCode.CREATED).json({
@@ -75,7 +77,9 @@ const getCampaignByCurrentUser = async (req, res) => {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       const userId = decoded.data._doc._id;
 
-      const campaigns = await Campaign.find({ creatorId: userId }).exec();
+      const campaigns = await Campaign.find({ creatorId: userId })
+        .populate("creatorId")
+        .exec();
       res.status(HttpStatusCode.OK).json({
         message: "Get All Campaigns successfully",
         result: campaigns,

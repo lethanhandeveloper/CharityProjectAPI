@@ -44,11 +44,16 @@ router.post(
   UserController.getPhoneNumberCode
 );
 
-// router.post(
-//   "/phonenumber/validate",
-//   // requestLimit,
-//   UserController.validatePhoneNumber
-// );
+router.post(
+  "/phonenumber/validate",
+  // requestLimit,
+  UserController.validatePhoneNumber
+);
+router.post(
+  "/email/validate",
+  // requestLimit,
+  UserController.validateEmail
+);
 
 router.get("/refreshtoken", UserController.getAccessToken);
 

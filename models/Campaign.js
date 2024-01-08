@@ -59,5 +59,9 @@ export default mongoose.model(
       //start, draft, end
       require: true,
     },
+    addressWallet: {
+      type: String,
+      require: true,
+    },
   })
 );

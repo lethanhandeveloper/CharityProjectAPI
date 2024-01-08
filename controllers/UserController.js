@@ -546,12 +546,33 @@ const validatePhoneNumber = async (req, res) => {
   try {
     const { phoneNumber, code } = req.body;
     const phonenocode = await PhoneNumberCode.findOne({ phoneNumber, code });
-
     if (!phonenocode) {
       return res.status(HttpStatusCode.BAD_REQUEST).json({
         message: "Your request data is not valid",
       });
     } else {
+    }
+  } catch (error) {
+    return res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+const validateEmail = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    const phonenocode = await isValidRgCode(code);
+
+    if (!phonenocode) {
+      return res.status(HttpStatusCode.OK).json({
+        message: "Your request data is not valid",
+        result: false,
+      });
+    } else {
+      return res.status(HttpStatusCode.OK).json({
+        message: "Your request data is not valid",
+        result: true,
+      });
     }
   } catch (error) {
     return res.status(HttpStatusCode.SERVER_ERROR).json({
@@ -642,4 +663,5 @@ export default {
   sendDonate,
   sendCancel,
   sendFinish,
+  validateEmail,
 };

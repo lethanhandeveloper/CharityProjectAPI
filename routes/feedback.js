@@ -1,5 +1,4 @@
 import express from "express";
-import { AreaController } from "../controllers/index.js";
 import auth from "../middlewares/auth.js";
 import Role from "../utils/Role.js";
 import FeedbackController from "../controllers/FeedbackController.js";

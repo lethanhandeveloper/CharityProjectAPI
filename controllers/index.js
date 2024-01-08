@@ -6,8 +6,8 @@ import BannerController from "./BannerController.js";
 import VerificationController from "./VerificationController.js";
 import HomeController from "./HomeController.js";
 import FeedbackController from "./FeedbackController.js";
-import DonationTransactionHash from "./campaign/TransactionController.js"
-
+import DonationTransactionHash from "./campaign/TransactionController.js";
+import FileController from "./FileController.js";
 export {
   UserController,
   AreaController,
@@ -17,5 +17,6 @@ export {
   VerificationController,
   HomeController,
   FeedbackController,
-  DonationTransactionHash
+  DonationTransactionHash,
+  FileController,
 };

@@ -1,7 +1,7 @@
 import HttpStatusCode from "../utils/HttpStatusCode.js";
-import Map from "../models/Map.js";
+import { Map } from "../models/index.js";
 import Message from "../utils/Message.js";
-import Banner from "../models/Banner.js";
+
 const getMapList = async (req, res) => {
   try {
     const data = await Map.find().populate("campaignId").exec();
@@ -37,7 +37,7 @@ const addNewMap = async (req, res) => {
 const updateMap = async (req, res) => {
   try {
     const { lat, long, campaign, id, type } = req.body;
-    await Banner.findByIdAndUpdate(id, {
+    await Map.findByIdAndUpdate(id, {
       lat,
       long,
       type,

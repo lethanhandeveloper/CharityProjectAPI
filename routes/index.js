@@ -5,7 +5,7 @@ import bannerRouter from "../routes/banner.js";
 import campaignRouter from "../routes/campaign.js";
 import homeRouter from "../routes/home.js";
 import feedbackRouter from "../routes/feedback.js";
-
+import fileRouter from "../routes/file.js";
 export {
   userRouter,
   areaRouter,
@@ -13,5 +13,6 @@ export {
   bannerRouter,
   campaignRouter,
   homeRouter,
-  feedbackRouter
+  feedbackRouter,
+  fileRouter,
 };

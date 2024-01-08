@@ -15,6 +15,7 @@ contract TransactionHistory {
         bool isRefund;
         string time;
         string timeRefund;
+        bool isAnonymous;
     }
 
     TransactionInfo[] public transactionInfoArray;
@@ -46,7 +47,8 @@ contract TransactionHistory {
         string memory donatorId,
         address donatorAddress,
         uint value,
-        string memory time
+        string memory time,
+        bool isAnonymous
     ) external onlyCampaignContract {
         TransactionInfo memory newTransaction;
         newTransaction.id = id;
@@ -58,6 +60,7 @@ contract TransactionHistory {
         newTransaction.isRefund = false;
         newTransaction.time = time;
         newTransaction.timeRefund='';
+        newTransaction.isAnonymous=isAnonymous;
         transactionInfoArray.push(newTransaction);
     }
 

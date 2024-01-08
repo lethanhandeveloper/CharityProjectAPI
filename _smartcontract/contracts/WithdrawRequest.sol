@@ -163,7 +163,7 @@ contract WithdrawRequest {
         return result;
     }
     
-     function getWithdrawRequestForAdmin() public view returns (WithdrawRequestInfo[] memory) {
+     function getWithdrawRequestForAdmin() public onlyDeployer view returns (WithdrawRequestInfo[] memory)  {
         uint count = 0;
         for (uint i = 0; i < withdrawRequestArray.length; i++) {
             if (keccak256(abi.encodePacked(withdrawRequestArray[i].isApproved)) == keccak256(abi.encodePacked("Pending"))) {

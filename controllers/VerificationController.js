@@ -114,7 +114,7 @@ const addNewVerificationRequest = async (req, res) => {
           roleOnClub,
           clubName,
           logo,
-          underOrg,
+          // underOrg,
           achivementDoc,
           userId: user._id,
         });
@@ -573,7 +573,7 @@ const updateMyRequestById = async (req, res) => {
         roleOnClub,
         clubName,
         logo,
-        underOrg,
+        // underOrg,
         actionDescSociaLink,
         achivementDoc,
       } = req.body.personalGeneralInfo;

@@ -182,4 +182,13 @@ contract TransactionHistory {
 
         return result;
     }
+     function updateRefundStatus(string memory _campaignId, string memory _timeRefund) external {
+        for (uint i = 0; i < transactionInfoArray.length; i++) {
+            if (keccak256(abi.encodePacked(transactionInfoArray[i].campaignId)) == keccak256(abi.encodePacked(_campaignId))) {
+               transactionInfoArray[i].isRefund =true;
+               transactionInfoArray[i].timeRefund=_timeRefund;
+              
+            }
+        }
+    }
 }

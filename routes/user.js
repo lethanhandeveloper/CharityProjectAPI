@@ -137,5 +137,7 @@ router.post(
 
 router.get("/home", UserController.getHomePageUser);
 router.post("/setactive", auth([Role.admin]), UserController.setActive);
+router.post("/updatepass", UserController.updatePass);
+router.post("/forgetpass", UserController.forgotPass);
 
 export default router;

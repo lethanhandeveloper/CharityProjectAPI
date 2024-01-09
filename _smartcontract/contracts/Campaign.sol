@@ -15,10 +15,10 @@ contract Campaign {
         string endDate;
 	    uint donateValue;
         address creatorAddress;
-       
     }
 
     uint256 private nonce = 0;
+    uint256 totalToken =0;
     address deployerAddress;
     address transactionHistoryContractAddress;
     address withdrawRequestContractAddress;
@@ -119,7 +119,8 @@ contract Campaign {
     function donate(
         string memory campaignId,
         string memory donatorId,
-	    string memory time
+	    string memory time,
+        bool isAnonymous
     ) public payable {
         require(
             msg.value >= 200000000000000,
@@ -132,7 +133,7 @@ contract Campaign {
             ) {
                 campaignInfoArray[i].currentValue += msg.value;
                 campaignInfoArray[i].donateValue += msg.value;
-                
+                totalToken+=msg.value;
                 uint256 transactionHistoryId = generateUniqueNumber();
 
                 TransactionHistory(transactionHistoryContractAddress)
@@ -143,7 +144,8 @@ contract Campaign {
                         donatorId,
                         msg.sender,
                         msg.value,
-                        time
+                        time,
+                        isAnonymous
                     );
                 
                 emit ReturnTransactionId(transactionHistoryId);
@@ -182,9 +184,11 @@ contract Campaign {
         }
 
         for(uint i = 0; i < transHistories.length; i++) {
-            payable(transHistories[i].donatorAddress).transfer(transHistories[i].value);
-            transHistories[i].isRefund = true;
-            transHistories[i].timeRefund = _timeRefund;
+            if(transHistories[i].isRefund==false){
+                payable(transHistories[i].donatorAddress).transfer(transHistories[i].value);
+                TransactionHistory(transactionHistoryContractAddress).updateRefundStatus(_campaignId,_timeRefund);
+            }
+           
         }
 
         for (uint i = 0; i < campaignInfoArray.length; i++) {
@@ -195,5 +199,12 @@ contract Campaign {
                 campaignInfoArray[i].currentValue = 0;
             }
         }
+    }
+
+    function getContractBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
+       function getContractTotal() external view returns (uint256) {
+        return totalToken;
     }
 }

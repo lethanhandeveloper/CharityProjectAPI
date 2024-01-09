@@ -130,6 +130,7 @@ const addNewVerificationRequest = async (req, res) => {
             representativeName,
             representativePhoneNumber,
             representativeEmail,
+            description,
           },
         } = req.body;
 
@@ -156,6 +157,7 @@ const addNewVerificationRequest = async (req, res) => {
           representativeName,
           representativePhoneNumber,
           representativeEmail,
+          description,
         });
       }
 
@@ -306,6 +308,7 @@ const updateRequestStatus = async (req, res) => {
 const getVerificationRequestByPagination = async (req, res) => {
   try {
     const { search_text, page, no_item_per_page } = req.body;
+    const { status } = req.params;
     const skip = (page - 1) * no_item_per_page;
 
     const personalInfo = await PersonalGeneralInfo.find({
@@ -325,12 +328,19 @@ const getVerificationRequestByPagination = async (req, res) => {
     organizationInfo.forEach((oi) => {
       organizationGeneralInfoIdArr.push(oi._id);
     });
-
+    let statusList = [];
+    console.log(status, "cxvxcvxcv");
+    if (status === "pending") {
+      statusList = [1, 2];
+    } else {
+      statusList = [3];
+    }
     const requests = await VerificationRequest.find({
       $or: [
         { personalGeneralInfoId: { $in: personalGeneralInfoIdArr } },
         { organizationGeneralInfoId: { $in: organizationGeneralInfoIdArr } },
       ],
+      status: { $in: statusList },
     })
       .skip(skip)
       .limit(no_item_per_page)
@@ -442,7 +452,7 @@ const getRequestByCurrentUser = async (req, res) => {
       result: returnRequest,
     });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 

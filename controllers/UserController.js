@@ -15,6 +15,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
 import { generateRandomCode } from "../utils/Number.js";
+import { sendEmailByType } from "../services/EmailCustom.js";
 
 const isUserExists = async ({ email, phoneNumber, userName }) => {
   const existingUser = await User.exists({
@@ -291,6 +292,49 @@ const setActive = async (req, res) => {
   }
 };
 
+const updatePass = async (req, res) => {
+  try {
+    const token = req.headers?.authorization?.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      const user = await User.findById(decoded.data._doc._id).exec();
+      const { password, newpassword } = req.body;
+      if (password === user.password) {
+        await User.findByIdAndUpdate(user.id, {
+          newpassword,
+        });
+      }
+    });
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Update user info successfully",
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.BAD_REQUEST).json({
+      message: "User info is not valid",
+    });
+  }
+};
+const forgotPass = async (req, res) => {
+  try {
+    const { email, code, password } = req.body;
+    const user = await User.findOne({ email: email }).exec();
+
+    const check = await isValidRgCode(email, code);
+    if (check) {
+      await User.findByIdAndUpdate(user.id, {
+        password,
+      });
+      res.status(HttpStatusCode.OK).json({
+        message: "Update user info successfully",
+      });
+    }
+  } catch (error) {
+    res.status(HttpStatusCode.BAD_REQUEST).json({
+      message: "User info is not valid",
+    });
+  }
+};
+
 const getUserListByPage = async (req, res) => {
   try {
     const UserList = await User.find().exec();
@@ -320,6 +364,7 @@ const getUserInActiveListByPage = async (req, res) => {
 const sendRegistionCode = async (req, res) => {
   try {
     const { toEmail } = req.body;
+
     const rgcode = await sendRegistionCodeEmail(toEmail);
     const expiredAt =
       Date.now() + process.env.REGISTRATION_EXPIRED_AFTER_MINUTES * 60 * 1000;
@@ -353,6 +398,60 @@ const sendRegistionCode = async (req, res) => {
         nextRequestAt: expiredAt,
       });
     }
+
+    res.status(200).json({
+      message: "Send registration code mail successfully",
+    });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server is error" });
+  }
+};
+const sendDonate = async (req, res) => {
+  try {
+    const { toEmail, endDate, userName, campaignName, valueDonate } = req.body;
+
+    await sendEmailByType(
+      { toEmail, endDate, userName, campaignName, valueDonate },
+      "Donate"
+    );
+
+    res.status(200).json({
+      message: "Send registration code mail successfully",
+    });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server is error" });
+  }
+};
+const sendCancel = async (req, res) => {
+  try {
+    const { toEmail, endDate, userName, campaignName, reson } = req.body;
+
+    await sendEmailByType(
+      { toEmail, endDate, userName, campaignName, valueDonate: reson },
+      "Cancel"
+    );
+
+    res.status(200).json({
+      message: "Send registration code mail successfully",
+    });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server is error" });
+  }
+};
+const sendFinish = async (req, res) => {
+  try {
+    const { toEmail, endDate, userName, campaignName } = req.body;
+
+    await sendEmailByType(
+      { toEmail, endDate, userName, campaignName, valueDonate: "" },
+      "Finish"
+    );
 
     res.status(200).json({
       message: "Send registration code mail successfully",
@@ -490,12 +589,38 @@ const validatePhoneNumber = async (req, res) => {
   try {
     const { phoneNumber, code } = req.body;
     const phonenocode = await PhoneNumberCode.findOne({ phoneNumber, code });
-
     if (!phonenocode) {
-      return res.status(HttpStatusCode.BAD_REQUEST).json({
+      return res.status(HttpStatusCode.NOT_FOUND).json({
         message: "Your request data is not valid",
+        result: false,
       });
     } else {
+      return res.status(HttpStatusCode.OK).json({
+        message: "Your request data is not valid",
+        result: true,
+      });
+    }
+  } catch (error) {
+    return res.status(HttpStatusCode.SERVER_ERROR).json({
+      message: Exception.SERVER_ERROR,
+    });
+  }
+};
+const validateEmail = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    const emailCheck = await isValidRgCode(email, code);
+
+    if (!emailCheck) {
+      return res.status(HttpStatusCode.OK).json({
+        message: "Your request data is not valid",
+        result: false,
+      });
+    } else {
+      return res.status(HttpStatusCode.OK).json({
+        message: "Your request data is not valid",
+        result: true,
+      });
     }
   } catch (error) {
     return res.status(HttpStatusCode.SERVER_ERROR).json({
@@ -519,7 +644,6 @@ const getPhoneNumberCode = async (req, res) => {
     if (phonenocode) {
       phonenocode.code = code;
       phonenocode.expiredAt = expiredAt;
-
       phonenocode.save();
     } else {
       PhoneNumberCode.create({
@@ -532,9 +656,9 @@ const getPhoneNumberCode = async (req, res) => {
     client.messages
 
       .create({
-        from: "+12056712883",
+        from: process.env.PHONE_SET_UP,
         body: "Your email code validation is " + code,
-        to: "+84337464921",
+        to: phoneNumber,
       })
       .then((message) => console.log(message.sid));
 
@@ -583,5 +707,11 @@ export default {
   setActive,
   getPhoneNumberCode,
   changeActiveStatus,
-  validatePhoneNumber
+  validatePhoneNumber,
+  sendDonate,
+  sendCancel,
+  sendFinish,
+  validateEmail,
+  updatePass,
+  forgotPass,
 };

@@ -7,7 +7,8 @@ import {
   bannerRouter,
   campaignRouter,
   homeRouter,
-  feedbackRouter
+  feedbackRouter,
+  fileRouter,
 } from "./routes/index.js";
 import connectDatabase from "./databases/database.js";
 import * as dotenv from "dotenv";
@@ -27,6 +28,7 @@ app.use("/campaign", campaignRouter);
 app.use("/banner", bannerRouter);
 app.use("/home", homeRouter);
 app.use("/feedback", feedbackRouter);
+app.use("/file", fileRouter);
 
 app.use((req, res) => {
   res.status(HttpStatusCode.BAD_REQUEST).json({ message: "Route not found" });

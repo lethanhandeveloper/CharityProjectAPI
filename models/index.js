@@ -14,7 +14,7 @@ import EmailRegistrationCode from "./EmailRegistrationCode.js";
 import RequestLimit from "./RequestLimit.js";
 import PhoneNumberCode from "./PhoneNumberCode.js";
 import DonationTransactionHash from "./DonationTransactionHash.js";
-
+import File from "./File.js";
 export {
   User,
   Commune,
@@ -31,5 +31,6 @@ export {
   EmailRegistrationCode,
   RequestLimit,
   PhoneNumberCode,
-  DonationTransactionHash
+  DonationTransactionHash,
+  File,
 };

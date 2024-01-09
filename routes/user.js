@@ -15,6 +15,22 @@ router.post(
   UserController.sendRegistionCode
 );
 
+router.post(
+  "/email/donate",
+  // requestLimit,
+  UserController.sendDonate
+);
+router.post(
+  "/email/cancel",
+  // requestLimit,
+  UserController.sendCancel
+);
+router.post(
+  "/email/finish",
+  // requestLimit,
+  UserController.sendFinish
+);
+
 router.patch(
   "/changeactivestatus/:id",
   auth([Role.admin]),
@@ -22,17 +38,22 @@ router.patch(
   UserController.changeActiveStatus
 );
 
-router.get(
+router.post(
   "/phonenumber/getcode",
   // requestLimit,
   UserController.getPhoneNumberCode
 );
 
-// router.post(
-//   "/phonenumber/validate",
-//   // requestLimit,
-//   UserController.validatePhoneNumber
-// );
+router.post(
+  "/phonenumber/validate",
+  // requestLimit,
+  UserController.validatePhoneNumber
+);
+router.post(
+  "/email/validate",
+  // requestLimit,
+  UserController.validateEmail
+);
 
 router.get("/refreshtoken", UserController.getAccessToken);
 
@@ -62,7 +83,7 @@ router.post(
 );
 
 router.post(
-  "/verification/paginate",
+  "/verification/paginate/:status",
   auth([Role.admin]),
   VerificationController.getVerificationRequestByPagination
 );
@@ -88,11 +109,6 @@ router.patch(
   VerificationController.updateRequestStatus
 );
 
-router.post(
-  "/verification/paginate",
-  auth([Role.admin]),
-  VerificationController.getVerificationRequestByPagination
-);
 router.get("/verification/user/:id", VerificationController.getRequestByUserId);
 router.get("/verification/:id", VerificationController.getRequestById);
 
@@ -121,5 +137,7 @@ router.post(
 
 router.get("/home", UserController.getHomePageUser);
 router.post("/setactive", auth([Role.admin]), UserController.setActive);
+router.post("/updatepass", UserController.updatePass);
+router.post("/forgetpass", UserController.forgotPass);
 
 export default router;

@@ -184,9 +184,11 @@ contract Campaign {
         }
 
         for(uint i = 0; i < transHistories.length; i++) {
-            payable(transHistories[i].donatorAddress).transfer(transHistories[i].value);
-            transHistories[i].isRefund = true;
-            transHistories[i].timeRefund = _timeRefund;
+            if(transHistories[i].isRefund==false){
+                payable(transHistories[i].donatorAddress).transfer(transHistories[i].value);
+                TransactionHistory(transactionHistoryContractAddress).updateRefundStatus(_campaignId,_timeRefund);
+            }
+           
         }
 
         for (uint i = 0; i < campaignInfoArray.length; i++) {

@@ -292,6 +292,49 @@ const setActive = async (req, res) => {
   }
 };
 
+const updatePass = async (req, res) => {
+  try {
+    const token = req.headers?.authorization?.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      const user = await User.findById(decoded.data._doc._id).exec();
+      const { password, newpassword } = req.body;
+      if (password === user.password) {
+        await User.findByIdAndUpdate(user.id, {
+          newpassword,
+        });
+      }
+    });
+
+    res.status(HttpStatusCode.OK).json({
+      message: "Update user info successfully",
+    });
+  } catch (error) {
+    res.status(HttpStatusCode.BAD_REQUEST).json({
+      message: "User info is not valid",
+    });
+  }
+};
+const forgotPass = async (req, res) => {
+  try {
+    const { email, code, password } = req.body;
+    const user = await User.findOne({ email: email }).exec();
+
+    const check = await isValidRgCode(email, code);
+    if (check) {
+      await User.findByIdAndUpdate(user.id, {
+        password,
+      });
+      res.status(HttpStatusCode.OK).json({
+        message: "Update user info successfully",
+      });
+    }
+  } catch (error) {
+    res.status(HttpStatusCode.BAD_REQUEST).json({
+      message: "User info is not valid",
+    });
+  }
+};
+
 const getUserListByPage = async (req, res) => {
   try {
     const UserList = await User.find().exec();
@@ -547,10 +590,15 @@ const validatePhoneNumber = async (req, res) => {
     const { phoneNumber, code } = req.body;
     const phonenocode = await PhoneNumberCode.findOne({ phoneNumber, code });
     if (!phonenocode) {
-      return res.status(HttpStatusCode.BAD_REQUEST).json({
+      return res.status(HttpStatusCode.NOT_FOUND).json({
         message: "Your request data is not valid",
+        result: false,
       });
     } else {
+      return res.status(HttpStatusCode.OK).json({
+        message: "Your request data is not valid",
+        result: true,
+      });
     }
   } catch (error) {
     return res.status(HttpStatusCode.SERVER_ERROR).json({
@@ -561,9 +609,9 @@ const validatePhoneNumber = async (req, res) => {
 const validateEmail = async (req, res) => {
   try {
     const { email, code } = req.body;
-    const phonenocode = await isValidRgCode(code);
+    const emailCheck = await isValidRgCode(email, code);
 
-    if (!phonenocode) {
+    if (!emailCheck) {
       return res.status(HttpStatusCode.OK).json({
         message: "Your request data is not valid",
         result: false,
@@ -664,4 +712,6 @@ export default {
   sendCancel,
   sendFinish,
   validateEmail,
+  updatePass,
+  forgotPass,
 };

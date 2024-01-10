@@ -410,10 +410,16 @@ const sendRegistionCode = async (req, res) => {
 };
 const sendDonate = async (req, res) => {
   try {
-    const { toEmail, endDate, userName, campaignName, valueDonate } = req.body;
-
+    const { userId, endDate, campaignName, valueDonate } = req.body;
+    const user = await User.findById(userId).exec();
     await sendEmailByType(
-      { toEmail, endDate, userName, campaignName, valueDonate },
+      {
+        toEmail: user.email,
+        endDate,
+        userName: user.userName,
+        campaignName,
+        valueDonate,
+      },
       "Donate"
     );
 

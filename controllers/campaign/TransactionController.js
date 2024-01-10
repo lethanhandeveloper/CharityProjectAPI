@@ -6,18 +6,7 @@ const addNewDonationTransactionHash = async (req, res) => {
   try {
     const { transactionHash, transactionId } = req.body;
     await DonationTransactionHash.create({ transactionHash, transactionId });
-    await DonationTransactionHash.create({
-      transactionHash:
-        "0xb844394ad1cf157915bf2d66ece553fb4a016f029950ad5a9e3dc8f9b47ea835",
-      transactionId:
-        "0xed62fb5739f816e5f8a45c40f5fb10dba3c7e4761aea22ebb9e8dfa59ac6b809",
-    });
-    await DonationTransactionHash.create({
-      transactionHash:
-        "0xbf9999924b510eb2621b703ad6d66f8b4e288174a2322c41f449a0db45f26120",
-      transactionId:
-        "0x62b16be0c35b759f7159002faf70318e2507f6544829772f04873dd22e5aa09e",
-    });
+
     res.status(HttpStatusCode.CREATED).json({
       message: "Create donation transaction hash successfully",
     });

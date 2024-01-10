@@ -1,6 +1,6 @@
 Admin
 
-0x9E418D67e88E08E1617F4DFB0b616F3ebaE2b274
+0x170Cc9AE24C56afB8cb48055f3F6519A9Ad2B116
 
 [
 	{
@@ -74,9 +74,11 @@ Admin
 	}
 ]
 
+
+
 Campaign
 
-0x2E20569afd74C23F8c606255FC273f408a0EF7bf
+0xBdE2C2A5d5b45a6e21ed2892cBd9DDEf079e7F0F
 
 [
 	{
@@ -138,29 +140,16 @@ Campaign
 				"internalType": "string",
 				"name": "time",
 				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "isAnonymous",
+				"type": "bool"
 			}
 		],
 		"name": "donate",
 		"outputs": [],
 		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_campaignId",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_timeRefund",
-				"type": "string"
-			}
-		],
-		"name": "refundAllByCampaignId",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -210,6 +199,24 @@ Campaign
 		],
 		"name": "NewCampaignAdded",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_campaignId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_timeRefund",
+				"type": "string"
+			}
+		],
+		"name": "refundAllByCampaignId",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -461,6 +468,32 @@ Campaign
 	},
 	{
 		"inputs": [],
+		"name": "getContractBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getContractTotal",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "isAdmin",
 		"outputs": [
 			{
@@ -476,7 +509,7 @@ Campaign
 
 Item
 
-0x31E639565e776bF983d7110f120f16B2561B4cda
+0x6A45739e688a6Cc6C4C1d3Edc4A36BB4f461f4e2
 
 [
 	{
@@ -499,6 +532,11 @@ Item
 			{
 				"internalType": "string",
 				"name": "_time",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_fileUrl",
 				"type": "string"
 			}
 		],
@@ -550,6 +588,11 @@ Item
 						"internalType": "string",
 						"name": "time",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "fileUrl",
+						"type": "string"
 					}
 				],
 				"internalType": "struct Item.ItemInfo[]",
@@ -591,6 +634,11 @@ Item
 						"internalType": "string",
 						"name": "time",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "fileUrl",
+						"type": "string"
 					}
 				],
 				"internalType": "struct Item.ItemInfo[]",
@@ -631,6 +679,11 @@ Item
 					{
 						"internalType": "string",
 						"name": "time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "fileUrl",
 						"type": "string"
 					}
 				],
@@ -684,6 +737,11 @@ Item
 				"internalType": "string",
 				"name": "time",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "fileUrl",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -693,7 +751,7 @@ Item
 
 TransactionHistory
 
-0x762a9284d5BBc8Ef94cAe1F58C453DB68136039f
+0xffFAC26636B7f8946B611023B4128b9b22d14996
 
 [
 	{
@@ -732,6 +790,11 @@ TransactionHistory
 				"internalType": "string",
 				"name": "time",
 				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "isAnonymous",
+				"type": "bool"
 			}
 		],
 		"name": "addNewTransactionHistory",
@@ -756,6 +819,24 @@ TransactionHistory
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_campaignId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_timeRefund",
+				"type": "string"
+			}
+		],
+		"name": "updateRefundStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -833,6 +914,11 @@ TransactionHistory
 						"internalType": "string",
 						"name": "timeRefund",
 						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isAnonymous",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TransactionHistory.TransactionInfo[]",
@@ -899,6 +985,11 @@ TransactionHistory
 						"internalType": "string",
 						"name": "timeRefund",
 						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isAnonymous",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TransactionHistory.TransactionInfo[]",
@@ -965,6 +1056,11 @@ TransactionHistory
 						"internalType": "string",
 						"name": "timeRefund",
 						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isAnonymous",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TransactionHistory.TransactionInfo[]",
@@ -1031,6 +1127,11 @@ TransactionHistory
 						"internalType": "string",
 						"name": "timeRefund",
 						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isAnonymous",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TransactionHistory.TransactionInfo[]",
@@ -1097,6 +1198,11 @@ TransactionHistory
 						"internalType": "string",
 						"name": "timeRefund",
 						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "isAnonymous",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct TransactionHistory.TransactionInfo[]",
@@ -1185,6 +1291,11 @@ TransactionHistory
 				"internalType": "string",
 				"name": "timeRefund",
 				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "isAnonymous",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -1194,7 +1305,7 @@ TransactionHistory
 
 withdrawrequest 
 
-0x356113BbA8Ca958474cDC0B4AfA14afb9223De6b
+0xD5d38EB495223231adf228dF4BdDf00d3c07D183
 
 [
 	{

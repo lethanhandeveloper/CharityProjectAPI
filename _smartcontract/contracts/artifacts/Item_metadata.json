@@ -31,6 +31,11 @@
 						"internalType": "string",
 						"name": "_time",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_fileUrl",
+						"type": "string"
 					}
 				],
 				"name": "addNewItem",
@@ -62,6 +67,11 @@
 							{
 								"internalType": "string",
 								"name": "time",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "fileUrl",
 								"type": "string"
 							}
 						],
@@ -104,6 +114,11 @@
 								"internalType": "string",
 								"name": "time",
 								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "fileUrl",
+								"type": "string"
 							}
 						],
 						"internalType": "struct Item.ItemInfo[]",
@@ -144,6 +159,11 @@
 							{
 								"internalType": "string",
 								"name": "time",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "fileUrl",
 								"type": "string"
 							}
 						],
@@ -196,6 +216,11 @@
 					{
 						"internalType": "string",
 						"name": "time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "fileUrl",
 						"type": "string"
 					}
 				],
@@ -252,11 +277,11 @@
 			]
 		},
 		"contracts/Item.sol": {
-			"keccak256": "0xbc85280542a2d75f3db86978f9b0895d979ce03692f43f36b1eeb111972cab90",
+			"keccak256": "0x211166756807e1b5f79216911f1eda47a497b7d1bea0bbcc10dab35e397dc439",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://33246a68579dab530b8f829717c8bbdae52569cd1e26e2bf6bb7af5ea9e6dc2d",
-				"dweb:/ipfs/QmPKuwibo8zDeX7MHvb6BFVriGEcDhArXjHazByxFVEsH3"
+				"bzz-raw://f796077aa29ec4417d79f66384cdae0d82d68903815b60b7c8dbd049e924e2b4",
+				"dweb:/ipfs/QmPwUbwQirqmacSDJaENotwWhseQsZa1PRLTcFDJ1m7jv2"
 			]
 		}
 	},

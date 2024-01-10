@@ -625,27 +625,27 @@
 			]
 		},
 		"contracts/Campaign.sol": {
-			"keccak256": "0x694109f25eb9b47714b8659a3af35ab7bb7dc958f5e8f65d44abe5ab65709aab",
+			"keccak256": "0xbd1e27eb90c8803b394a503cca06f5adf6e8a1e43328078074e59418f8ea66e1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fc5459de6011fe09347cf906ad75d4c24fbde322b0b572935dcd82c1a61cefd5",
-				"dweb:/ipfs/QmUs38MLMBjR3MykHAJmDdf96Zxc981hiUQHTC9RD2Y4dK"
+				"bzz-raw://db75328f3f6bf62bbb37a00307c86d92bb5e3be323e9adade5c6a918a8b3f625",
+				"dweb:/ipfs/QmRQqcK7t7NKqrTtSYWAbLhd8DEYC94vcnFcqtKvYXHpQv"
 			]
 		},
 		"contracts/TransactionHistory.sol": {
-			"keccak256": "0xf9e85d268f5b8c824a5f56f357ab4ff98248306c4a2f5d29f001875d5dea9fdc",
+			"keccak256": "0x99e826104fbb9ff61b0084c0972e4d82dff7cfef6f9d0e07a920213acb831bed",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fde03dbaf6f815918aa97459dae6b48943d14209fc74bfbecb35d452045bcfa8",
-				"dweb:/ipfs/QmUhq7MjFsJ88jKmY5z13gmiqNN3hSvgZdauvS3xELtH6a"
+				"bzz-raw://5df528e975e05fb3563acd5585685c1abc3153c2d3c21f3b2a67e1279d15f12e",
+				"dweb:/ipfs/QmZw9kq2F8hFpppoL7xFwGzYLRTqqZkUXpoycZw6yzCvkp"
 			]
 		},
 		"contracts/WithdrawRequest.sol": {
-			"keccak256": "0x71c341f5d39826ea14c098aa514729dbaf7121a6cfbdc6156ea362008860cfa6",
+			"keccak256": "0x6f0bca30bec6fde8b7ca9de7cf66b24a2b3e99995a38f82246dadcafa22d0334",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cbce12cf0b3c079a0413879a2ea999490e55a921f9fb85ae3205e4dc1f407b70",
-				"dweb:/ipfs/QmUs2eWT5j5NE2bgjJmhrVojMCBr7WEG3PYxkRRLWKnPo4"
+				"bzz-raw://7763a5d9c1bdcc53c15c3a3b4e0f9f612cf11cce6f28ba793789f9976f849326",
+				"dweb:/ipfs/QmcyYzT8Ybe1xFnojUAcizB4z2Xq77GApW3V6Nybw7B9uG"
 			]
 		}
 	},

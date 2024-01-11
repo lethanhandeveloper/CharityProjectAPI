@@ -16,7 +16,10 @@ const addNewCampaign = async (req, res) => {
       description,
       thumbnail,
       fileUrl,
-      addressWallet,
+      addressCreator,
+      lat,
+      long,
+      type,
     } = req.body;
     const token = req.headers?.authorization?.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
@@ -35,7 +38,10 @@ const addNewCampaign = async (req, res) => {
         thumbnail,
         fileUrl,
         status: "DRAFT",
-        addressWallet,
+        addressCreator,
+        lat,
+        long,
+        type,
       });
 
       res.status(HttpStatusCode.CREATED).json({

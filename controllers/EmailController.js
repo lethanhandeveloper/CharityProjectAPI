@@ -1,33 +1,37 @@
 import { Campaign } from "../models/index.js";
 import { sendEmailByType } from "../services/EmailCustom.js";
+import HttpStatusCode from "../utils/HttpStatusCode.js";
+import Message from "../utils/Message.js";
 
 const sendEmail = async (req, res) => {
   try {
-    const { type, campaignID, emailList } = req.body;
-    const campaignData = await Campaign.findById(campaignID).exec();
+    const { type, campaignId, emailList, reason } = req.body;
+    const campaignData = await Campaign.findById(campaignId).exec();
+
     let data;
-    if (type === "cancel") {
+    if (type === "Cancel") {
       data = {
-        userName,
+        userName: "2",
         campaignName: campaignData.title,
         reason,
+        endDate: campaignData.endDate.toString(),
         toEmail: emailList,
       };
-    } else if (type === "reject") {
+    } else if (type === "Reject") {
       data = {
-        userName,
+        userName: "2",
         campaignName: campaignData.title,
         reason,
-        fileUrl,
-        endDate: campaignData.endDate,
+        fileUrl: "2",
+        endDate: campaignData.endDate.toString(),
         toEmail: emailList,
       };
     } else {
       data = {
-        userName,
+        userName: "2",
         campaignName: campaignData.title,
         reason,
-        fileUrl,
+        fileUrl: "file",
         endDate: campaignData.endDate,
         toEmail: emailList,
       };
@@ -35,7 +39,6 @@ const sendEmail = async (req, res) => {
     sendEmailByType({ ...data, toEmail: emailList }, type);
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
-      result: data,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({

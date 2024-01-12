@@ -59,9 +59,21 @@ export default mongoose.model(
       //start, draft, end
       require: true,
     },
-    addressWallet: {
+    addressCreator: {
       type: String,
       require: true,
+    },
+    specialAddress: {
+      type: String,
+      require: true,
+    },
+    lat: {
+      type: String,
+      required: true,
+    },
+    long: {
+      type: String,
+      required: true,
     },
   })
 );

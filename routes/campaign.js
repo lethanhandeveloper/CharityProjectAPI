@@ -67,7 +67,7 @@ router.delete(
 
 router.post(
   "/",
-  auth([Role.admin]),
+  auth([Role.admin, Role.organization, Role.personal]),
   CampaignController.CampaignController.addNewCampaign
 );
 router.get("/", CampaignController.CampaignController.getAllCampaign);

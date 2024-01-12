@@ -162,7 +162,6 @@ const getCampaignByFilter = async (req, res) => {
       };
     }
 
-    console.log(queryMongo);
     const skip = (page - 1) * no_item_per_page;
 
     const campaigns = await Campaign.find(queryMongo)

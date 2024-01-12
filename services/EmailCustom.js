@@ -51,7 +51,7 @@ async function sendEmailByType(data, type) {
         break;
       case "Withdaw":
         title.name = "Thông báo rút tiền";
-        title.template = "./templates/infor.ejs";
+        title.template = "./templates/request.ejs";
         break;
       case "Finish":
         title.name = "Thông báo kết thúc chiến dịch";
@@ -59,11 +59,15 @@ async function sendEmailByType(data, type) {
         break;
       case "Cancel":
         title.name = "Thông báo hủy chiến dịch";
-        title.template = "./templates/donate.ejs";
+        title.template = "./templates/cancel.ejs";
         break;
       case "Donate":
         title.name = "Thông báo ủng hộ";
         title.template = "./templates/donate.ejs";
+        break;
+      case "Reject":
+        title.name = "Thông báo hủy yêu cầu";
+        title.template = "./templates/reject.ejs";
         break;
       default:
         break;

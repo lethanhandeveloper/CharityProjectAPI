@@ -20,9 +20,9 @@ const addFile = async (req, res) => {
 };
 const getFile = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const response = await File.findById(id);
-    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+    res.status(HttpStatusCode.OK).json({
       message: "Server is error",
       result: response,
     });

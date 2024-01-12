@@ -72,6 +72,7 @@ async function sendEmailByType(data, type) {
       default:
         break;
     }
+    console.log(title.name, title.template, "xzcxzczx");
     const emailTemplate = await fs.readFileSync(title.template, "utf8");
 
     const renderedHtml = ejs.render(emailTemplate, data);

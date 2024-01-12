@@ -83,7 +83,7 @@ router.post(
 );
 
 router.post(
-  "/verification/paginate/:status",
+  "/verification/paginate/:status/:type",
   auth([Role.admin]),
   VerificationController.getVerificationRequestByPagination
 );

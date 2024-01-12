@@ -308,7 +308,7 @@ const updateRequestStatus = async (req, res) => {
 const getVerificationRequestByPagination = async (req, res) => {
   try {
     const { search_text, page, no_item_per_page } = req.body;
-    const { status } = req.params;
+    const { status, type } = req.params;
     const skip = (page - 1) * no_item_per_page;
 
     const personalInfo = await PersonalGeneralInfo.find({
@@ -329,7 +329,7 @@ const getVerificationRequestByPagination = async (req, res) => {
       organizationGeneralInfoIdArr.push(oi._id);
     });
     let statusList = [];
-    console.log(status, "cxvxcvxcv");
+
     if (status === "pending") {
       statusList = [1, 2];
     } else {
@@ -341,6 +341,7 @@ const getVerificationRequestByPagination = async (req, res) => {
         { organizationGeneralInfoId: { $in: organizationGeneralInfoIdArr } },
       ],
       status: { $in: statusList },
+      type: type,
     })
       .skip(skip)
       .limit(no_item_per_page)

@@ -31,12 +31,13 @@ const sendEmail = async (req, res) => {
         userName: "2",
         campaignName: campaignData.title,
         reason,
-        fileUrl: "file",
-        endDate: campaignData.endDate,
+        fileUrl: "2",
+        endDate: campaignData.endDate.toString(),
         toEmail: emailList,
       };
     }
-    sendEmailByType({ ...data, toEmail: emailList }, type);
+
+    sendEmailByType({ ...data }, type);
     res.status(HttpStatusCode.OK).json({
       message: Message.success,
     });

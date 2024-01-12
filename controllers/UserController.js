@@ -403,6 +403,7 @@ const sendRegistionCode = async (req, res) => {
       message: "Send registration code mail successfully",
     });
   } catch (error) {
+    console.log(error)
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: "Server is error" });

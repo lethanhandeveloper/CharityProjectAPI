@@ -20,6 +20,7 @@ const addNewCampaign = async (req, res) => {
       lat,
       long,
       type,
+      specialAddress,
     } = req.body;
     const token = req.headers?.authorization?.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
@@ -42,6 +43,7 @@ const addNewCampaign = async (req, res) => {
         lat,
         long,
         type,
+        specialAddress,
       });
 
       res.status(HttpStatusCode.CREATED).json({

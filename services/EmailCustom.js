@@ -61,6 +61,10 @@ async function sendEmailByType(data, type) {
         title.name = "Thông báo hủy chiến dịch";
         title.template = "./templates/cancel.ejs";
         break;
+      case "Start":
+        title.name = "Thông báo bắt đầu chiến dịch";
+        title.template = "./templates/start.ejs";
+        break;
       case "Donate":
         title.name = "Thông báo ủng hộ";
         title.template = "./templates/donate.ejs";

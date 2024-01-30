@@ -52,13 +52,13 @@ export default mongoose.model(
     underOrg: {
       type: Number,
       enum: [1, 2, 3, 4, 5],
-      required: true,
+      // required: true,
     },
     // actionDescSocialLink: {
     //   type: String
     // },
     achivementDoc: {
-      type: String
+      type: String,
     },
     userId: {
       type: ObjectId,
